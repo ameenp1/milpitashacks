@@ -26,6 +26,9 @@ export const APPLY_CHROME = [
   "All forms",
   "Reload",
   "Open in new tab",
+  "Show agent my screen",
+  "Stop sharing",
+  "Agent can see your screen",
   INTRO,
   ERROR,
   NO_KEY,
@@ -55,7 +58,7 @@ export function useAssistChat() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [t]);
 
-  async function send(message: string) {
+  async function send(message: string, image?: string) {
     const text = message.trim();
     if (!text || sending) return;
     stop();
@@ -72,6 +75,7 @@ export function useAssistChat() {
           content: m.text,
         })),
         langLabel,
+        image,
       );
       setMessages((m) => [
         ...m,

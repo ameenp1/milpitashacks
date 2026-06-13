@@ -46,11 +46,12 @@ export async function chat(args: {
 export async function askAssistant(
   messages: { role: "user" | "assistant"; content: string }[],
   language?: string,
+  image?: string,
 ): Promise<string> {
   const res = await fetch("/api/assist", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ messages, language }),
+    body: JSON.stringify({ messages, language, image }),
   });
   if (res.status === 503) throw new NoKeyError();
   if (!res.ok) throw new Error("Assistant failed");

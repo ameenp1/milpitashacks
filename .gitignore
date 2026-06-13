@@ -218,3 +218,12 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+# --- Node / Next.js ---
+node_modules/
+.next/
+out/
+next-env.d.ts
+.vercel/
+
+# local env (contains OPENAI_API_KEY)
+.env*.local

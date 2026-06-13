@@ -1,0 +1,15 @@
+{
+  "id": "cw74",
+  "code": "CW 74",
+  "title": "Permanent Housing Search Document",
+  "description": "A log of your search for permanent housing while you receive temporary shelter.",
+  "fields": [
+    {
+      "id": "phone",
+      "token": "cw74__phone",
+      "group": "phone",
+      "anchor": "EW Phone:",
+      "answerType": "phone"
+    }
+  ]
+}

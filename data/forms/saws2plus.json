@@ -1,0 +1,37 @@
+{
+  "id": "saws2plus",
+  "code": "SAWS 2 PLUS",
+  "title": "Application for CalFresh, Cash Aid, and/or Medi-Cal",
+  "description": "The main application with your household, income, and resource details.",
+  "fields": [
+    {
+      "id": "phone",
+      "token": "saws2plus__phone",
+      "group": "phone",
+      "anchor": "Phone and utility costs.",
+      "answerType": "phone"
+    },
+    {
+      "id": "ssn",
+      "token": "saws2plus__ssn",
+      "group": "ssn",
+      "anchor": "Use of Social Security Numbers (SSN)",
+      "answerType": "ssn",
+      "needsReview": true
+    },
+    {
+      "id": "email",
+      "token": "saws2plus__email",
+      "group": "email",
+      "anchor": "I want to get information about this app",
+      "answerType": "email"
+    },
+    {
+      "id": "dob",
+      "token": "saws2plus__dob",
+      "group": "dob",
+      "anchor": "DATE OF BIRTH",
+      "answerType": "date"
+    }
+  ]
+}

@@ -1,0 +1,285 @@
+[
+  {
+    "id": "full_name",
+    "order": 1,
+    "isCore": true,
+    "answerType": "name",
+    "question": "What is your full name?",
+    "help": "Say your first name, middle name, and last name."
+  },
+  {
+    "id": "dob",
+    "order": 2,
+    "isCore": true,
+    "answerType": "date",
+    "question": "What is your date of birth?",
+    "help": "The month, day, and year you were born."
+  },
+  {
+    "id": "ssn",
+    "order": 3,
+    "isCore": true,
+    "answerType": "ssn",
+    "needsReview": true,
+    "question": "What is your Social Security Number (SSN)?",
+    "help": "Your 9-digit SSN. The county uses it to check your identity. We will ask you to review this one."
+  },
+  {
+    "id": "phone",
+    "order": 4,
+    "isCore": true,
+    "answerType": "phone",
+    "question": "What is a phone number where we can reach you?",
+    "help": "A number where a worker can leave you a message."
+  },
+  {
+    "id": "email",
+    "order": 5,
+    "isCore": true,
+    "answerType": "email",
+    "question": "What is your email address, if you have one?",
+    "help": "Optional. Used for appointment reminders."
+  },
+  {
+    "id": "address",
+    "order": 6,
+    "isCore": true,
+    "answerType": "address",
+    "question": "What is your current or most recent home address?",
+    "help": "Street, city, state, and ZIP. If you have no address, say where you usually stay."
+  },
+  {
+    "id": "household_members",
+    "order": 7,
+    "isCore": true,
+    "answerType": "longtext",
+    "question": "Who lives with you? Please give names and ages.",
+    "help": "Everyone in your household, including children."
+  },
+  {
+    "id": "gets_cash_aid",
+    "order": 8,
+    "isCore": true,
+    "answerType": "boolean",
+    "choices": [
+      "Yes",
+      "No"
+    ],
+    "question": "Do you currently get Cash Aid (CalWORKs)?",
+    "help": "Monthly cash assistance from the county."
+  },
+  {
+    "id": "cash_aid_county",
+    "isCore": false,
+    "answerType": "text",
+    "dependsOn": {
+      "group": "gets_cash_aid",
+      "equals": "Yes"
+    },
+    "question": "Which county gives you Cash Aid?"
+  },
+  {
+    "id": "prior_ha",
+    "order": 9,
+    "isCore": true,
+    "answerType": "boolean",
+    "choices": [
+      "Yes",
+      "No"
+    ],
+    "question": "Have you ever received Homeless Assistance before?",
+    "help": "Homeless Assistance is usually limited to once every 12 months."
+  },
+  {
+    "id": "prior_ha_details",
+    "isCore": false,
+    "answerType": "text",
+    "dependsOn": {
+      "group": "prior_ha",
+      "equals": "Yes"
+    },
+    "question": "Which county gave it to you, and roughly when?"
+  },
+  {
+    "id": "household_income",
+    "order": 10,
+    "isCore": true,
+    "answerType": "longtext",
+    "question": "Does anyone in your home earn money from a job, training, or any other source?",
+    "help": "If yes, say who earns it and about how much."
+  },
+  {
+    "id": "liquid_resources",
+    "order": 11,
+    "isCore": true,
+    "answerType": "longtext",
+    "question": "How much money do you have right now in cash, checking, and savings?",
+    "help": "To get Homeless Assistance you must have less than $100 in resources."
+  },
+  {
+    "id": "has_home",
+    "order": 12,
+    "isCore": true,
+    "answerType": "boolean",
+    "choices": [
+      "Yes",
+      "No"
+    ],
+    "question": "Do you have a place to live right now?",
+    "help": "If no, we will ask where you are staying. If you got an eviction notice, we will ask about back rent."
+  },
+  {
+    "id": "where_staying",
+    "order": 13,
+    "isCore": true,
+    "answerType": "longtext",
+    "dependsOn": {
+      "group": "has_home",
+      "equals": "No"
+    },
+    "question": "Where are you staying right now?"
+  },
+  {
+    "id": "how_long_there",
+    "order": 14,
+    "isCore": true,
+    "answerType": "text",
+    "dependsOn": {
+      "group": "has_home",
+      "equals": "No"
+    },
+    "question": "How long have you been staying there?"
+  },
+  {
+    "id": "pay_to_stay",
+    "order": 15,
+    "isCore": true,
+    "answerType": "text",
+    "dependsOn": {
+      "group": "has_home",
+      "equals": "No"
+    },
+    "question": "Do you pay to stay there? If so, how much?"
+  },
+  {
+    "id": "why_homeless",
+    "order": 16,
+    "isCore": true,
+    "answerType": "longtext",
+    "dependsOn": {
+      "group": "has_home",
+      "equals": "No"
+    },
+    "question": "Can you explain why you have no place to live?"
+  },
+  {
+    "id": "seeking_housing",
+    "order": 17,
+    "isCore": true,
+    "answerType": "longtext",
+    "dependsOn": {
+      "group": "has_home",
+      "equals": "No"
+    },
+    "question": "Are you looking for permanent housing? Please explain."
+  },
+  {
+    "id": "payment_preference",
+    "order": 18,
+    "isCore": true,
+    "answerType": "choice",
+    "choices": [
+      "Yourself",
+      "Landlord",
+      "Shelter",
+      "Other"
+    ],
+    "question": "If you get Homeless Assistance money, who should it be paid to?",
+    "help": "You can have it paid to yourself, a landlord, a shelter, or someone else."
+  },
+  {
+    "id": "has_eviction_notice",
+    "order": 19,
+    "isCore": true,
+    "answerType": "boolean",
+    "choices": [
+      "Yes",
+      "No"
+    ],
+    "question": "Did you get a 'pay rent or quit' (eviction) notice?",
+    "help": "If yes, you may be able to get help with up to two months of back rent."
+  },
+  {
+    "id": "eviction_notice_date",
+    "isCore": false,
+    "answerType": "date",
+    "dependsOn": {
+      "group": "has_eviction_notice",
+      "equals": "Yes"
+    },
+    "question": "What day did you get the pay rent or quit notice?"
+  },
+  {
+    "id": "months_back_rent",
+    "isCore": false,
+    "answerType": "number",
+    "dependsOn": {
+      "group": "has_eviction_notice",
+      "equals": "Yes"
+    },
+    "question": "How many months of back rent do you owe?"
+  },
+  {
+    "id": "monthly_rent",
+    "isCore": false,
+    "answerType": "money",
+    "dependsOn": {
+      "group": "has_eviction_notice",
+      "equals": "Yes"
+    },
+    "question": "How much is your monthly rent?"
+  },
+  {
+    "id": "why_unpaid_rent",
+    "isCore": false,
+    "answerType": "longtext",
+    "dependsOn": {
+      "group": "has_eviction_notice",
+      "equals": "Yes"
+    },
+    "question": "Why weren't you able to pay your rent?"
+  },
+  {
+    "id": "why_evicting",
+    "isCore": false,
+    "answerType": "longtext",
+    "dependsOn": {
+      "group": "has_eviction_notice",
+      "equals": "Yes"
+    },
+    "question": "Why is your landlord evicting you?"
+  },
+  {
+    "id": "us_citizen",
+    "order": 20,
+    "isCore": true,
+    "answerType": "boolean",
+    "choices": [
+      "Yes",
+      "No"
+    ],
+    "question": "Are you a United States citizen?",
+    "help": "Used for voter registration eligibility. It does not affect your aid."
+  },
+  {
+    "id": "wants_to_register_vote",
+    "isCore": false,
+    "answerType": "boolean",
+    "choices": [
+      "Yes",
+      "No"
+    ],
+    "question": "Would you like to register to vote?",
+    "help": "Your choice will not affect the help you get from the county."
+  }
+]

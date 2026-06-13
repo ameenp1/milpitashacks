@@ -1,0 +1,156 @@
+{
+  "id": "cw42",
+  "code": "CW 42",
+  "title": "Statement of Facts — Homeless Assistance",
+  "description": "Tells the county your housing situation and why you need homeless assistance.",
+  "fields": [
+    {
+      "id": "name",
+      "group": "full_name",
+      "anchor": "Name of Caretaker Relative",
+      "answerType": "name",
+      "token": "cw42__name"
+    },
+    {
+      "id": "phone",
+      "group": "phone",
+      "anchor": "Message Phone",
+      "answerType": "phone",
+      "token": "cw42__phone"
+    },
+    {
+      "id": "ssn",
+      "group": "ssn",
+      "anchor": "Social Security Number",
+      "answerType": "ssn",
+      "needsReview": true,
+      "token": "cw42__ssn"
+    },
+    {
+      "id": "dob",
+      "group": "dob",
+      "anchor": "Date of Birth",
+      "answerType": "date",
+      "token": "cw42__dob"
+    },
+    {
+      "id": "address",
+      "group": "address",
+      "anchor": "What is your current or last address",
+      "answerType": "address",
+      "token": "cw42__address"
+    },
+    {
+      "id": "cash_aid",
+      "group": "gets_cash_aid",
+      "anchor": "Do you get Cash Aid",
+      "answerType": "boolean",
+      "token": "cw42__cash_aid"
+    },
+    {
+      "id": "cash_aid_county",
+      "group": "cash_aid_county",
+      "anchor": "in which county",
+      "answerType": "text",
+      "token": "cw42__cash_aid_county"
+    },
+    {
+      "id": "prior_ha",
+      "group": "prior_ha",
+      "anchor": "Did you get Homeless Assistance from any county",
+      "answerType": "boolean",
+      "token": "cw42__prior_ha"
+    },
+    {
+      "id": "income",
+      "group": "household_income",
+      "anchor": "Does anyone in your home get income",
+      "answerType": "longtext",
+      "token": "cw42__income"
+    },
+    {
+      "id": "resources",
+      "group": "liquid_resources",
+      "anchor": "List all liquid resources you own",
+      "answerType": "longtext",
+      "token": "cw42__resources"
+    },
+    {
+      "id": "payment_pref",
+      "group": "payment_preference",
+      "anchor": "how you want the payment made",
+      "answerType": "choice",
+      "token": "cw42__payment_pref"
+    },
+    {
+      "id": "where_staying",
+      "group": "where_staying",
+      "anchor": "Explain where you are staying now",
+      "answerType": "longtext",
+      "token": "cw42__where_staying"
+    },
+    {
+      "id": "how_long",
+      "group": "how_long_there",
+      "anchor": "How long have you been there",
+      "answerType": "text",
+      "token": "cw42__how_long"
+    },
+    {
+      "id": "pay_to_stay",
+      "group": "pay_to_stay",
+      "anchor": "Do you pay for staying there",
+      "answerType": "text",
+      "token": "cw42__pay_to_stay"
+    },
+    {
+      "id": "why_homeless",
+      "group": "why_homeless",
+      "anchor": "Explain why you have no place to live",
+      "answerType": "longtext",
+      "token": "cw42__why_homeless"
+    },
+    {
+      "id": "seeking",
+      "group": "seeking_housing",
+      "anchor": "Are you seeking permanent housing",
+      "answerType": "longtext",
+      "token": "cw42__seeking"
+    },
+    {
+      "id": "eviction_date",
+      "group": "eviction_notice_date",
+      "anchor": "What day did you get a pay rent or quit notice",
+      "answerType": "date",
+      "token": "cw42__eviction_date"
+    },
+    {
+      "id": "months_back",
+      "group": "months_back_rent",
+      "anchor": "How many months of back rent do you owe",
+      "answerType": "number",
+      "token": "cw42__months_back"
+    },
+    {
+      "id": "monthly_rent",
+      "group": "monthly_rent",
+      "anchor": "How much is your monthly rent",
+      "answerType": "money",
+      "token": "cw42__monthly_rent"
+    },
+    {
+      "id": "why_unpaid",
+      "group": "why_unpaid_rent",
+      "anchor": "pay your rent",
+      "answerType": "longtext",
+      "token": "cw42__why_unpaid"
+    },
+    {
+      "id": "why_evict",
+      "group": "why_evicting",
+      "anchor": "Why is your Landlord evicting you",
+      "answerType": "longtext",
+      "token": "cw42__why_evict"
+    }
+  ]
+}

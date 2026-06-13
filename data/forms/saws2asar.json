@@ -1,0 +1,23 @@
+{
+  "id": "saws2asar",
+  "code": "SAWS 2A SAR",
+  "title": "Rights, Responsibilities and Other Important Information",
+  "description": "Explains your rights and responsibilities. Mostly for your records.",
+  "fields": [
+    {
+      "id": "ssn",
+      "token": "saws2asar__ssn",
+      "group": "ssn",
+      "anchor": "Social Security Number (SSN) Rules",
+      "answerType": "ssn",
+      "needsReview": true
+    },
+    {
+      "id": "phone",
+      "token": "saws2asar__phone",
+      "group": "phone",
+      "anchor": "by mail, telephone, or in person at the ",
+      "answerType": "phone"
+    }
+  ]
+}

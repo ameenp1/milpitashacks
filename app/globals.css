@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  --color-accent: #2563eb;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+}
+
+/* Large, calm focus rings for accessibility (iPad / low-vision users). */
+:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* docx-preview output: keep the official form readable inside our panel. */
+.docx-wrapper {
+  background: transparent !important;
+  padding: 0 !important;
+}
+.docx-wrapper > section.docx {
+  box-shadow: none !important;
+  margin: 0 auto 1rem auto !important;
+  width: 100% !important;
+  padding: 1.25rem !important;
+}
+
+/* Answer inserts rendered by the fill engine (Word tracked-change <w:ins>). */
+.docx ins,
+.docx .answer-ins {
+  text-decoration: none;
+  background: #dbeafe;
+  color: #1e3a8a;
+  border-radius: 3px;
+  padding: 0 2px;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  /* Let the live preview flow across pages when saving to PDF. */
+  .docx-host {
+    max-height: none !important;
+    overflow: visible !important;
+    border: none !important;
+    background: #fff !important;
+    padding: 0 !important;
+  }
+}

@@ -102,7 +102,17 @@ export function ChatTranscript({
             {m.role === "bot" ? (
               <Typewriter text={m.text} start={startedRef.current.has(m.id)} />
             ) : (
-              m.text
+              <>
+                {m.image && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={m.image}
+                    alt="Screen you shared"
+                    className="mb-2 block max-h-44 w-full rounded-lg border border-white/20 object-cover"
+                  />
+                )}
+                {m.text}
+              </>
             )}
           </div>
         </div>

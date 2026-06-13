@@ -7,6 +7,7 @@ export interface Msg {
   role: "bot" | "user";
   text: string;
   speak?: boolean; // bot turns the transcript should read aloud
+  image?: string; // optional screenshot the user shared with this turn (data URL)
 }
 
 export interface DetectedLanguage {

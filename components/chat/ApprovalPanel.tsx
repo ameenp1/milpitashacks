@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { getFormDef, getGroup } from "@/lib/data";
 
 // Lists the tracked-change answers on the active form with Approve / Reject and
@@ -21,6 +22,7 @@ export function ApprovalPanel({
   onReject: (group: string) => void;
   t: (s: string) => string;
 }) {
+  const [reveal, setReveal] = useState(false);
   const def = getFormDef(formId);
   if (!def) return null;
   const groupIds = [...new Set(def.fields.map((f) => f.group))].filter((g) =>
@@ -67,7 +69,19 @@ export function ApprovalPanel({
                   {t(getGroup(g)?.question ?? g)}
                 </div>
                 <div className="truncate text-sm text-neutral-900">
-                  {answers[g]}
+                  {g === "ssn" && !reveal
+                    ? answers[g].replace(/[0-9]/g, "•")
+                    : answers[g]}
+                  {g === "ssn" && (
+                    <button
+                      type="button"
+                      onClick={() => setReveal((r) => !r)}
+                      aria-label={reveal ? "Hide" : "Show"}
+                      className="ml-2 text-neutral-400 hover:text-neutral-700"
+                    >
+                      {reveal ? "🙈" : "👁"}
+                    </button>
+                  )}
                 </div>
               </div>
               <div className="flex shrink-0 items-center gap-1.5">

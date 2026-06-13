@@ -31,6 +31,13 @@ export default function Home() {
         when you are done. If anything goes wrong, we will point you to a person
         who can help.
       </p>
+
+      <Link
+        href="/privacy"
+        className="mt-4 inline-block text-sm text-neutral-400 underline-offset-2 hover:text-neutral-700 hover:underline"
+      >
+        Privacy
+      </Link>
     </main>
   );
 }

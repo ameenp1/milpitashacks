@@ -26,6 +26,7 @@ const CHROME = [
   "Sound off",
   "Type your answer…",
   "Send",
+  "Print",
   "All your forms are filled in. Review the highlighted answers on the right and approve them.",
   "Sorry, I didn't catch that. Could you say it another way?",
   "Something went wrong. Please try again or type your answer.",
@@ -50,6 +51,8 @@ export default function ChatPage() {
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
   const [hearMode, setHearMode] = useState(true);
+  const [ttsVoice, setTtsVoice] = useState("alloy");
+  const [showSecret, setShowSecret] = useState(false);
   const [manualForm, setManualForm] = useState<string | null>(null);
   const [lastValue, setLastValue] = useState<string | undefined>(undefined);
 
@@ -108,7 +111,7 @@ export default function ChatPage() {
     setMessages((m) => [...m, { id: idRef.current++, role: "bot", text }]);
     if (doSpeak && hearMode) {
       stop();
-      speak(text);
+      speak(text, ttsVoice);
     }
   }
   function addUser(text: string) {
@@ -211,6 +214,20 @@ export default function ChatPage() {
           >
             {hearMode ? `🔊 ${t("Sound on")}` : `🔇 ${t("Sound off")}`}
           </button>
+          {hearMode && (
+            <select
+              value={ttsVoice}
+              onChange={(e) => setTtsVoice(e.target.value)}
+              aria-label="Voice"
+              className="rounded-full border border-neutral-200 px-2 py-1 text-sm text-neutral-600"
+            >
+              {["alloy", "echo", "fable", "onyx", "nova", "shimmer"].map((v) => (
+                <option key={v} value={v}>
+                  {v}
+                </option>
+              ))}
+            </select>
+          )}
           <Link
             href="/review"
             className="rounded-full bg-neutral-900 px-3 py-1 text-sm font-medium text-white hover:bg-neutral-700"
@@ -268,14 +285,31 @@ export default function ChatPage() {
               </div>
             )}
             <div className="flex items-center gap-2">
-              <input
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && submit(input)}
-                placeholder={t("Type your answer…")}
-                disabled={!currentGroup || sending}
-                className="flex-1 rounded-xl border border-neutral-300 px-4 py-3 outline-none focus:border-neutral-900 disabled:bg-neutral-50"
-              />
+              <div className="relative flex-1">
+                <input
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && submit(input)}
+                  type={
+                    currentGroup?.answerType === "ssn" && !showSecret
+                      ? "password"
+                      : "text"
+                  }
+                  placeholder={t("Type your answer…")}
+                  disabled={!currentGroup || sending}
+                  className="w-full rounded-xl border border-neutral-300 px-4 py-3 pr-10 outline-none focus:border-neutral-900 disabled:bg-neutral-50"
+                />
+                {currentGroup?.answerType === "ssn" && (
+                  <button
+                    type="button"
+                    onClick={() => setShowSecret((s) => !s)}
+                    aria-label={showSecret ? "Hide" : "Show"}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-700"
+                  >
+                    {showSecret ? "🙈" : "👁"}
+                  </button>
+                )}
+              </div>
               <VoiceButton onResult={submit} language={lang} idleLabel="🎤" />
               <button
                 type="button"
@@ -303,6 +337,12 @@ export default function ChatPage() {
                 </option>
               ))}
             </select>
+            <Link
+              href={`/print/${activeForm}`}
+              className="rounded-lg border border-neutral-200 px-3 py-1.5 text-sm text-neutral-600 hover:bg-neutral-50"
+            >
+              🖨 {t("Print")}
+            </Link>
           </div>
           <div className="min-h-0 flex-1 overflow-y-auto">
             <FormPreview

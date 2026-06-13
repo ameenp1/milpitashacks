@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { FORM_INDEX } from "@/lib/data";
+import { warmFilledDoc } from "@/lib/client/api";
 import { FormPreview } from "@/components/FormPreview";
 import { AnswerList } from "./AnswerList";
 import type { DocumentPanelProps } from "@/lib/chat/contracts";
@@ -32,6 +33,18 @@ export function DocumentPanel({
   }, [multilingual, done]);
 
   const previewLang = showEnglish ? undefined : lang;
+
+  // Keep both the English and translated copies (and the English print copy)
+  // generated in the background as answers come in, so toggling language or
+  // hitting Print is instant instead of waiting on a re-translation.
+  useEffect(() => {
+    warmFilledDoc(activeForm, answers, "clean"); // /print uses clean English
+    if (multilingual) {
+      warmFilledDoc(activeForm, answers, "preview"); // English toggle
+      warmFilledDoc(activeForm, answers, "preview", lang); // translated toggle
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeForm, JSON.stringify(answers), lang, multilingual]);
 
   return (
     <section className="flex min-h-0 flex-col">

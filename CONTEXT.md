@@ -80,23 +80,27 @@ app/
     review-pass/route.ts  one-shot post-interview: reformat answers + flag nonsense
     understand/route.ts   LEGACY (superseded by chat), still present
 components/
+  chat/ChatTranscript.tsx messages + typewriter + reads new bot turns aloud (Role 2)
+  chat/ChatComposer.tsx   text input + mic + masked SSN + choices + skip (Role 2)
+  chat/DocumentPanel.tsx  form switcher + preview + answer list (Role 3)
+  chat/AnswerList.tsx     answers list with inline Edit; masks SSN (replaced ApprovalPanel)
   chat/Typewriter.tsx     types text char-by-char (once)
-  chat/ApprovalPanel.tsx  list tracked-changes → Approve / Approve-all / Reject; masks SSN
-  FormPreview.tsx         docx-preview render of /api/fill preview; scroll-to-field
+  FormPreview.tsx         docx-preview render of /api/fill (mode preview|clean); scroll-to-field
   VoiceButton.tsx         MediaRecorder → /api/transcribe
   SignaturePad.tsx        canvas signature (mouse+touch)
   I18nProvider.tsx        t()/ensure()/ready(); per-language localStorage cache
   Toast.tsx               toasts (errors add "ask a worker / call 2-1-1")
   Providers.tsx           wraps Toast + I18n (used in app/layout.tsx)
-  QuestionCard.tsx        LEGACY (was the old per-question card; now unused)
   StatusBadge.tsx, DeleteButton.tsx
 lib/
+  chat/useChatFlow.ts     ★ chat orchestration hook (queue/currentGroup/activeForm/submit/skip/editField)
+  chat/contracts.ts       shared prop/Msg types — the one cross-role file (see PLAN.md/ROLES.md)
   data.ts                 static JSON accessors (GROUPS, PROFILE_SCHEMA, FORM_INDEX, getFormDef, getGroup)
   status.ts               fieldStatus / formProgress / formStatus
-  profile.ts              ★ localStorage store (useSyncExternalStore): answers/reviewed/approved/signature
+  profile.ts              ★ localStorage store (useSyncExternalStore): answers/reviewed/signature
   date.ts                 todayMMDDYYYY()
   openai.ts               getClient(), MODELS, NoKeyError, errorResponse
-  docx/fillEngine.ts      ★ token → run replacement (blank / approved-plain / w:ins / blue-underline)
+  docx/fillEngine.ts      ★ token → run replacement (blank / clean-black / w:ins export / blue preview)
   server/forms.ts         getFormMarkdown / getFilledMarkdown (md working doc)
   server/i18nStore.ts     load/save data/i18n/<lang>.json
   client/api.ts           fetch wrappers: chat, reviewPass, transcribeAudio, fetchTts, translateBatch, fetchFilledDoc
@@ -121,7 +125,7 @@ inline; [lib/server/forms.ts](lib/server/forms.ts) `getFilledMarkdown` swaps tok
 answers. The "diff applied as a tracked change" is realized as **per-field token → `w:ins`**
 (reliable run mapping) rather than a positional free-form md diff — see caveats.
 
-**Chat orchestration** ([app/chat/page.tsx](app/chat/page.tsx)).
+**Chat orchestration** ([lib/chat/useChatFlow.ts](lib/chat/useChatFlow.ts); `page.tsx` is a thin shell).
 - `orderedGroups` = `PROFILE_SCHEMA` (core, `dependsOn`-filtered) then per-form extra groups,
   deduped by group id. `currentGroup` = first applicable, unanswered, un-skipped group.
 - `activeForm` (right panel) = `?form=` or manual selector, else the form owning `currentGroup`
@@ -160,21 +164,26 @@ email validation (no period), reformat + nonsense failsafe (post-completion), cr
 e-signature + auto date, English answers on export while UI is in-language, print all pages, review in
 user's language + per-language dataset, privacy page, TTS voice selection. Live via ngrok.
 
-## 10. Caveats / known gaps (read before "finishing" things)
-- **"Full adeu" is token-anchored**, not a positional free-form md diff engine. Each answer is a
-  real per-field `w:ins` tracked change. Going fully positional means reimplementing run-mapping.
-- **Vercel build not verified by a push** (local `next build` is green; Node is pinned). If it
-  fails, get the build log.
-- **Field coverage**: CW 42 is deeply mapped (22 fields, hand-curated in `scripts/preprocess.ts`
-  `CW42_FIELDS`). Other forms only have auto-detected identity fields — "full docx structure" for
-  SAWS 2 PLUS etc. is the main remaining depth work (add curated field maps like CW42's).
-- **Legacy/dead code**: `components/QuestionCard.tsx` and `app/api/understand/route.ts` are unused
-  now (superseded by chat) — safe to delete.
-- **Signature image** is shown on `/review` only; the form's signature line gets the auto **date**,
-  not an embedded image (image-in-docx was out of scope).
-- **docx-preview & live voice** were verified by clicking the app, not headlessly.
-- `data/i18n/<lang>.json` grows at runtime and is committed (seeded `espa_ol.json`); on serverless
-  the write is a no-op (read-only FS) but reads still work from committed snapshots.
+## 10. Caveats / deliberate choices (read before "finishing" things)
+- **Tracked changes are token-anchored per-field `w:ins`** — deliberate, not a bug. Each answer
+  maps to its field token and is applied as a real Word tracked change. A positional free-form
+  md-diff engine (mapping arbitrary md edits back to docx runs, adeu's hard part) would be a large
+  rewrite with the same visible result, so it's intentionally out of scope.
+- **Field coverage**: CW 42 is fully hand-curated (22 fields, `CW42_FIELDS` in
+  `scripts/preprocess.ts`). The other forms = auto-detected identity fields + a per-form `CURATED`
+  layer (signature date on all, cw74 name, scd508 register). Exhaustively mapping the long
+  SAWS 2 PLUS is the main ongoing depth work — add entries to `CURATED` with unique anchors from
+  `data/forms/<id>.md`, then `npm run preprocess` (R3 owns `data/`).
+- **`data/i18n/<lang>.json`** is a committed, growing translation dataset (seeded `espa_ol.json`).
+  On serverless the runtime write is a no-op (read-only FS) but reads still work from the committed
+  snapshot — so commit new languages deliberately to "bake them in".
+- **Dead code already removed**: `QuestionCard.tsx`, `/api/understand`, the `approved` store field,
+  and `ApprovalPanel` are gone (Phase 0).
+- **Vercel build not verified by a push** (local `next build` is green; Node pinned). If it fails,
+  get the build log.
+- **Signature image** shows on `/review`; the form's signature line gets the auto **date** (not an
+  embedded image — out of scope).
+- **docx-preview & live voice** verified by clicking the app, not headlessly.
 
 ## 11. Common extension tasks
 - **Deepen a form** (e.g. SAWS 2 PLUS): add curated entries to `CW42_FIELDS`-style logic in

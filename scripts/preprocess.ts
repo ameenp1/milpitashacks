@@ -228,6 +228,24 @@ function inject(xml: string, fields: Field[]): { xml: string; placed: Set<string
   return { xml: out, placed };
 }
 
+// Build a markdown view of the form with each field shown inline as its
+// {{token}} — the working representation the chat/adeu engine edits.
+function toMarkdown(xml: string, fields: Field[]): string {
+  const placed = new Set<string>();
+  const lines: string[] = [];
+  const paras = xml.match(/<w:p\b[^>]*>[\s\S]*?<\/w:p>/g) ?? [];
+  for (const p of paras) {
+    let t = paraText(p);
+    const f = fields.find((f) => !placed.has(f.id) && t.includes(f.anchor));
+    if (f) {
+      placed.add(f.id);
+      t = t ? `${t} {{${f.token}}}` : `{{${f.token}}}`;
+    }
+    if (t) lines.push(t);
+  }
+  return lines.join("\n");
+}
+
 // Auto-detect shared fields for non-curated forms.
 function autoFields(formId: string, xml: string): Field[] {
   const paras = xml.match(/<w:p\b[^>]*>[\s\S]*?<\/w:p>/g) ?? [];
@@ -278,6 +296,9 @@ function processForm(meta: { id: string; code: string; title: string; descriptio
     join(TEMPLATES, `${meta.id}.docx`),
     zip.generate({ type: "nodebuffer", compression: "DEFLATE" }),
   );
+
+  // md working representation (tokens at field slots)
+  writeFileSync(join(FORMS_OUT, `${meta.id}.md`), toMarkdown(xml, kept));
 
   const def: FormDef = { id: meta.id, code: meta.code, title: meta.title, description: meta.description, fields: kept };
   writeFileSync(join(FORMS_OUT, `${meta.id}.json`), JSON.stringify(def, null, 2));

@@ -9,6 +9,18 @@ export interface Msg {
   speak?: boolean; // bot turns the transcript should read aloud
 }
 
+export interface DetectedLanguage {
+  code: string;
+  label: string;
+}
+
+export interface ChatResult {
+  type: "answer" | "question" | "unclear";
+  value: string;
+  reply: string;
+  detectedLanguage?: DetectedLanguage;
+}
+
 // Role 2 (Voice) builds against these.
 export interface ChatTranscriptProps {
   messages: Msg[];
@@ -33,7 +45,7 @@ export interface ChatComposerProps {
 export interface DocumentPanelProps {
   activeForm: string;
   answers: Record<string, string>;
-  activeValue?: string; // last-answered value → scroll/highlight target
+  activeValue?: string; // last-answered value -> scroll/highlight target
   t: (s: string) => string;
   onSwitchForm: (id: string) => void;
   onEditField: (group: string, value: string) => void;

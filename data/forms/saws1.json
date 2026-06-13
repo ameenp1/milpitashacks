@@ -5,6 +5,13 @@
   "description": "Starts your application for benefits on the day you sign it.",
   "fields": [
     {
+      "id": "sign_date",
+      "group": "sign_date",
+      "anchor": "SIGNATURE OF APPLICANT",
+      "answerType": "date",
+      "token": "saws1__sign_date"
+    },
+    {
       "id": "phone",
       "token": "saws1__phone",
       "group": "phone",

@@ -320,7 +320,7 @@ The Rights, Responsibilities, and Other Important Information (SAWS 2A SAR)
 11750441943For cash aid:
 Welfare to Work Informing Notice (WTW 5)
 For Medi-Cal/34-County CMSP: the MC 219/CMSP 219 and that its contents were explained to him/her.
-Signature (Parent or Caretaker Relative, CalFresh Household Member or Authorized Representative, Medi-Cal/34-County CMSP Applicant/Beneficiary)
+Signature (Parent or Caretaker Relative, CalFresh Household Member or Authorized Representative, Medi-Cal/34-County CMSP Applicant/Beneficiary) {{saws2asar__sign_date}}
 Date
 Signature (Other Parent Living in the Home, Registered Domestic Partner)
 Witness, if You Signed With An "X"

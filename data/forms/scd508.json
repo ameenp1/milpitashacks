@@ -5,6 +5,13 @@
   "description": "Lets you choose whether you would like to register to vote.",
   "fields": [
     {
+      "id": "register",
+      "group": "wants_to_register_vote",
+      "anchor": "I would like to register to vote",
+      "answerType": "choice",
+      "token": "scd508__register"
+    },
+    {
       "id": "full_name",
       "token": "scd508__full_name",
       "group": "full_name",

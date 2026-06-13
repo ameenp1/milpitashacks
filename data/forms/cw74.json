@@ -5,6 +5,13 @@
   "description": "A log of your search for permanent housing while you receive temporary shelter.",
   "fields": [
     {
+      "id": "case_name",
+      "group": "full_name",
+      "anchor": "Case Name",
+      "answerType": "name",
+      "token": "cw74__case_name"
+    },
+    {
       "id": "phone",
       "token": "cw74__phone",
       "group": "phone",

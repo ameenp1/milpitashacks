@@ -11,7 +11,8 @@ file a single owner**. Today most tasks pile into one 439-line file
 streams never touch the same file.
 
 ## 2. Phase 0 — decomposition (Role 4, merged to `main` BEFORE anyone branches)
-Role 4 lands one small, behavior-preserving PR that:
+**Status: ✅ DONE (commit `a498160`). Everyone can branch off `main` now.**
+Role 4 landed one small, behavior-preserving PR that:
 1. Extracts `app/chat/page.tsx` into:
    - `components/chat/ChatTranscript.tsx` (messages + typewriter + audio) → Role 2
    - `components/chat/ChatComposer.tsx` (input + mic + SSN field) → Role 2

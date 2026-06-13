@@ -11,34 +11,34 @@
     "code": "CW 74",
     "title": "Permanent Housing Search Document",
     "description": "A log of your search for permanent housing while you receive temporary shelter.",
-    "fieldCount": 2
+    "fieldCount": 3
   },
   {
     "id": "saws1",
     "code": "SAWS 1",
     "title": "Application for Cash Aid, CalFresh, and/or Medi-Cal",
     "description": "Starts your application for benefits on the day you sign it.",
-    "fieldCount": 5
+    "fieldCount": 6
   },
   {
     "id": "saws2plus",
     "code": "SAWS 2 PLUS",
     "title": "Application for CalFresh, Cash Aid, and/or Medi-Cal",
     "description": "The main application with your household, income, and resource details.",
-    "fieldCount": 6
+    "fieldCount": 7
   },
   {
     "id": "saws2asar",
     "code": "SAWS 2A SAR",
     "title": "Rights, Responsibilities and Other Important Information",
     "description": "Explains your rights and responsibilities. Mostly for your records.",
-    "fieldCount": 3
+    "fieldCount": 4
   },
   {
     "id": "scd508",
     "code": "SCD 508",
     "title": "Voter Registration",
     "description": "Lets you choose whether you would like to register to vote.",
-    "fieldCount": 1
+    "fieldCount": 2
   }
 ]

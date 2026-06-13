@@ -180,6 +180,27 @@ const CW42_FIELDS: Omit<Field, "token">[] = [
 ];
 
 // Keyword auto-detection for the other forms (first occurrence of each).
+// Curated extra fields for the other forms (beyond auto-detected identity fields).
+// Deepening these per-form is ongoing; CW 42 is the fully-mapped example. Each maps
+// to an existing group so it fills from the shared profile (cross-fill).
+const CURATED: Record<string, Omit<Field, "token">[]> = {
+  cw74: [
+    { id: "case_name", group: "full_name", anchor: "Case Name", answerType: "name" },
+  ],
+  scd508: [
+    { id: "register", group: "wants_to_register_vote", anchor: "I would like to register to vote", answerType: "choice" },
+  ],
+  saws1: [
+    { id: "sign_date", group: "sign_date", anchor: "SIGNATURE OF APPLICANT", answerType: "date" },
+  ],
+  saws2plus: [
+    { id: "sign_date", group: "sign_date", anchor: "SIGNATURE OF APPLICANT", answerType: "date" },
+  ],
+  saws2asar: [
+    { id: "sign_date", group: "sign_date", anchor: "Signature (Parent or Caretaker", answerType: "date" },
+  ],
+};
+
 // Keyword auto-detection (first occurrence of each per form). These map to the
 // SHARED core groups, so answering once fills the field on every form (cross-fill).
 const AUTO: { group: string; answerType: AnswerType; test: (t: string) => boolean; needsReview?: boolean }[] = [
@@ -297,7 +318,13 @@ function processForm(meta: { id: string; code: string; title: string; descriptio
   if (meta.id === "cw42") {
     fields = CW42_FIELDS.map((f) => ({ ...f, token: `cw42__${f.id}` }));
   } else {
-    fields = autoFields(meta.id, xml);
+    const curated = (CURATED[meta.id] ?? []).map((f) => ({
+      ...f,
+      token: `${meta.id}__${f.id}`,
+    }));
+    const curatedGroups = new Set(curated.map((f) => f.group));
+    const auto = autoFields(meta.id, xml).filter((f) => !curatedGroups.has(f.group));
+    fields = [...curated, ...auto];
   }
 
   const { xml: filledXml, placed } = inject(xml, fields);

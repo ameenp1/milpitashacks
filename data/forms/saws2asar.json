@@ -5,6 +5,13 @@
   "description": "Explains your rights and responsibilities. Mostly for your records.",
   "fields": [
     {
+      "id": "sign_date",
+      "group": "sign_date",
+      "anchor": "Signature (Parent or Caretaker",
+      "answerType": "date",
+      "token": "saws2asar__sign_date"
+    },
+    {
       "id": "ssn",
       "token": "saws2asar__ssn",
       "group": "ssn",

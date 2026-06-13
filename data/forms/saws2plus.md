@@ -252,7 +252,7 @@ I read, or had read to me, the Program Rules and Penalties (Program Rules Pages 
 I understand that giving false or misleading statements or misrepresenting, hiding or withholding facts to establish eligibility is fraud and that I may be subject to penalties under federal law if I provide false or untrue information. Fraud can cause a criminal case to be filed against me and/or I may be barred for a period of time (or life) from getting CalFresh benefits and cash aid.
 I understand that Social Security Numbers or Immigration Status for household members applying for benefits may be shared with the appropriate government agencies as required by federal law.
 I am giving the Medi-Cal agency the right to pursue and get any money from other health insurance, legal settlements, or other third parties.
-SIGNATURE OF APPLICANT, CARETAKER RELATIVE (OR ADULT HOUSEHOLD MEMBER/ AUTHORIZED REPRESENTATIVE*/GUARDIAN)
+SIGNATURE OF APPLICANT, CARETAKER RELATIVE (OR ADULT HOUSEHOLD MEMBER/ AUTHORIZED REPRESENTATIVE*/GUARDIAN) {{saws2plus__sign_date}}
 *If you have an Authorized Representative, please complete Question 2 on the next page.
 DATE
 SIGNATURE OF SPOUSE, OTHER PARENT, OTHER AIDED ADULT, OR REGISTERED DOMESTIC PARTNER

@@ -6,10 +6,16 @@ Four people, four agents, four branches, one `main`. Work is mergeable because
 
 Source of tasks: [revisions_2.md](revisions_2.md) (line numbers referenced as L2–L12).
 
-> **Phase 0 (do this before anyone branches):** Role 4 lands a small refactor that
-> splits the 439-line [app/chat/page.tsx](app/chat/page.tsx) into a thin shell + three
-> panels + one flow hook, with typed contracts. Everyone branches off `main` *after*
-> Phase 0. Details in [PLAN.md](PLAN.md) §2.
+> **Phase 0 — ✅ DONE (commit `a498160` on `main`). Branch off `main` now.**
+> [app/chat/page.tsx](app/chat/page.tsx) is now a thin shell wiring
+> [lib/chat/useChatFlow.ts](lib/chat/useChatFlow.ts) to three panels —
+> [ChatTranscript](components/chat/ChatTranscript.tsx) (R2),
+> [ChatComposer](components/chat/ChatComposer.tsx) (R2),
+> [DocumentPanel](components/chat/DocumentPanel.tsx)+[AnswerList](components/chat/AnswerList.tsx) (R3) —
+> with shared types in [lib/chat/contracts.ts](lib/chat/contracts.ts). Approve/disapprove
+> is gone (fillEngine `mode: preview|export|clean`, `profile.approved` removed,
+> `ApprovalPanel` replaced by `AnswerList`). Dead code (`QuestionCard`, `/api/understand`)
+> deleted. **The files marked `*(new)*` below now exist — you extend them, not create them.**
 
 ---
 

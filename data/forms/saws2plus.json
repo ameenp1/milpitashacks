@@ -5,6 +5,13 @@
   "description": "The main application with your household, income, and resource details.",
   "fields": [
     {
+      "id": "sign_date",
+      "group": "sign_date",
+      "anchor": "SIGNATURE OF APPLICANT",
+      "answerType": "date",
+      "token": "saws2plus__sign_date"
+    },
+    {
       "id": "phone",
       "token": "saws2plus__phone",
       "group": "phone",

@@ -1,0 +1,113 @@
+// Client-side app state: the applicant's profile + which forms they marked
+// reviewed. Lives ONLY in localStorage (privacy-first) and is exposed to React
+// via useSyncExternalStore. "Delete my information" clears it entirely.
+import { useSyncExternalStore } from "react";
+import type { Profile } from "./types";
+
+export interface AppState {
+  profile: Profile;
+  reviewed: string[]; // form ids the applicant confirmed
+  approved: string[]; // group ids whose tracked-change the applicant approved
+  signature?: string; // data URL of the e-signature
+}
+
+const KEY = "ha_state";
+
+const EMPTY: AppState = {
+  profile: { language: "en", languageLabel: "English", answers: {} },
+  reviewed: [],
+  approved: [],
+};
+
+function load(): AppState {
+  if (typeof window === "undefined") return EMPTY;
+  try {
+    const raw = window.localStorage.getItem(KEY);
+    if (!raw) return EMPTY;
+    const parsed = JSON.parse(raw) as AppState;
+    return {
+      profile: {
+        language: parsed.profile?.language ?? "en",
+        languageLabel: parsed.profile?.languageLabel ?? "English",
+        answers: parsed.profile?.answers ?? {},
+      },
+      reviewed: parsed.reviewed ?? [],
+      approved: parsed.approved ?? [],
+      signature: parsed.signature,
+    };
+  } catch {
+    return EMPTY;
+  }
+}
+
+let state: AppState = load();
+const listeners = new Set<() => void>();
+
+function persist() {
+  if (typeof window !== "undefined") {
+    window.localStorage.setItem(KEY, JSON.stringify(state));
+  }
+}
+function set(next: AppState) {
+  state = next;
+  persist();
+  listeners.forEach((l) => l());
+}
+
+function subscribe(l: () => void) {
+  listeners.add(l);
+  return () => listeners.delete(l);
+}
+
+// --- actions ---
+export function setLanguage(language: string, languageLabel: string) {
+  set({ ...state, profile: { ...state.profile, language, languageLabel } });
+}
+export function setAnswer(group: string, value: string) {
+  set({
+    ...state,
+    profile: {
+      ...state.profile,
+      answers: { ...state.profile.answers, [group]: value },
+    },
+  });
+}
+export function markReviewed(formId: string, reviewed = true) {
+  const has = state.reviewed.includes(formId);
+  if (reviewed && !has) set({ ...state, reviewed: [...state.reviewed, formId] });
+  if (!reviewed && has)
+    set({ ...state, reviewed: state.reviewed.filter((id) => id !== formId) });
+}
+export function approveGroups(ids: string[]) {
+  const next = new Set(state.approved);
+  ids.forEach((id) => next.add(id));
+  set({ ...state, approved: [...next] });
+}
+export function unapproveGroup(id: string) {
+  set({ ...state, approved: state.approved.filter((g) => g !== id) });
+}
+export function setSignature(dataUrl: string | undefined) {
+  set({ ...state, signature: dataUrl });
+}
+export function clearAll() {
+  // Wipe everything this app ever stored, including cached translations.
+  if (typeof window !== "undefined") {
+    Object.keys(window.localStorage)
+      .filter((k) => k === KEY || k.startsWith("ha_tr_"))
+      .forEach((k) => window.localStorage.removeItem(k));
+  }
+  set({
+    profile: { language: "en", languageLabel: "English", answers: {} },
+    reviewed: [],
+    approved: [],
+    signature: undefined,
+  });
+}
+
+// --- hooks ---
+export function useAppState(): AppState {
+  return useSyncExternalStore(subscribe, () => state, () => EMPTY);
+}
+export function useProfile(): Profile {
+  return useAppState().profile;
+}

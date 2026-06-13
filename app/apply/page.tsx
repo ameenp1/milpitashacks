@@ -61,7 +61,7 @@ export default function ApplyPage() {
           />
           <AssistComposer
             sending={flow.sending}
-            language={flow.langLabel}
+            language={flow.lang}
             t={t}
             onSubmit={flow.send}
           />

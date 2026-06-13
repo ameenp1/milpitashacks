@@ -75,6 +75,7 @@ export default function ChatPage() {
             t={t}
             onSubmit={flow.submit}
             onSkip={flow.skip}
+            onStartRecording={flow.stop}
           />
         </section>
 

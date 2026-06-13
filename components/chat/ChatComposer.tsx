@@ -14,6 +14,7 @@ export function ChatComposer({
   t,
   onSubmit,
   onSkip,
+  onStartRecording,
 }: ChatComposerProps) {
   const isSsn = currentGroup?.answerType === "ssn";
   const [input, setInput] = useState("");
@@ -75,6 +76,7 @@ export function ChatComposer({
           big
           startSignal={startSignal}
           onResult={send}
+          onRecordStart={onStartRecording}
           language={language}
         />
         {currentGroup && (

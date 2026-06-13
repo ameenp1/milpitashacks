@@ -2,6 +2,8 @@
 // to text input / English when no OpenAI key is configured.
 "use client";
 
+import type { ChatResult } from "@/lib/chat/contracts";
+
 export class NoKeyError extends Error {
   constructor() {
     super("no_key");
@@ -21,12 +23,6 @@ export async function transcribeAudio(
   if (!res.ok) throw new Error("Transcription failed");
   const json = (await res.json()) as { text?: string };
   return json.text ?? "";
-}
-
-export interface ChatResult {
-  type: "answer" | "question" | "unclear";
-  value: string;
-  reply: string;
 }
 
 export async function chat(args: {

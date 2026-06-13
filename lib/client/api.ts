@@ -43,6 +43,21 @@ export async function chat(args: {
   return (await res.json()) as ChatResult;
 }
 
+export async function askAssistant(
+  messages: { role: "user" | "assistant"; content: string }[],
+  language?: string,
+): Promise<string> {
+  const res = await fetch("/api/assist", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ messages, language }),
+  });
+  if (res.status === 503) throw new NoKeyError();
+  if (!res.ok) throw new Error("Assistant failed");
+  const json = (await res.json()) as { reply?: string };
+  return json.reply ?? "";
+}
+
 export interface ReviewPass {
   fixes: Record<string, string>;
   issues: { group: string; reason: string }[];

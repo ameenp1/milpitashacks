@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { transcribeAudio, NoKeyError } from "@/lib/client/api";
 import { useToast } from "./Toast";
 
@@ -9,17 +9,24 @@ export function VoiceButton({
   onResult,
   language,
   idleLabel = "Tap to speak",
+  big = false,
+  startSignal,
 }: {
   onResult: (text: string) => void;
   language?: string;
   idleLabel?: string;
+  big?: boolean; // large primary mic (mic-first composer)
+  startSignal?: number; // bump to auto-start recording (after the bot speaks)
 }) {
   const [state, setState] = useState<State>("idle");
+  const stateRef = useRef<State>("idle");
+  stateRef.current = state;
   const recorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
   const { showToast } = useToast();
 
   async function start() {
+    if (stateRef.current !== "idle") return;
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const recorder = new MediaRecorder(stream);
@@ -56,18 +63,60 @@ export function VoiceButton({
     }
   }
 
-  function stop() {
+  function stopRecording() {
     recorderRef.current?.stop();
+  }
+
+  // Auto-start when the parent bumps startSignal (after the assistant speaks).
+  const prevSignal = useRef(startSignal);
+  useEffect(() => {
+    if (startSignal !== undefined && startSignal !== prevSignal.current) {
+      prevSignal.current = startSignal;
+      start();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startSignal]);
+
+  const toggle = () =>
+    state === "recording" ? stopRecording() : state === "idle" ? start() : undefined;
+
+  if (big) {
+    return (
+      <button
+        type="button"
+        onClick={toggle}
+        disabled={state === "processing"}
+        aria-pressed={state === "recording"}
+        aria-label={state === "recording" ? "Stop" : "Speak"}
+        className={[
+          "flex h-24 w-24 flex-col items-center justify-center rounded-full text-3xl shadow-sm transition",
+          state === "recording"
+            ? "animate-pulse bg-red-600 text-white"
+            : state === "processing"
+              ? "bg-neutral-200 text-neutral-400"
+              : "bg-neutral-900 text-white hover:bg-neutral-700",
+        ].join(" ")}
+      >
+        {state === "processing" ? "…" : "🎤"}
+        <span className="mt-1 text-[11px] font-medium">
+          {state === "recording"
+            ? "Tap to stop"
+            : state === "processing"
+              ? "One moment"
+              : "Tap to speak"}
+        </span>
+      </button>
+    );
   }
 
   return (
     <button
       type="button"
-      onClick={() => (state === "recording" ? stop() : state === "idle" ? start() : undefined)}
+      onClick={toggle}
       disabled={state === "processing"}
       aria-pressed={state === "recording"}
       className={[
-        "inline-flex items-center gap-3 rounded-full px-7 py-4 text-lg font-medium transition",
+        "inline-flex items-center gap-2 rounded-full px-4 py-3 text-sm font-medium transition",
         state === "recording"
           ? "bg-red-600 text-white hover:bg-red-700"
           : state === "processing"
@@ -77,7 +126,7 @@ export function VoiceButton({
     >
       <span
         className={[
-          "inline-block h-3 w-3 rounded-full",
+          "inline-block h-2.5 w-2.5 rounded-full",
           state === "recording" ? "animate-pulse bg-white" : "bg-white/80",
         ].join(" ")}
         aria-hidden

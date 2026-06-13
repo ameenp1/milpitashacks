@@ -42,6 +42,7 @@ export interface ChatComposerProps {
   t: (s: string) => string;
   onSubmit: (text: string) => void;
   onSkip: () => void;
+  onStartRecording: () => void; // user started the mic → cut assistant audio (barge-in)
 }
 
 // Role 3 (Document) builds against these.

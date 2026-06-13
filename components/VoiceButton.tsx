@@ -11,12 +11,14 @@ export function VoiceButton({
   idleLabel = "Tap to speak",
   big = false,
   startSignal,
+  onRecordStart,
 }: {
   onResult: (text: string) => void;
   language?: string;
   idleLabel?: string;
   big?: boolean; // large primary mic (mic-first composer)
   startSignal?: number; // bump to auto-start recording (after the bot speaks)
+  onRecordStart?: () => void; // fired when recording begins (e.g. to cut TTS)
 }) {
   const [state, setState] = useState<State>("idle");
   const stateRef = useRef<State>("idle");
@@ -57,6 +59,7 @@ export function VoiceButton({
       recorder.start();
       recorderRef.current = recorder;
       setState("recording");
+      onRecordStart?.(); // user is talking → cut any assistant audio (barge-in)
     } catch {
       showToast("Please allow microphone access, or type your answer.", "error");
       setState("idle");

@@ -3,39 +3,73 @@ import { useCallback, useRef, useState } from "react";
 import { fetchTts, NoKeyError } from "./api";
 
 // Reads text aloud via OpenAI TTS. Silently no-ops if no key is configured or
-// the browser blocks autoplay (a manual tap will still work).
+// the browser blocks autoplay (a manual tap still works).
+//
+// Utterances are QUEUED, not interrupted: consecutive bot turns (e.g. "Thank
+// you." then the next question) play back-to-back without cutting each other off.
+// `stop()` flushes the queue + halts playback — used when the user takes an
+// action (submit/skip) so we don't make them wait. `speaking` stays true while
+// anything is playing or queued, and flips to false when the queue drains — that
+// false-edge is the "finished talking" signal the composer uses to auto-listen.
 export function useSpeak() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const queueRef = useRef<{ text: string; voice?: string }[]>([]);
+  const playingRef = useRef(false);
   const disabledRef = useRef(false);
   const [speaking, setSpeaking] = useState(false);
 
   const stop = useCallback(() => {
-    audioRef.current?.pause();
-    audioRef.current = null;
+    queueRef.current = [];
+    playingRef.current = false;
+    if (audioRef.current) {
+      audioRef.current.onended = null;
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
     setSpeaking(false);
   }, []);
 
-  const speak = useCallback(
-    async (text: string, voice?: string) => {
-      if (disabledRef.current || !text.trim()) return;
-      try {
-        const blob = await fetchTts(text, voice);
-        const url = URL.createObjectURL(blob);
-        stop();
-        const audio = new Audio(url);
-        audioRef.current = audio;
-        setSpeaking(true);
-        audio.onended = () => {
-          setSpeaking(false);
-          URL.revokeObjectURL(url);
-        };
-        await audio.play().catch(() => setSpeaking(false));
-      } catch (err) {
-        if (err instanceof NoKeyError) disabledRef.current = true;
-        setSpeaking(false);
+  const playNext = useCallback(async () => {
+    if (playingRef.current) return; // a turn is already playing
+    const item = queueRef.current.shift();
+    if (!item) {
+      setSpeaking(false); // queue drained
+      return;
+    }
+    playingRef.current = true;
+    setSpeaking(true);
+    try {
+      const blob = await fetchTts(item.text, item.voice);
+      if (!playingRef.current) return; // stopped while fetching
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+      audioRef.current = audio;
+      const advance = () => {
+        URL.revokeObjectURL(url);
+        if (audioRef.current === audio) audioRef.current = null;
+        playingRef.current = false;
+        playNext();
+      };
+      audio.onended = advance;
+      audio.onerror = advance;
+      await audio.play().catch(advance);
+    } catch (err) {
+      if (err instanceof NoKeyError) {
+        disabledRef.current = true;
+        queueRef.current = [];
       }
+      playingRef.current = false;
+      playNext();
+    }
+  }, []);
+
+  const speak = useCallback(
+    (text: string, voice?: string) => {
+      if (disabledRef.current || !text.trim()) return;
+      queueRef.current.push({ text, voice });
+      playNext();
     },
-    [stop],
+    [playNext],
   );
 
   return { speak, stop, speaking };

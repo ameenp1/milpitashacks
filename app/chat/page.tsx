@@ -69,6 +69,8 @@ export default function ChatPage() {
             currentGroup={flow.currentGroup}
             sending={flow.sending}
             language={flow.lang}
+            speaking={flow.speaking}
+            hearMode={flow.hearMode}
             t={t}
             onSubmit={flow.submit}
             onSkip={flow.skip}

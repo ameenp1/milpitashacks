@@ -78,7 +78,7 @@ export function useChatFlow() {
   const { profile } = useAppState();
   const answers = profile.answers;
   const { t, ensure, ready, langLabel, lang } = useI18n();
-  const { speak, stop, speaking } = useSpeak();
+  const { speak, stop, speaking, playingText } = useSpeak();
   const { showToast } = useToast();
 
   const [messages, setMessages] = useState<Msg[]>([]);
@@ -343,6 +343,7 @@ export function useChatFlow() {
     speak,
     stop,
     speaking,
+    playingText,
     lastValue,
     submit,
     skip,

@@ -10,13 +10,6 @@
       "anchor": "I would like to register to vote",
       "answerType": "choice",
       "token": "scd508__register"
-    },
-    {
-      "id": "full_name",
-      "token": "scd508__full_name",
-      "group": "full_name",
-      "anchor": "Please sign your name here:",
-      "answerType": "name"
     }
   ]
 }

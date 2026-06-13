@@ -17,6 +17,10 @@ export function useSpeak() {
   const playingRef = useRef(false);
   const disabledRef = useRef(false);
   const [speaking, setSpeaking] = useState(false);
+  // The text of the utterance that has actually begun PLAYING. The transcript
+  // uses this to start a turn's typewriter only once its audio starts, so speech
+  // leads the typing instead of arriving after it (revisions_2 L4).
+  const [playingText, setPlayingText] = useState<string | null>(null);
 
   const stop = useCallback(() => {
     queueRef.current = [];
@@ -27,6 +31,7 @@ export function useSpeak() {
       audioRef.current = null;
     }
     setSpeaking(false);
+    setPlayingText(null);
   }, []);
 
   const playNext = useCallback(async () => {
@@ -34,6 +39,7 @@ export function useSpeak() {
     const item = queueRef.current.shift();
     if (!item) {
       setSpeaking(false); // queue drained
+      setPlayingText(null);
       return;
     }
     playingRef.current = true;
@@ -52,7 +58,12 @@ export function useSpeak() {
       };
       audio.onended = advance;
       audio.onerror = advance;
-      await audio.play().catch(advance);
+      await audio
+        .play()
+        .then(() => {
+          if (audioRef.current === audio) setPlayingText(item.text);
+        })
+        .catch(advance);
     } catch (err) {
       if (err instanceof NoKeyError) {
         disabledRef.current = true;
@@ -72,5 +83,5 @@ export function useSpeak() {
     [playNext],
   );
 
-  return { speak, stop, speaking };
+  return { speak, stop, speaking, playingText };
 }

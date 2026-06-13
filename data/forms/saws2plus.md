@@ -45,7 +45,7 @@ NOTE: Certain noncitizens applying for immigration status based on domestic viol
 What if I am homeless?
 Proof Needed to Get More CalFresh Benefits
 Housing costs (rent receipts, mortgage bills, property tax bill, insurance documents).
-Phone and utility costs. {{saws2plus__phone}}
+Phone and utility costs.
 Medical expenses for anyone in your household who is elderly (60 and older) or disabled.
 Child and adult care costs due to someone working, looking for work, attending training or school, or participating in a required work activity.
 Child support paid by a person in your household.
@@ -124,7 +124,7 @@ Getting food benefits will not affect you or your family’s immigration status.
 The immigration status of noncitizens who are eligible and apply for benefits will be checked with the U.S. Citizenship and Immigration Services (USCIS). Federal law says the USCIS cannot use the information for anything else except cases of fraud.
 Opting Out
 You do not have to give immigration information, Social Security numbers, or documents for any noncitizen family member(s) who are not applying for benefits. The County will need to know their income and resource information to correctly determine your household’s benefits. The County will not contact USCIS about the people who don’t apply for benefits.
-Use of Social Security Numbers (SSN) {{saws2plus__ssn}}
+Use of Social Security Numbers (SSN)
 CalFresh and Cash Aid: Everyone applying for CalFresh benefits or cash aid needs to provide a SSN, if you have one, or proof that you have applied for a SSN (such as a letter from the Social Security office). We can deny you or any member of your household who does not give us a SSN. Some people do not have to give SSNs to get help such as, victims of domestic abuse, crime prosecution witnesses, and trafficking victims.
 Health Coverage/Medi-Cal: We need your SSN if you want health coverage and have a SSN. Providing your SSN can be helpful if you don’t want health coverage too since it can speed up the application process. We use SSNs to check income and other information to see who’s eligible for help with health coverage costs. If someone wants help getting a SSN, Call 1-800-772-1213 or visit the website: www.socialsecurity.gov
 Overissuance
@@ -183,7 +183,7 @@ Please use black or blue ink because it is easy to read and copies best. Please 
 3454843244563OTHER NAMES (MAIDEN, NICKNAMES, ETC.)
 OTHER NAMES (MAIDEN, NICKNAMES, ETC.)
 NAME (FIRST, MIDDLE, LAST) {{saws2plus__full_name}}
-SOCIAL SECURITY NUMBER (IF YOU HAVE ONE AND ARE APPLYING FOR BENEFITS)
+SOCIAL SECURITY NUMBER (IF YOU HAVE ONE AND ARE APPLYING FOR BENEFITS) {{saws2plus__ssn}}
 6058691-1226STATE
 STATE
 COUNTY
@@ -193,8 +193,8 @@ CITY
 APARTMENT #
 APARTMENT #
 MAILING ADDRESS (IF DIFFERENT FROM ABOVE) {{saws2plus__address}}
-I want to get information about this application by email. {{saws2plus__email}}
-19438935334WORK/ALTERNATE/MESSAGE PHONE
+I want to get information about this application by email.
+19438935334WORK/ALTERNATE/MESSAGE PHONE {{saws2plus__phone}}
 WORK/ALTERNATE/MESSAGE PHONE
 YesNo
 CITY
@@ -203,7 +203,7 @@ COUNTY
 COUNTY
 2683706-297179APARTMENT #
 APARTMENT #
-EMAIL ADDRESS
+EMAIL ADDRESS {{saws2plus__email}}
 ZIP CODE
 6058691-345986STATE
 STATE

@@ -12,21 +12,6 @@
       "token": "saws2plus__sign_date"
     },
     {
-      "id": "phone",
-      "token": "saws2plus__phone",
-      "group": "phone",
-      "anchor": "Phone and utility costs.",
-      "answerType": "phone"
-    },
-    {
-      "id": "ssn",
-      "token": "saws2plus__ssn",
-      "group": "ssn",
-      "anchor": "Use of Social Security Numbers (SSN)",
-      "answerType": "ssn",
-      "needsReview": true
-    },
-    {
       "id": "full_name",
       "token": "saws2plus__full_name",
       "group": "full_name",
@@ -41,11 +26,26 @@
       "answerType": "address"
     },
     {
+      "id": "phone",
+      "token": "saws2plus__phone",
+      "group": "phone",
+      "anchor": "19438935334WORK/ALTERNATE/MESSAGE PHONE",
+      "answerType": "phone"
+    },
+    {
       "id": "email",
       "token": "saws2plus__email",
       "group": "email",
-      "anchor": "I want to get information about this app",
+      "anchor": "EMAIL ADDRESS",
       "answerType": "email"
+    },
+    {
+      "id": "ssn",
+      "token": "saws2plus__ssn",
+      "group": "ssn",
+      "anchor": "SOCIAL SECURITY NUMBER",
+      "answerType": "ssn",
+      "needsReview": true
     },
     {
       "id": "dob",

@@ -12,21 +12,6 @@
       "token": "saws1__sign_date"
     },
     {
-      "id": "phone",
-      "token": "saws1__phone",
-      "group": "phone",
-      "anchor": "Phone and utility costs.",
-      "answerType": "phone"
-    },
-    {
-      "id": "ssn",
-      "token": "saws1__ssn",
-      "group": "ssn",
-      "anchor": "Use of Social Security Numbers (SSN)",
-      "answerType": "ssn",
-      "needsReview": true
-    },
-    {
       "id": "address",
       "token": "saws1__address",
       "group": "address",
@@ -34,10 +19,17 @@
       "answerType": "address"
     },
     {
+      "id": "phone",
+      "token": "saws1__phone",
+      "group": "phone",
+      "anchor": "HOME PHONE",
+      "answerType": "phone"
+    },
+    {
       "id": "email",
       "token": "saws1__email",
       "group": "email",
-      "anchor": "I want to get information about this app",
+      "anchor": "EMAIL ADDRESS",
       "answerType": "email"
     },
     {

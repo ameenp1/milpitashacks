@@ -18,7 +18,7 @@
     "code": "SAWS 1",
     "title": "Application for Cash Aid, CalFresh, and/or Medi-Cal",
     "description": "Starts your application for benefits on the day you sign it.",
-    "fieldCount": 6
+    "fieldCount": 5
   },
   {
     "id": "saws2plus",
@@ -32,13 +32,13 @@
     "code": "SAWS 2A SAR",
     "title": "Rights, Responsibilities and Other Important Information",
     "description": "Explains your rights and responsibilities. Mostly for your records.",
-    "fieldCount": 4
+    "fieldCount": 1
   },
   {
     "id": "scd508",
     "code": "SCD 508",
     "title": "Voter Registration",
     "description": "Lets you choose whether you would like to register to vote.",
-    "fieldCount": 2
+    "fieldCount": 1
   }
 ]

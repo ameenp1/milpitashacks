@@ -220,7 +220,10 @@ const AUTO: { group: string; answerType: AnswerType; test: (t: string) => boolea
   { group: "dob", answerType: "date",
     test: (t) => /date of birth|birthdate/i.test(t) && t.length < 90 },
   { group: "phone", answerType: "phone",
-    test: (t) => /(telephone|phone)\s*(number|no\.?|#)?/i.test(t) && t.length < 70 },
+    test: (t) =>
+      /(telephone|phone)\s*(number|no\.?|#)?/i.test(t) &&
+      t.length < 70 &&
+      !/\b(ew|worker|eligibility|office|fax|employer|landlord)\b/i.test(t) },
   { group: "email", answerType: "email",
     test: (t) => /e-?mail/i.test(t) && t.length < 70 },
 ];
@@ -283,6 +286,29 @@ function toMarkdown(xml: string, fields: Field[]): string {
   return lines.join("\n");
 }
 
+// Reject paragraphs that read as a sentence/heading/explanation rather than a
+// fill-in field LABEL. Without this, loose keyword tests stamp answer tokens onto
+// prose like "Phone and utility costs." or "Use of Social Security Numbers (SSN)"
+// — so the user's phone/SSN get written into explanatory text, not a real field.
+function looksLikeFieldLabel(t: string): boolean {
+  // Sentences (end with terminal punctuation and have a few words).
+  if (/[.!?]$/.test(t) && t.split(/\s+/).length >= 3) return false;
+  // Explanatory prose / section headings (not a place to write an answer).
+  if (
+    /\b(use of|notice|statement|privacy|disclosure|voluntary|rules|rights|responsibilities|how we use|we use|will be used|i (understand|certify|declare|want|agree|am|have)|you (must|may|can|will|are|have)|please|information about|by signing|i acknowledge)\b/i.test(
+      t,
+    )
+  )
+    return false;
+  // Running prose: several LOWERCASE connector words signal a sentence, not a
+  // label ("by mail, telephone, or in person at the "). Real labels are Title
+  // Case / ALL CAPS, so their connectors aren't lowercase. (No /i flag.)
+  const lowerConnectors =
+    t.match(/\b(by|or|in|at|the|of|to|for|with|and|as|is|are|will|may|can|when|if|that|this|person|mail|other)\b/g) ?? [];
+  if (lowerConnectors.length >= 2) return false;
+  return true;
+}
+
 // Auto-detect shared fields for non-curated forms.
 function autoFields(formId: string, xml: string): Field[] {
   const paras = xml.match(/<w:p\b[^>]*>[\s\S]*?<\/w:p>/g) ?? [];
@@ -291,6 +317,7 @@ function autoFields(formId: string, xml: string): Field[] {
   for (const p of paras) {
     const t = paraText(p);
     if (!t) continue;
+    if (!looksLikeFieldLabel(t)) continue;
     for (const a of AUTO) {
       if (usedGroups.has(a.group)) continue;
       if (a.test(t)) {

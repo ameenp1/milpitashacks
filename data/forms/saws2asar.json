@@ -10,28 +10,6 @@
       "anchor": "Signature (Parent or Caretaker",
       "answerType": "date",
       "token": "saws2asar__sign_date"
-    },
-    {
-      "id": "ssn",
-      "token": "saws2asar__ssn",
-      "group": "ssn",
-      "anchor": "Social Security Number (SSN) Rules",
-      "answerType": "ssn",
-      "needsReview": true
-    },
-    {
-      "id": "phone",
-      "token": "saws2asar__phone",
-      "group": "phone",
-      "anchor": "by mail, telephone, or in person at the ",
-      "answerType": "phone"
-    },
-    {
-      "id": "address",
-      "token": "saws2asar__address",
-      "group": "address",
-      "anchor": "You move or you get a new address.",
-      "answerType": "address"
     }
   ]
 }

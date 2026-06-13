@@ -28,6 +28,9 @@ export interface ChatTranscriptProps {
   hearMode: boolean;
   voice: string;
   speak: (text: string, voice?: string) => void;
+  // Text of the turn whose audio is currently playing, so the transcript holds
+  // each spoken turn's typewriter until its speech starts (revisions_2 L4).
+  playingText?: string | null;
 }
 
 export interface ChatComposerProps {

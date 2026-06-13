@@ -64,6 +64,7 @@ export default function ChatPage() {
             hearMode={flow.hearMode}
             voice={flow.voice}
             speak={flow.speak}
+            playingText={flow.playingText}
           />
           <ChatComposer
             currentGroup={flow.currentGroup}

@@ -5,54 +5,54 @@
   "description": "The main application with your household, income, and resource details.",
   "fields": [
     {
+      "id": "full_name",
+      "group": "full_name",
+      "anchor": "NAME (FIRST, MIDDLE, LAST)",
+      "answerType": "name",
+      "token": "saws2plus__full_name"
+    },
+    {
+      "id": "ssn",
+      "group": "ssn",
+      "anchor": "SOCIAL SECURITY NUMBER (IF YOU HAVE ONE",
+      "answerType": "ssn",
+      "needsReview": true,
+      "token": "saws2plus__ssn"
+    },
+    {
+      "id": "dob",
+      "group": "dob",
+      "anchor": "DATE OF BIRTH",
+      "answerType": "date",
+      "token": "saws2plus__dob"
+    },
+    {
+      "id": "address",
+      "group": "address",
+      "anchor": "MAILING ADDRESS (IF DIFFERENT FROM ABOVE",
+      "answerType": "address",
+      "token": "saws2plus__address"
+    },
+    {
+      "id": "phone",
+      "group": "phone",
+      "anchor": "WORK/ALTERNATE/MESSAGE PHONE",
+      "answerType": "phone",
+      "token": "saws2plus__phone"
+    },
+    {
+      "id": "email",
+      "group": "email",
+      "anchor": "EMAIL ADDRESS",
+      "answerType": "email",
+      "token": "saws2plus__email"
+    },
+    {
       "id": "sign_date",
       "group": "sign_date",
       "anchor": "SIGNATURE OF APPLICANT",
       "answerType": "date",
       "token": "saws2plus__sign_date"
-    },
-    {
-      "id": "full_name",
-      "token": "saws2plus__full_name",
-      "group": "full_name",
-      "anchor": "NAME (FIRST, MIDDLE, LAST)",
-      "answerType": "name"
-    },
-    {
-      "id": "address",
-      "token": "saws2plus__address",
-      "group": "address",
-      "anchor": "MAILING ADDRESS (IF DIFFERENT FROM ABOVE",
-      "answerType": "address"
-    },
-    {
-      "id": "phone",
-      "token": "saws2plus__phone",
-      "group": "phone",
-      "anchor": "19438935334WORK/ALTERNATE/MESSAGE PHONE",
-      "answerType": "phone"
-    },
-    {
-      "id": "email",
-      "token": "saws2plus__email",
-      "group": "email",
-      "anchor": "EMAIL ADDRESS",
-      "answerType": "email"
-    },
-    {
-      "id": "ssn",
-      "token": "saws2plus__ssn",
-      "group": "ssn",
-      "anchor": "SOCIAL SECURITY NUMBER",
-      "answerType": "ssn",
-      "needsReview": true
-    },
-    {
-      "id": "dob",
-      "token": "saws2plus__dob",
-      "group": "dob",
-      "anchor": "DATE OF BIRTH",
-      "answerType": "date"
     }
   ]
 }

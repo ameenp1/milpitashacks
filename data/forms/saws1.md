@@ -169,13 +169,13 @@ For other health care programs you will receive a health plan card from your par
 457200122837
 Please take and keep for your records
 Please use black or blue ink because it is easy to read and copies best. Please print your answers.
-451154344746SOCIAL SECURITY NUMBER (IF YOU HAVE ONE AND ARE APPLYING FOR BENEFITS)
+451154344746SOCIAL SECURITY NUMBER (IF YOU HAVE ONE AND ARE APPLYING FOR BENEFITS) {{saws1__ssn}}
 HOME ADDRESS OR DIRECTIONS TO YOUR HOME {{saws1__address}}
 ZIP CODE
 MAILING ADDRESS (IF DIFFERENT FROM ABOVE
 ZIP CODE
 I want to get information about this application by email.
-HOME PHONE {{saws1__phone}}
+HOME PHONE
 Yes
 No
 I want to get messages about my case by email.
@@ -189,7 +189,7 @@ NAME (FIRST, MIDDLE, LAST) {{saws1__full_name}}
 Are you homeless? ■ Yes ■ NoIf yes, please let the County know right away if you are homeless, so they can help you
 figure out an address to use to accept your application and get notices from the county about your case.
 What language do you prefer to read (if not English)? What language do you prefer to speak (if not English)?
-WORK/ALTERNATE/MESSAGE PHONE
+WORK/ALTERNATE/MESSAGE PHONE {{saws1__phone}}
 STATE
 COUNTY
 CITY

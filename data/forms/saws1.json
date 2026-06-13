@@ -5,39 +5,47 @@
   "description": "Starts your application for benefits on the day you sign it.",
   "fields": [
     {
+      "id": "full_name",
+      "group": "full_name",
+      "anchor": "NAME (FIRST, MIDDLE, LAST)",
+      "answerType": "name",
+      "token": "saws1__full_name"
+    },
+    {
+      "id": "ssn",
+      "group": "ssn",
+      "anchor": "SOCIAL SECURITY NUMBER (IF YOU HAVE ONE",
+      "answerType": "ssn",
+      "needsReview": true,
+      "token": "saws1__ssn"
+    },
+    {
+      "id": "address",
+      "group": "address",
+      "anchor": "HOME ADDRESS OR DIRECTIONS TO YOUR HOME",
+      "answerType": "address",
+      "token": "saws1__address"
+    },
+    {
+      "id": "phone",
+      "group": "phone",
+      "anchor": "WORK/ALTERNATE/MESSAGE PHONE",
+      "answerType": "phone",
+      "token": "saws1__phone"
+    },
+    {
+      "id": "email",
+      "group": "email",
+      "anchor": "EMAIL ADDRESS",
+      "answerType": "email",
+      "token": "saws1__email"
+    },
+    {
       "id": "sign_date",
       "group": "sign_date",
       "anchor": "SIGNATURE OF APPLICANT",
       "answerType": "date",
       "token": "saws1__sign_date"
-    },
-    {
-      "id": "address",
-      "token": "saws1__address",
-      "group": "address",
-      "anchor": "HOME ADDRESS OR DIRECTIONS TO YOUR HOME",
-      "answerType": "address"
-    },
-    {
-      "id": "phone",
-      "token": "saws1__phone",
-      "group": "phone",
-      "anchor": "HOME PHONE",
-      "answerType": "phone"
-    },
-    {
-      "id": "email",
-      "token": "saws1__email",
-      "group": "email",
-      "anchor": "EMAIL ADDRESS",
-      "answerType": "email"
-    },
-    {
-      "id": "full_name",
-      "token": "saws1__full_name",
-      "group": "full_name",
-      "anchor": "NAME (FIRST, MIDDLE, LAST)",
-      "answerType": "name"
     }
   ]
 }

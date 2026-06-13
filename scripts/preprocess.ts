@@ -180,7 +180,20 @@ const CW42_FIELDS: Omit<Field, "token">[] = [
 ];
 
 // Keyword auto-detection for the other forms (first occurrence of each).
+// Keyword auto-detection (first occurrence of each per form). These map to the
+// SHARED core groups, so answering once fills the field on every form (cross-fill).
 const AUTO: { group: string; answerType: AnswerType; test: (t: string) => boolean; needsReview?: boolean }[] = [
+  { group: "full_name", answerType: "name",
+    test: (t) =>
+      /\bname\b/i.test(t) &&
+      t.length < 52 &&
+      /(applicant|your name|^name\b|print name|full name|client|caretaker)/i.test(t) &&
+      !/(case|worker|program|landlord|employer|county|business|file|user|spouse|child|provider|payee)/i.test(t) },
+  { group: "address", answerType: "address",
+    test: (t) =>
+      /\baddress\b/i.test(t) &&
+      t.length < 64 &&
+      !/(e-?mail|website|web site|employer|landlord)/i.test(t) },
   { group: "ssn", answerType: "ssn", needsReview: true,
     test: (t) => /social security/i.test(t) && t.length < 90 && !/required to give/i.test(t) },
   { group: "dob", answerType: "date",

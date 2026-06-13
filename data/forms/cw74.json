@@ -10,6 +10,13 @@
       "group": "phone",
       "anchor": "EW Phone:",
       "answerType": "phone"
+    },
+    {
+      "id": "address",
+      "token": "cw74__address",
+      "group": "address",
+      "anchor": "Address",
+      "answerType": "address"
     }
   ]
 }

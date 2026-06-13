@@ -137,7 +137,7 @@ Your total monthly income starts, stops, or changes by more than $50.
 Anyone’s source of income changes.
 Anyone moves into or out of your home.
 Anyone joins or leaves your household.
-You move or you get a new address.
+You move or you get a new address. {{saws2asar__address}}
 Your rent and utility costs only if you move.
 If there is a change in the amount of any court ordered child support paid by a member of the household for a child not living in the home.
 Anyone who is an Able Bodied Adult Without Dependents (ABAWD) CalFresh recipient and the number of hours they work or are in training drop to less than 20 hours a week or 80 hours a month.

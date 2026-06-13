@@ -3,5 +3,13 @@
   "code": "SCD 508",
   "title": "Voter Registration",
   "description": "Lets you choose whether you would like to register to vote.",
-  "fields": []
+  "fields": [
+    {
+      "id": "full_name",
+      "token": "scd508__full_name",
+      "group": "full_name",
+      "anchor": "Please sign your name here:",
+      "answerType": "name"
+    }
+  ]
 }

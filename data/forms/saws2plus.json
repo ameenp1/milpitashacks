@@ -20,6 +20,20 @@
       "needsReview": true
     },
     {
+      "id": "full_name",
+      "token": "saws2plus__full_name",
+      "group": "full_name",
+      "anchor": "NAME (FIRST, MIDDLE, LAST)",
+      "answerType": "name"
+    },
+    {
+      "id": "address",
+      "token": "saws2plus__address",
+      "group": "address",
+      "anchor": "MAILING ADDRESS (IF DIFFERENT FROM ABOVE",
+      "answerType": "address"
+    },
+    {
       "id": "email",
       "token": "saws2plus__email",
       "group": "email",

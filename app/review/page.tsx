@@ -21,6 +21,18 @@ export default function ReviewPage() {
   const { profile, reviewed, signature } = useAppState();
   const answers = profile.answers;
   const { showToast } = useToast();
+  const groupQuestions = [
+    ...new Set(
+      [
+        ...SUMMARY_FIELDS,
+        ...FORM_INDEX.flatMap(
+          (f) => getFormDef(f.id)?.fields.map((fl) => fl.group) ?? [],
+        ),
+      ]
+        .map((id) => getGroup(id)?.question)
+        .filter(Boolean) as string[],
+    ),
+  ];
   const t = useT([
     "Review and download",
     "Your summary",
@@ -33,6 +45,7 @@ export default function ReviewPage() {
     "Delete my information",
     "Signature",
     "Date",
+    ...groupQuestions,
   ]);
 
   const supportingDocs = [
@@ -96,7 +109,7 @@ export default function ReviewPage() {
           {SUMMARY_FIELDS.map((id) => (
             <div key={id}>
               <dt className="text-xs text-neutral-500">
-                {getGroup(id)?.question}
+                {t(getGroup(id)?.question ?? id)}
               </dt>
               <dd className="text-sm text-neutral-900">
                 {answers[id] || "—"}
@@ -142,8 +155,8 @@ export default function ReviewPage() {
           <ul className="space-y-1.5 text-sm text-amber-900">
             {missing.slice(0, 12).map((m, i) => (
               <li key={i}>
-                <Link href={`/forms/${m.formId}`} className="hover:underline">
-                  <span className="font-medium">{m.code}:</span> {m.question}
+                <Link href={`/chat?form=${m.formId}`} className="hover:underline">
+                  <span className="font-medium">{m.code}:</span> {t(m.question)}
                 </Link>
               </li>
             ))}

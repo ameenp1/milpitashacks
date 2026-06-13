@@ -20,11 +20,25 @@
       "needsReview": true
     },
     {
+      "id": "address",
+      "token": "saws1__address",
+      "group": "address",
+      "anchor": "HOME ADDRESS OR DIRECTIONS TO YOUR HOME",
+      "answerType": "address"
+    },
+    {
       "id": "email",
       "token": "saws1__email",
       "group": "email",
       "anchor": "I want to get information about this app",
       "answerType": "email"
+    },
+    {
+      "id": "full_name",
+      "token": "saws1__full_name",
+      "group": "full_name",
+      "anchor": "NAME (FIRST, MIDDLE, LAST)",
+      "answerType": "name"
     }
   ]
 }

@@ -18,6 +18,13 @@
       "group": "phone",
       "anchor": "by mail, telephone, or in person at the ",
       "answerType": "phone"
+    },
+    {
+      "id": "address",
+      "token": "saws2asar__address",
+      "group": "address",
+      "anchor": "You move or you get a new address.",
+      "answerType": "address"
     }
   ]
 }

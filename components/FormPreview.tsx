@@ -1,26 +1,37 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { fetchFilledDoc } from "@/lib/client/api";
+import { getFormDef } from "@/lib/data";
 
 // Renders the live, filled DOCX (preview mode) with docx-preview, re-rendering
-// when answers/approval change. Pending answers show as blue underlined
-// insertions; approved answers as near-black accepted text. When scrollToText
-// is set, scrolls the just-filled value into view.
+// when answers change. Answers show as blue underlined insertions (always
+// accepted now — no approve step). After each render we:
+//   • scroll to + highlight the field that was just answered (located by its
+//     unique anchor label, not a fragile value-text search), and
+//   • when onEditField is provided, make each answered value clickable so the
+//     user can edit it inline, right on the document (revisions_2 L3/L6/L7).
 export function FormPreview({
   formId,
   answers,
   mode = "preview",
   scrollToText,
+  onEditField,
 }: {
   formId: string;
   answers: Record<string, string>;
   mode?: "preview" | "clean";
   scrollToText?: string;
+  onEditField?: (group: string, value: string) => void;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const key = JSON.stringify({ answers, mode });
+
+  // Keep the latest edit callback in a ref so re-rendering with a new function
+  // identity doesn't force a (network) re-fetch of the document.
+  const onEditRef = useRef(onEditField);
+  onEditRef.current = onEditField;
 
   useEffect(() => {
     let cancelled = false;
@@ -37,7 +48,9 @@ export function FormPreview({
           ignoreLastRenderedPageBreak: true,
           experimental: true,
         });
-        if (!cancelled && scrollToText) scrollToValue(ref.current, scrollToText);
+        if (!cancelled && ref.current) {
+          decorate(ref.current, formId, answers, scrollToText, onEditRef.current);
+        }
       } catch {
         if (!cancelled) setError(true);
       } finally {
@@ -72,23 +85,115 @@ export function FormPreview({
   );
 }
 
-// Find the rendered run whose text contains `text` and scroll it into view,
-// briefly highlighting it.
-function scrollToValue(container: HTMLElement, text: string) {
-  const needle = text.trim().slice(0, 24);
-  if (!needle) return;
-  const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
-  let node: Node | null;
-  while ((node = walker.nextNode())) {
-    if (node.textContent && node.textContent.includes(needle)) {
-      const el = node.parentElement;
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "center" });
-        el.style.transition = "background-color 1.2s";
-        el.style.backgroundColor = "#fde68a";
-        setTimeout(() => (el.style.backgroundColor = "transparent"), 1400);
-      }
-      return;
+const norm = (s: string | null) => (s ?? "").replace(/\s+/g, " ").trim().toLowerCase();
+
+// After docx-preview renders, locate each answered field by its anchor label and
+// (a) wire inline editing on its value span, (b) scroll/highlight the active one.
+function decorate(
+  container: HTMLElement,
+  formId: string,
+  answers: Record<string, string>,
+  activeValue: string | undefined,
+  onEditField?: (group: string, value: string) => void,
+) {
+  const def = getFormDef(formId);
+  if (!def) return;
+
+  // One entry per group (cross-fill), in document order, that has an answer.
+  const seen = new Set<string>();
+  const items: { group: string; anchor: string; value: string }[] = [];
+  for (const f of def.fields) {
+    if (seen.has(f.group)) continue;
+    const value = (answers[f.group] ?? "").trim();
+    if (!value) continue;
+    seen.add(f.group);
+    items.push({ group: f.group, anchor: f.anchor, value });
+  }
+
+  // The just-answered field = the group whose value equals the active value.
+  const wanted = (activeValue ?? "").trim();
+  const activeGroup = wanted
+    ? items.find((i) => i.value === wanted)?.group
+    : undefined;
+
+  const blocks = Array.from(container.querySelectorAll("p"));
+  let highlighted = false;
+
+  for (const it of items) {
+    const block = blocks.find((b) => norm(b.textContent).includes(norm(it.anchor)));
+    if (!block) continue;
+    const span = valueSpan(block, it.value);
+    if (!span) continue;
+    if (onEditField) makeEditable(span, it.group, it.value, onEditField);
+    if (it.group === activeGroup) {
+      highlight(span);
+      highlighted = true;
     }
   }
+
+  // Fallback: if the anchor lookup didn't pin the active field, do a plain text
+  // search so we still scroll somewhere sensible.
+  if (wanted && !highlighted) {
+    const span = blocks
+      .flatMap((b) => Array.from(b.querySelectorAll("span")))
+      .find((s) => norm(s.textContent).includes(norm(wanted).slice(0, 24)));
+    if (span) highlight(span);
+  }
+}
+
+// Within an anchor paragraph, the injected answer run is appended last, so the
+// last span whose text matches the value is the field we filled.
+function valueSpan(block: HTMLElement, value: string): HTMLElement | null {
+  const spans = Array.from(block.querySelectorAll("span")) as HTMLElement[];
+  const exact = spans.filter((s) => (s.textContent ?? "").trim() === value);
+  if (exact.length) return exact[exact.length - 1];
+  const partial = spans.filter((s) => (s.textContent ?? "").includes(value));
+  return partial.length ? partial[partial.length - 1] : null;
+}
+
+function highlight(el: HTMLElement) {
+  el.scrollIntoView({ behavior: "smooth", block: "center" });
+  el.style.transition = "background-color 1.4s ease";
+  el.style.backgroundColor = "#fde68a";
+  el.style.borderRadius = "3px";
+  setTimeout(() => {
+    el.style.backgroundColor = "transparent";
+  }, 1600);
+}
+
+function makeEditable(
+  span: HTMLElement,
+  group: string,
+  value: string,
+  onEditField: (group: string, value: string) => void,
+) {
+  span.style.cursor = "pointer";
+  span.title = "Click to edit";
+  span.addEventListener("click", () => {
+    if (span.isContentEditable) return;
+    span.contentEditable = "true";
+    span.focus();
+    const range = document.createRange();
+    range.selectNodeContents(span);
+    const sel = window.getSelection();
+    sel?.removeAllRanges();
+    sel?.addRange(range);
+
+    const commit = () => {
+      span.contentEditable = "false";
+      span.removeEventListener("blur", commit);
+      const next = (span.textContent ?? "").trim();
+      if (next && next !== value) onEditField(group, next);
+    };
+    span.addEventListener("blur", commit, { once: true });
+    span.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        span.blur();
+      } else if (e.key === "Escape") {
+        span.textContent = ` ${value}`;
+        span.blur();
+      }
+    });
+  });
 }

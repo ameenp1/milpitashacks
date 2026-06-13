@@ -36,7 +36,12 @@ export function DocumentPanel({
         </Link>
       </div>
       <div className="min-h-0 flex-1 overflow-y-auto">
-        <FormPreview formId={activeForm} answers={answers} scrollToText={activeValue} />
+        <FormPreview
+          formId={activeForm}
+          answers={answers}
+          scrollToText={activeValue}
+          onEditField={onEditField}
+        />
         <div className="mt-3">
           <AnswerList formId={activeForm} answers={answers} t={t} onEdit={onEditField} />
         </div>

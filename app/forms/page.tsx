@@ -15,6 +15,7 @@ export default function FormsPage() {
     "Your forms",
     "We filled in what we could from your answers. Open each form to review it side by side.",
     "Review and download everything",
+    "Apply online with a guide",
     "Delete my information",
     ...FORM_INDEX.map((f) => f.description),
   ]);
@@ -65,12 +66,20 @@ export default function FormsPage() {
       </div>
 
       <div className="mt-10 flex flex-wrap items-center justify-between gap-4">
-        <Link
-          href="/review"
-          className="rounded-xl bg-neutral-900 px-6 py-4 text-lg font-medium text-white hover:bg-neutral-700"
-        >
-          {t("Review and download everything")}
-        </Link>
+        <div className="flex flex-wrap gap-3">
+          <Link
+            href="/review"
+            className="rounded-xl bg-neutral-900 px-6 py-4 text-lg font-medium text-white hover:bg-neutral-700"
+          >
+            {t("Review and download everything")}
+          </Link>
+          <Link
+            href="/apply"
+            className="rounded-xl border border-neutral-300 px-6 py-4 text-lg font-medium text-neutral-700 hover:border-neutral-900 hover:text-neutral-900"
+          >
+            {t("Apply online with a guide")}
+          </Link>
+        </div>
         <DeleteButton label={t("Delete my information")} />
       </div>
     </main>

@@ -50,6 +50,7 @@ export function FormPreview({
         });
         if (!cancelled && ref.current) {
           decorate(ref.current, formId, answers, scrollToText, onEditRef.current);
+          fitToWidth(ref.current);
         }
       } catch {
         if (!cancelled) setError(true);
@@ -61,6 +62,15 @@ export function FormPreview({
       cancelled = true;
     };
   }, [formId, key, scrollToText]);
+
+  // Re-fit the rendered page to the panel whenever the panel is resized.
+  useEffect(() => {
+    const host = ref.current;
+    if (!host) return;
+    const ro = new ResizeObserver(() => fitToWidth(host));
+    ro.observe(host);
+    return () => ro.disconnect();
+  }, []);
 
   return (
     <div className="relative">
@@ -83,6 +93,27 @@ export function FormPreview({
       )}
     </div>
   );
+}
+
+// Scale the full-size Word pages down to fit the panel width (like Word's
+// "fit to width" zoom), preserving the real page layout. Transform doesn't
+// shrink the layout box, so we pull up the freed vertical space with a negative
+// margin to avoid a tall empty gap below the document.
+function fitToWidth(host: HTMLElement) {
+  const wrapper = host.querySelector<HTMLElement>(".docx-wrapper");
+  const page = host.querySelector<HTMLElement>("section.docx");
+  if (!wrapper || !page) return;
+  wrapper.style.transform = "";
+  wrapper.style.marginBottom = "";
+  const pageW = page.offsetWidth; // true Word page width (may overflow the panel)
+  const natH = wrapper.offsetHeight;
+  if (!pageW) return;
+  const avail = host.clientWidth - 24; // host has p-3 (12px each side)
+  const scale = Math.min(1, avail / pageW);
+  if (scale >= 1) return;
+  wrapper.style.transformOrigin = "top left";
+  wrapper.style.transform = `scale(${scale})`;
+  wrapper.style.marginBottom = `${-(natH * (1 - scale))}px`;
 }
 
 const norm = (s: string | null) => (s ?? "").replace(/\s+/g, " ").trim().toLowerCase();

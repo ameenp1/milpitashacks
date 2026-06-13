@@ -17,12 +17,18 @@ export default function Home() {
         review — so you only have to answer each question once.
       </p>
 
-      <div className="mt-10">
+      <div className="mt-10 flex flex-wrap items-center gap-4">
         <Link
           href="/language"
           className="inline-flex items-center justify-center rounded-xl bg-neutral-900 px-8 py-4 text-lg font-medium text-white transition hover:bg-neutral-700"
         >
           Start
+        </Link>
+        <Link
+          href="/apply"
+          className="inline-flex items-center justify-center rounded-xl border border-neutral-300 px-8 py-4 text-lg font-medium text-neutral-700 transition hover:border-neutral-900 hover:text-neutral-900"
+        >
+          Apply online with a guide
         </Link>
       </div>
 

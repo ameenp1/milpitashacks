@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
     if (hasImage && last?.role === "user") {
       last.content = [
         { type: "text", text: last.content as string },
-        { type: "image_url", image_url: { url: image, detail: "low" } },
+        { type: "image_url", image_url: { url: image, detail: "high" } },
       ];
     }
 

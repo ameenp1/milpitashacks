@@ -8,16 +8,17 @@ export const runtime = "nodejs";
 //   mode="export"  -> Word tracked-change insertions (for download)  [default]
 export async function POST(req: NextRequest) {
   try {
-    const { formId, answers, mode } = (await req.json()) as {
+    const { formId, answers, mode, lang } = (await req.json()) as {
       formId?: string;
       answers?: Record<string, string>;
       mode?: "preview" | "export" | "clean";
+      lang?: string;
     };
     if (!formId) {
       return NextResponse.json({ error: "formId is required" }, { status: 400 });
     }
     const m = mode === "preview" || mode === "clean" ? mode : "export";
-    const buf = fillDocx(formId, answers ?? {}, { mode: m });
+    const buf = await fillDocx(formId, answers ?? {}, { mode: m, lang });
     const filename = `${formId}-completed.docx`;
     return new NextResponse(new Uint8Array(buf), {
       headers: {

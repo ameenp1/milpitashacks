@@ -86,6 +86,9 @@ export default function ChatPage() {
           t={t}
           onSwitchForm={flow.setActiveForm}
           onEditField={flow.editField}
+          lang={flow.lang}
+          langLabel={flow.langLabel}
+          done={!flow.currentGroup}
         />
       </div>
     </main>

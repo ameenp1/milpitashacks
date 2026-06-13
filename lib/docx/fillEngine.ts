@@ -12,6 +12,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { getFormDef } from "@/lib/data";
 import { answerFor } from "@/lib/status";
+import { translateDocumentXml, translateAnswers } from "./translateEngine";
 
 const escXml = (s: string) =>
   s
@@ -74,20 +75,30 @@ const DATE = "2024-01-01T00:00:00Z";
 
 export interface FillOptions {
   mode?: "preview" | "export" | "clean";
+  // When set to a non-English language, produce the "your-language copy": the
+  // form's static text is translated and free-text answers are translated too.
+  lang?: string;
 }
 
-export function fillDocx(
+export async function fillDocx(
   formId: string,
   answers: Record<string, string>,
   opts: FillOptions = {},
-): Buffer {
+): Promise<Buffer> {
   const mode = opts.mode ?? "export";
+  const lang = opts.lang;
   const def = getFormDef(formId);
   if (!def) throw new Error(`Unknown form: ${formId}`);
 
   const path = join(process.cwd(), "data", "templates", `${formId}.docx`);
   const zip = new PizZip(readFileSync(path));
   let xml = zip.file("word/document.xml")!.asText();
+
+  let fillAnswers = answers;
+  if (lang && lang !== "en") {
+    xml = await translateDocumentXml(xml, lang);
+    fillAnswers = await translateAnswers(def, answers, lang);
+  }
 
   const sigDataUrl = answers["signature"];
   const sigRelId = sigDataUrl ? embedSignature(zip, sigDataUrl) : null;
@@ -97,7 +108,7 @@ export function fillDocx(
     const tokenRe = new RegExp(
       `<w:r>\\s*<w:t xml:space="preserve">\\s*\\{\\{${escRe(field.token)}\\}\\}\\s*</w:t>\\s*</w:r>`,
     );
-    const value = answerFor(field, answers);
+    const value = answerFor(field, fillAnswers);
     let replacement: string;
     if (!value) {
       replacement = blankRun();

@@ -54,4 +54,9 @@ export interface DocumentPanelProps {
   t: (s: string) => string;
   onSwitchForm: (id: string) => void;
   onEditField: (group: string, value: string) => void;
+  // Multilingual copy: the applicant's language + label, and whether the
+  // interview is finished (flip the preview to the English submit copy).
+  lang: string;
+  langLabel: string;
+  done: boolean;
 }

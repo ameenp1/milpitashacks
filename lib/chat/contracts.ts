@@ -22,6 +22,8 @@ export interface ChatComposerProps {
   currentGroup: QuestionGroup | null;
   sending: boolean;
   language: string; // STT hint for the mic
+  speaking: boolean; // assistant is reading a turn aloud (for auto-listen)
+  hearMode: boolean; // voice mode → auto-listen after the assistant speaks
   t: (s: string) => string;
   onSubmit: (text: string) => void;
   onSkip: () => void;

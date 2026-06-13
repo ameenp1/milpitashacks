@@ -18,14 +18,16 @@ export function ChatTranscript({
     ref.current?.scrollTo({ top: ref.current.scrollHeight, behavior: "smooth" });
   }, [messages]);
 
-  // Read the newest bot turn aloud once (advance the pointer even if muted, so
-  // toggling sound on doesn't replay old turns).
+  // Read new bot turns aloud as they appear (so audio starts with the typing).
+  // Every new turn is enqueued in order, so a batched ack + next question play
+  // back-to-back without cutting each other off (useSpeak queues). The pointer
+  // advances even when muted so toggling sound on doesn't replay old turns.
   useEffect(() => {
-    const last = messages[messages.length - 1];
-    if (!last || last.role !== "bot" || !last.speak) return;
-    if (last.id === lastSpokenId.current) return;
-    lastSpokenId.current = last.id;
-    if (hearMode) speak(last.text, voice);
+    for (const m of messages) {
+      if (m.id <= lastSpokenId.current) continue;
+      lastSpokenId.current = m.id;
+      if (m.role === "bot" && m.speak && hearMode) speak(m.text, voice);
+    }
   }, [messages, hearMode, voice, speak]);
 
   return (

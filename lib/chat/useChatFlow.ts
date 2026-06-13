@@ -27,6 +27,8 @@ export const CHROME = [
   "Skip",
   "Edit",
   "Save",
+  "Type instead",
+  "Hide typing",
   "That doesn't look like a complete email (like name@example.com). Want to try again, or skip it?",
   "Checking your answers…",
   "Everything looks good. You can review and download on the right.",
@@ -42,7 +44,7 @@ export function useChatFlow() {
   const { profile } = useAppState();
   const answers = profile.answers;
   const { t, ensure, ready, langLabel, lang } = useI18n();
-  const { speak, stop } = useSpeak();
+  const { speak, stop, speaking } = useSpeak();
   const { showToast } = useToast();
 
   const [messages, setMessages] = useState<Msg[]>([]);
@@ -242,6 +244,7 @@ export function useChatFlow() {
     setVoice,
     speak,
     stop,
+    speaking,
     lastValue,
     submit,
     skip,

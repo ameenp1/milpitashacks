@@ -40,7 +40,7 @@ export default function FormsPage() {
           return (
             <Link
               key={f.id}
-              href={`/forms/${f.id}`}
+              href={`/chat?form=${f.id}`}
               className="block rounded-2xl border border-neutral-200 p-5 transition hover:border-neutral-900"
             >
               <div className="flex items-start justify-between gap-3">

@@ -26,7 +26,7 @@ export default function LanguagePage() {
 
   function choose(code: string, native: string) {
     setLanguage(code, native);
-    router.push("/interview");
+    router.push("/chat");
   }
 
   function fromVoice(transcript: string) {

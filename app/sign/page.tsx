@@ -18,7 +18,10 @@ export default function SignPage() {
   ]);
 
   function finish(save: boolean) {
-    if (save && sig) setSignature(sig);
+    if (save && sig) {
+      setSignature(sig);
+      setAnswer("signature", sig); // travels with answers → embedded by the fill engine
+    }
     setAnswer("sign_date", todayMMDDYYYY()); // auto date
     router.push("/chat");
   }

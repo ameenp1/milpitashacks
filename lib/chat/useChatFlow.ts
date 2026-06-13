@@ -72,6 +72,8 @@ export const CHROME = [
   ...(GUIDE_GROUP.choices ?? []),
   SWITCH_PREFIX,
   SWITCH_STAY,
+  // Mirrors SUBMIT_NOTE in DocumentPanel — pre-translated for the language toggle.
+  "This copy is translated so you can read it. Print the English copy to submit.",
 ];
 
 export function useChatFlow() {

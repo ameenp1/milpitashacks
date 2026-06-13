@@ -106,11 +106,12 @@ export async function fetchFilledDoc(
   formId: string,
   answers: Record<string, string>,
   mode: "preview" | "export" | "clean",
+  lang?: string,
 ): Promise<Blob> {
   const res = await fetch("/api/fill", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ formId, answers, mode }),
+    body: JSON.stringify({ formId, answers, mode, lang }),
   });
   if (!res.ok) throw new Error("Could not generate the document");
   return res.blob();

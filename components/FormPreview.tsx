@@ -14,19 +14,24 @@ export function FormPreview({
   formId,
   answers,
   mode = "preview",
+  lang,
   scrollToText,
   onEditField,
 }: {
   formId: string;
   answers: Record<string, string>;
   mode?: "preview" | "clean";
+  // Non-English -> render the translated "your-language copy". Inline editing /
+  // scroll-highlight are anchored to English labels, so they're disabled there.
+  lang?: string;
   scrollToText?: string;
   onEditField?: (group: string, value: string) => void;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const key = JSON.stringify({ answers, mode });
+  const translated = !!lang && lang !== "en";
+  const key = JSON.stringify({ answers, mode, lang });
 
   // Keep the latest edit callback in a ref so re-rendering with a new function
   // identity doesn't force a (network) re-fetch of the document.
@@ -39,7 +44,7 @@ export function FormPreview({
     setError(false);
     (async () => {
       try {
-        const blob = await fetchFilledDoc(formId, answers, mode);
+        const blob = await fetchFilledDoc(formId, answers, mode, lang);
         const { renderAsync } = await import("docx-preview");
         if (cancelled || !ref.current) return;
         ref.current.innerHTML = "";
@@ -49,7 +54,11 @@ export function FormPreview({
           experimental: true,
         });
         if (!cancelled && ref.current) {
-          decorate(ref.current, formId, answers, scrollToText, onEditRef.current);
+          // The translated copy's labels/values aren't the English anchors the
+          // decorator keys off, so only decorate the English document.
+          if (!translated) {
+            decorate(ref.current, formId, answers, scrollToText, onEditRef.current);
+          }
           fitToWidth(ref.current);
         }
       } catch {
@@ -77,7 +86,7 @@ export function FormPreview({
       {loading && (
         <div className="absolute inset-x-0 top-3 z-10 flex justify-center">
           <span className="rounded-full bg-white/90 px-3 py-1 text-xs text-neutral-500 shadow-sm">
-            Updating form…
+            {translated ? "Translating form…" : "Updating form…"}
           </span>
         </div>
       )}

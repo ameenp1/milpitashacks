@@ -9,18 +9,18 @@ import { fetchFilledDoc } from "@/lib/client/api";
 export function FormPreview({
   formId,
   answers,
-  approved,
+  mode = "preview",
   scrollToText,
 }: {
   formId: string;
   answers: Record<string, string>;
-  approved?: string[];
+  mode?: "preview" | "clean";
   scrollToText?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const key = JSON.stringify({ answers, approved });
+  const key = JSON.stringify({ answers, mode });
 
   useEffect(() => {
     let cancelled = false;
@@ -28,7 +28,7 @@ export function FormPreview({
     setError(false);
     (async () => {
       try {
-        const blob = await fetchFilledDoc(formId, answers, "preview", approved);
+        const blob = await fetchFilledDoc(formId, answers, mode);
         const { renderAsync } = await import("docx-preview");
         if (cancelled || !ref.current) return;
         ref.current.innerHTML = "";

@@ -2,12 +2,10 @@
 //
 // Each template has `{{token}}` runs injected by scripts/preprocess.ts. For every
 // field we replace that run based on its answer + approval state:
-//   - no answer            -> gray "____" blank marker
-//   - answered, approved   -> accepted change: plain near-black run
-//   - answered, unapproved -> tracked change:
-//        export  -> wrapped in Word <w:ins>
-//        preview -> blue underlined run (renders reliably as a visible insertion)
-// Approval is keyed by group id (answers are group-keyed).
+//   - no answer       -> gray "____" blank marker
+//   - mode "clean"    -> accepted: plain near-black run (print / final)
+//   - mode "export"   -> Word tracked change <w:ins> (redline)
+//   - mode "preview"  -> blue underlined run (visible insertion in the live preview)
 // Server-only: imported solely by API routes (uses node:fs + pizzip).
 import PizZip from "pizzip";
 import { readFileSync } from "node:fs";
@@ -37,8 +35,7 @@ function blankRun(): string {
 const DATE = "2024-01-01T00:00:00Z";
 
 export interface FillOptions {
-  mode?: "preview" | "export";
-  approved?: string[]; // group ids the applicant has approved
+  mode?: "preview" | "export" | "clean";
 }
 
 export function fillDocx(
@@ -47,7 +44,6 @@ export function fillDocx(
   opts: FillOptions = {},
 ): Buffer {
   const mode = opts.mode ?? "export";
-  const approved = new Set(opts.approved ?? []);
   const def = getFormDef(formId);
   if (!def) throw new Error(`Unknown form: ${formId}`);
 
@@ -64,12 +60,12 @@ export function fillDocx(
     let replacement: string;
     if (!value) {
       replacement = blankRun();
-    } else if (approved.has(field.group)) {
-      replacement = run(value, "111827"); // accepted change: near-black
+    } else if (mode === "clean") {
+      replacement = run(value, "111827"); // accepted, near-black
     } else if (mode === "export") {
       replacement = `<w:ins w:id="${insId++}" w:author="Form Assistant" w:date="${DATE}">${run(value, "1D4ED8")}</w:ins>`;
     } else {
-      replacement = run(value, "1D4ED8", true); // pending insertion (preview)
+      replacement = run(value, "1D4ED8", true); // preview: visible insertion
     }
     xml = xml.replace(tokenRe, replacement);
   }

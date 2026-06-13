@@ -7,7 +7,6 @@ import type { Profile } from "./types";
 export interface AppState {
   profile: Profile;
   reviewed: string[]; // form ids the applicant confirmed
-  approved: string[]; // group ids whose tracked-change the applicant approved
   signature?: string; // data URL of the e-signature
 }
 
@@ -16,7 +15,6 @@ const KEY = "ha_state";
 const EMPTY: AppState = {
   profile: { language: "en", languageLabel: "English", answers: {} },
   reviewed: [],
-  approved: [],
 };
 
 function load(): AppState {
@@ -32,7 +30,6 @@ function load(): AppState {
         answers: parsed.profile?.answers ?? {},
       },
       reviewed: parsed.reviewed ?? [],
-      approved: parsed.approved ?? [],
       signature: parsed.signature,
     };
   } catch {
@@ -78,14 +75,6 @@ export function markReviewed(formId: string, reviewed = true) {
   if (!reviewed && has)
     set({ ...state, reviewed: state.reviewed.filter((id) => id !== formId) });
 }
-export function approveGroups(ids: string[]) {
-  const next = new Set(state.approved);
-  ids.forEach((id) => next.add(id));
-  set({ ...state, approved: [...next] });
-}
-export function unapproveGroup(id: string) {
-  set({ ...state, approved: state.approved.filter((g) => g !== id) });
-}
 export function setSignature(dataUrl: string | undefined) {
   set({ ...state, signature: dataUrl });
 }
@@ -99,7 +88,6 @@ export function clearAll() {
   set({
     profile: { language: "en", languageLabel: "English", answers: {} },
     reviewed: [],
-    approved: [],
     signature: undefined,
   });
 }

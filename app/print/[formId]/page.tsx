@@ -16,9 +16,6 @@ export default function PrintPage() {
   if (!def) {
     return <p className="p-8 text-neutral-500">Form not found.</p>;
   }
-  const allAnswered = [...new Set(def.fields.map((f) => f.group))].filter((g) =>
-    (answers[g] ?? "").trim(),
-  );
 
   return (
     <main className="mx-auto max-w-4xl p-6">
@@ -34,7 +31,7 @@ export default function PrintPage() {
           🖨 Print / Save as PDF
         </button>
       </div>
-      <FormPreview formId={formId} answers={answers} approved={allAnswered} />
+      <FormPreview formId={formId} answers={answers} mode="clean" />
     </main>
   );
 }

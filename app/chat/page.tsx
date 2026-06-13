@@ -1,258 +1,17 @@
 "use client";
-import { useEffect, useMemo, useRef, useState } from "react";
+// Thin shell (Role 4): wires the flow hook to the three panels. Keep logic OUT
+// of here — it belongs in useChatFlow or the panels (see PLAN.md / ROLES.md).
 import Link from "next/link";
-import { PROFILE_SCHEMA, FORM_INDEX, getFormDef, getGroup } from "@/lib/data";
-import { useAppState, setAnswer, approveGroups } from "@/lib/profile";
-import { todayMMDDYYYY } from "@/lib/date";
-import { chat, reviewPass, NoKeyError } from "@/lib/client/api";
-import { useSpeak } from "@/lib/client/useSpeak";
-import { useI18n } from "@/components/I18nProvider";
-import { useToast } from "@/components/Toast";
-import { VoiceButton } from "@/components/VoiceButton";
-import { Typewriter } from "@/components/chat/Typewriter";
-import { ApprovalPanel } from "@/components/chat/ApprovalPanel";
-import { FormPreview } from "@/components/FormPreview";
-import type { QuestionGroup } from "@/lib/types";
+import { useChatFlow } from "@/lib/chat/useChatFlow";
+import { ChatTranscript } from "@/components/chat/ChatTranscript";
+import { ChatComposer } from "@/components/chat/ChatComposer";
+import { DocumentPanel } from "@/components/chat/DocumentPanel";
 
-interface Msg {
-  id: number;
-  role: "bot" | "user";
-  text: string;
-}
-
-const CHROME = [
-  "All forms",
-  "Review & download",
-  "Sound on",
-  "Sound off",
-  "Type your answer…",
-  "Send",
-  "Print",
-  "Skip",
-  "That doesn't look like a complete email (like name@example.com). Want to try again, or skip it?",
-  "Checking your answers…",
-  "Everything looks good. You can review and download on the right.",
-  "All your forms are filled in. Review the highlighted answers on the right and approve them.",
-  "Sorry, I didn't catch that. Could you say it another way?",
-  "Something went wrong. Please try again or type your answer.",
-  "Changes to approve",
-  "Approve all",
-  "Approved",
-  "Approve",
-  "Reject",
-  "Answers will appear here as you go.",
-  "answered",
-  "Hi! I'll help you fill out your forms. You can speak or type, and you can ask me anything.",
-];
-
-const isValidEmail = (s: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.trim());
+const VOICES = ["alloy", "echo", "fable", "onyx", "nova", "shimmer"];
 
 export default function ChatPage() {
-  const { profile, approved } = useAppState();
-  const answers = profile.answers;
-  const { t, ensure, ready, langLabel, lang } = useI18n();
-  const { speak, stop } = useSpeak();
-  const { showToast } = useToast();
-
-  const [messages, setMessages] = useState<Msg[]>([]);
-  const [input, setInput] = useState("");
-  const [sending, setSending] = useState(false);
-  const [hearMode, setHearMode] = useState(true);
-  const [ttsVoice, setTtsVoice] = useState("alloy");
-  const [showSecret, setShowSecret] = useState(false);
-  const [skipped, setSkipped] = useState<Set<string>>(new Set());
-  const [manualForm, setManualForm] = useState<string | null>(null);
-  const [lastValue, setLastValue] = useState<string | undefined>(undefined);
-
-  const askedRef = useRef<string>("");
-  const idRef = useRef(1);
-  const greetedRef = useRef(false);
-  const transcriptRef = useRef<HTMLDivElement>(null);
-
-  // Ordered question groups: core profile, then per-form extras (deduped).
-  const orderedGroups = useMemo<QuestionGroup[]>(() => {
-    const coreIds = new Set(PROFILE_SCHEMA.map((g) => g.id));
-    const extra: string[] = [];
-    for (const f of FORM_INDEX) {
-      const def = getFormDef(f.id);
-      if (!def) continue;
-      for (const fl of def.fields) {
-        if (!coreIds.has(fl.group) && !extra.includes(fl.group)) extra.push(fl.group);
-      }
-    }
-    return [
-      ...PROFILE_SCHEMA,
-      ...(extra.map((id) => getGroup(id)).filter(Boolean) as QuestionGroup[]),
-    ];
-  }, []);
-
-  const applies = (g: QuestionGroup) =>
-    !g.dependsOn || answers[g.dependsOn.group] === g.dependsOn.equals;
-  const currentGroup =
-    orderedGroups.find(
-      (g) => applies(g) && !(answers[g.id]?.trim()) && !skipped.has(g.id),
-    ) ?? null;
-
-  const formForGroup = (gid: string | undefined) => {
-    if (!gid) return "cw42";
-    for (const f of FORM_INDEX) {
-      const def = getFormDef(f.id);
-      if (def?.fields.some((fl) => fl.group === gid)) return f.id;
-    }
-    return "cw42";
-  };
-  const activeForm = manualForm ?? formForGroup(currentGroup?.id);
-
-  const answeredCount = orderedGroups.filter((g) => answers[g.id]?.trim()).length;
-
-  // Pre-load translations for every question/help + chrome.
-  useEffect(() => {
-    ensure(orderedGroups.flatMap((g) => [g.question, g.help ?? ""]).filter(Boolean));
-    ensure(CHROME);
-  }, [ensure, orderedGroups]);
-
-  // Preselect the form from ?form= (when arriving from the forms list).
-  useEffect(() => {
-    const q = new URLSearchParams(window.location.search).get("form");
-    if (q && getFormDef(q)) setManualForm(q);
-    // Auto-fill today's date for the signature line (if /sign was skipped).
-    if (!answers.sign_date?.trim()) setAnswer("sign_date", todayMMDDYYYY());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  function addBot(text: string, doSpeak: boolean) {
-    setMessages((m) => [...m, { id: idRef.current++, role: "bot", text }]);
-    if (doSpeak && hearMode) {
-      stop();
-      speak(text, ttsVoice);
-    }
-  }
-  function addUser(text: string) {
-    setMessages((m) => [...m, { id: idRef.current++, role: "user", text }]);
-  }
-
-  // Greet once.
-  useEffect(() => {
-    if (greetedRef.current) return;
-    if (!ready(CHROME[CHROME.length - 1])) return; // wait for translation
-    greetedRef.current = true;
-    addBot(t("Hi! I'll help you fill out your forms. You can speak or type, and you can ask me anything."), true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ready, t]);
-
-  // Ask the current question — only once its translation is ready (no English
-  // flicker), appended to the end. Advances automatically as answers fill in.
-  const displayedQuestion = currentGroup ? t(currentGroup.question) : "";
-  const questionReady = currentGroup ? ready(currentGroup.question) : true;
-  useEffect(() => {
-    if (!greetedRef.current) return;
-    if (currentGroup) {
-      if (!questionReady) return;
-      if (askedRef.current === currentGroup.id) return;
-      askedRef.current = currentGroup.id;
-      addBot(displayedQuestion, true);
-    } else {
-      if (askedRef.current === "DONE") return;
-      askedRef.current = "DONE";
-      addBot(
-        t("All your forms are filled in. Review the highlighted answers on the right and approve them."),
-        true,
-      );
-      runReviewPass();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentGroup?.id, questionReady, displayedQuestion, greetedRef.current]);
-
-  // Keep transcript scrolled to the latest message.
-  useEffect(() => {
-    transcriptRef.current?.scrollTo({
-      top: transcriptRef.current.scrollHeight,
-      behavior: "smooth",
-    });
-  }, [messages]);
-
-  async function submit(message: string) {
-    const text = message.trim();
-    if (!text || sending || !currentGroup) return;
-    stop(); // cut audio when moving on
-    addUser(text);
-    setInput("");
-    setSending(true);
-    const g = currentGroup;
-    try {
-      const r = await chat({
-        message: text,
-        question: g.question,
-        answerType: g.answerType,
-        choices: g.choices,
-        help: g.help,
-        language: langLabel,
-      });
-      if (r.type === "answer" && r.value) {
-        if (g.answerType === "email" && !isValidEmail(r.value)) {
-          addBot(t("That doesn't look like a complete email (like name@example.com). Want to try again, or skip it?"), true);
-        } else {
-          setLastValue(r.value);
-          setAnswer(g.id, r.value);
-          if (r.reply) addBot(r.reply, true);
-        }
-      } else {
-        addBot(r.reply || t("Sorry, I didn't catch that. Could you say it another way?"), true);
-      }
-    } catch (err) {
-      if (err instanceof NoKeyError) {
-        // Deterministic fallback: take the text as the answer.
-        if (g.answerType === "email" && !isValidEmail(text)) {
-          addBot(t("That doesn't look like a complete email (like name@example.com). Want to try again, or skip it?"), false);
-        } else {
-          setLastValue(text);
-          setAnswer(g.id, text);
-        }
-      } else {
-        showToast(t("Something went wrong. Please try again or type your answer."), "error");
-      }
-    } finally {
-      setSending(false);
-    }
-  }
-
-  function skip() {
-    if (!currentGroup) return;
-    stop();
-    setSkipped((s) => new Set(s).add(currentGroup.id));
-  }
-
-  // Final pass once the interview is done: reformat answers + flag nonsense.
-  // (SSN excluded; date is auto.) Runs once.
-  async function runReviewPass() {
-    const items = orderedGroups
-      .filter((g) => g.id !== "ssn" && g.id !== "sign_date" && answers[g.id]?.trim())
-      .map((g) => ({
-        group: g.id,
-        question: g.question,
-        answerType: g.answerType,
-        value: answers[g.id],
-      }));
-    if (!items.length) return;
-    addBot(t("Checking your answers…"), false);
-    try {
-      const { fixes, issues } = await reviewPass(items);
-      Object.entries(fixes).forEach(([g, v]) => {
-        if (v && v !== answers[g]) setAnswer(g, v);
-      });
-      if (issues.length) {
-        issues
-          .slice(0, 5)
-          .forEach((i) =>
-            showToast(`${getGroup(i.group)?.question ?? i.group}: ${i.reason}`, "error"),
-          );
-      } else {
-        addBot(t("Everything looks good. You can review and download on the right."), true);
-      }
-    } catch {
-      /* no key or failure: skip silently */
-    }
-  }
+  const flow = useChatFlow();
+  const { t } = flow;
 
   return (
     <main className="mx-auto h-screen max-w-6xl px-4 py-4">
@@ -262,26 +21,26 @@ export default function ChatPage() {
         </Link>
         <div className="flex items-center gap-2">
           <span className="text-xs text-neutral-400">
-            {answeredCount} {t("answered")}
+            {flow.answeredCount} {t("answered")}
           </span>
           <button
             type="button"
             onClick={() => {
-              if (hearMode) stop();
-              setHearMode((s) => !s);
+              if (flow.hearMode) flow.stop();
+              flow.setHearMode(!flow.hearMode);
             }}
             className="rounded-full border border-neutral-200 px-3 py-1 text-sm text-neutral-600 hover:bg-neutral-50"
           >
-            {hearMode ? `🔊 ${t("Sound on")}` : `🔇 ${t("Sound off")}`}
+            {flow.hearMode ? `🔊 ${t("Sound on")}` : `🔇 ${t("Sound off")}`}
           </button>
-          {hearMode && (
+          {flow.hearMode && (
             <select
-              value={ttsVoice}
-              onChange={(e) => setTtsVoice(e.target.value)}
+              value={flow.voice}
+              onChange={(e) => flow.setVoice(e.target.value)}
               aria-label="Voice"
               className="rounded-full border border-neutral-200 px-2 py-1 text-sm text-neutral-600"
             >
-              {["alloy", "echo", "fable", "onyx", "nova", "shimmer"].map((v) => (
+              {VOICES.map((v) => (
                 <option key={v} value={v}>
                   {v}
                 </option>
@@ -298,141 +57,32 @@ export default function ChatPage() {
       </header>
 
       <div className="grid h-[calc(100vh-5rem)] gap-6 lg:grid-cols-2">
-        {/* Chat */}
         <section className="flex min-h-0 flex-col rounded-2xl border border-neutral-200">
-          <div ref={transcriptRef} className="flex-1 space-y-3 overflow-y-auto p-4">
-            {messages.map((m) => (
-              <div
-                key={m.id}
-                className={m.role === "user" ? "flex justify-end" : "flex justify-start"}
-              >
-                <div
-                  className={[
-                    "max-w-[85%] rounded-2xl px-4 py-2.5 text-[15px] leading-relaxed",
-                    m.role === "user"
-                      ? "bg-neutral-900 text-white"
-                      : "bg-neutral-100 text-neutral-900",
-                  ].join(" ")}
-                >
-                  {m.role === "bot" ? <Typewriter text={m.text} /> : m.text}
-                </div>
-              </div>
-            ))}
-            {sending && (
-              <div className="flex justify-start">
-                <div className="rounded-2xl bg-neutral-100 px-4 py-2.5 text-neutral-400">
-                  …
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Input */}
-          <div className="border-t border-neutral-100 p-3">
-            {currentGroup?.choices && (
-              <div className="mb-2 flex flex-wrap gap-2">
-                {currentGroup.choices.map((c) => (
-                  <button
-                    key={c}
-                    type="button"
-                    onClick={() => submit(c)}
-                    disabled={sending}
-                    className="rounded-full border border-neutral-300 px-4 py-2 text-sm hover:border-neutral-900 disabled:opacity-50"
-                  >
-                    {t(c)}
-                  </button>
-                ))}
-              </div>
-            )}
-            <div className="flex items-center gap-2">
-              <div className="relative flex-1">
-                <input
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && submit(input)}
-                  type={
-                    currentGroup?.answerType === "ssn" && !showSecret
-                      ? "password"
-                      : "text"
-                  }
-                  placeholder={t("Type your answer…")}
-                  disabled={!currentGroup || sending}
-                  className="w-full rounded-xl border border-neutral-300 px-4 py-3 pr-10 outline-none focus:border-neutral-900 disabled:bg-neutral-50"
-                />
-                {currentGroup?.answerType === "ssn" && (
-                  <button
-                    type="button"
-                    onClick={() => setShowSecret((s) => !s)}
-                    aria-label={showSecret ? "Hide" : "Show"}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-700"
-                  >
-                    {showSecret ? "🙈" : "👁"}
-                  </button>
-                )}
-              </div>
-              <VoiceButton onResult={submit} language={lang} idleLabel="🎤" />
-              <button
-                type="button"
-                onClick={() => submit(input)}
-                disabled={!input.trim() || sending || !currentGroup}
-                className="rounded-xl bg-neutral-900 px-4 py-3 text-sm font-medium text-white hover:bg-neutral-700 disabled:bg-neutral-200 disabled:text-neutral-400"
-              >
-                {t("Send")}
-              </button>
-            </div>
-            {currentGroup && (
-              <button
-                type="button"
-                onClick={skip}
-                className="mt-2 text-xs text-neutral-400 hover:text-neutral-700"
-              >
-                {t("Skip")}
-              </button>
-            )}
-          </div>
+          <ChatTranscript
+            messages={flow.messages}
+            sending={flow.sending}
+            hearMode={flow.hearMode}
+            voice={flow.voice}
+            speak={flow.speak}
+          />
+          <ChatComposer
+            currentGroup={flow.currentGroup}
+            sending={flow.sending}
+            language={flow.lang}
+            t={t}
+            onSubmit={flow.submit}
+            onSkip={flow.skip}
+          />
         </section>
 
-        {/* Active form: live tracked-changes preview + approval */}
-        <section className="flex min-h-0 flex-col">
-          <div className="no-print mb-2 flex items-center justify-between gap-2">
-            <select
-              value={activeForm}
-              onChange={(e) => setManualForm(e.target.value)}
-              className="rounded-lg border border-neutral-300 px-3 py-1.5 text-sm"
-            >
-              {FORM_INDEX.map((f) => (
-                <option key={f.id} value={f.id}>
-                  {f.code} — {f.title}
-                </option>
-              ))}
-            </select>
-            <Link
-              href={`/print/${activeForm}`}
-              className="rounded-lg border border-neutral-200 px-3 py-1.5 text-sm text-neutral-600 hover:bg-neutral-50"
-            >
-              🖨 {t("Print")}
-            </Link>
-          </div>
-          <div className="min-h-0 flex-1 overflow-y-auto">
-            <FormPreview
-              formId={activeForm}
-              answers={answers}
-              approved={approved}
-              scrollToText={lastValue}
-            />
-            <div className="mt-3">
-              <ApprovalPanel
-                formId={activeForm}
-                answers={answers}
-                approved={approved}
-                onApprove={(g) => approveGroups([g])}
-                onApproveAll={(gs) => approveGroups(gs)}
-                onReject={(g) => setAnswer(g, "")}
-                t={t}
-              />
-            </div>
-          </div>
-        </section>
+        <DocumentPanel
+          activeForm={flow.activeForm}
+          answers={flow.answers}
+          activeValue={flow.lastValue}
+          t={t}
+          onSwitchForm={flow.setActiveForm}
+          onEditField={flow.editField}
+        />
       </div>
     </main>
   );

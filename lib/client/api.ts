@@ -23,29 +23,6 @@ export async function transcribeAudio(
   return json.text ?? "";
 }
 
-export interface UnderstandResult {
-  value: string;
-  needsClarification: boolean;
-  clarification: string;
-}
-
-export async function understand(args: {
-  question: string;
-  answerType: string;
-  choices?: string[];
-  transcript: string;
-  language?: string;
-}): Promise<UnderstandResult> {
-  const res = await fetch("/api/understand", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(args),
-  });
-  if (res.status === 503) throw new NoKeyError();
-  if (!res.ok) throw new Error("Could not understand the answer");
-  return (await res.json()) as UnderstandResult;
-}
-
 export interface ChatResult {
   type: "answer" | "question" | "unclear";
   value: string;
@@ -116,13 +93,12 @@ export async function fetchTts(text: string, voice?: string): Promise<Blob> {
 export async function fetchFilledDoc(
   formId: string,
   answers: Record<string, string>,
-  mode: "preview" | "export",
-  approved?: string[],
+  mode: "preview" | "export" | "clean",
 ): Promise<Blob> {
   const res = await fetch("/api/fill", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ formId, answers, mode, approved }),
+    body: JSON.stringify({ formId, answers, mode }),
   });
   if (!res.ok) throw new Error("Could not generate the document");
   return res.blob();

@@ -152,78 +152,74 @@ const GROUPS: QuestionGroup[] = [
 ];
 
 // --------------------------------------------------------------------------
-// CW42 — fully curated field map. anchor = unique label substring.
+// Fully-curated field maps. Every field is anchored to a REAL input label on
+// the form (not informational/explanatory prose). Identity fields reuse the
+// SHARED core groups (full_name, ssn, dob, phone, email, address) so answering
+// once fills that field on every form that has it (cross-form fill). anchor =
+// a unique label substring; injection uses the FIRST paragraph that contains it,
+// so anchors are chosen so their first occurrence is the actual entry field.
 // --------------------------------------------------------------------------
-const CW42_FIELDS: Omit<Field, "token">[] = [
-  { id: "name", group: "full_name", anchor: "Name of Caretaker Relative", answerType: "name" },
-  { id: "phone", group: "phone", anchor: "Message Phone", answerType: "phone" },
-  { id: "ssn", group: "ssn", anchor: "Social Security Number", answerType: "ssn", needsReview: true },
-  { id: "dob", group: "dob", anchor: "Date of Birth", answerType: "date" },
-  { id: "address", group: "address", anchor: "What is your current or last address", answerType: "address" },
-  { id: "cash_aid", group: "gets_cash_aid", anchor: "Do you get Cash Aid", answerType: "boolean" },
-  { id: "cash_aid_county", group: "cash_aid_county", anchor: "in which county", answerType: "text" },
-  { id: "prior_ha", group: "prior_ha", anchor: "Did you get Homeless Assistance from any county", answerType: "boolean" },
-  { id: "income", group: "household_income", anchor: "Does anyone in your home get income", answerType: "longtext" },
-  { id: "resources", group: "liquid_resources", anchor: "List all liquid resources you own", answerType: "longtext" },
-  { id: "payment_pref", group: "payment_preference", anchor: "how you want the payment made", answerType: "choice" },
-  { id: "where_staying", group: "where_staying", anchor: "Explain where you are staying now", answerType: "longtext" },
-  { id: "how_long", group: "how_long_there", anchor: "How long have you been there", answerType: "text" },
-  { id: "pay_to_stay", group: "pay_to_stay", anchor: "Do you pay for staying there", answerType: "text" },
-  { id: "why_homeless", group: "why_homeless", anchor: "Explain why you have no place to live", answerType: "longtext" },
-  { id: "seeking", group: "seeking_housing", anchor: "Are you seeking permanent housing", answerType: "longtext" },
-  { id: "eviction_date", group: "eviction_notice_date", anchor: "What day did you get a pay rent or quit notice", answerType: "date" },
-  { id: "months_back", group: "months_back_rent", anchor: "How many months of back rent do you owe", answerType: "number" },
-  { id: "monthly_rent", group: "monthly_rent", anchor: "How much is your monthly rent", answerType: "money" },
-  { id: "why_unpaid", group: "why_unpaid_rent", anchor: "pay your rent", answerType: "longtext" },
-  { id: "why_evict", group: "why_evicting", anchor: "Why is your Landlord evicting you", answerType: "longtext" },
-  { id: "sign_date", group: "sign_date", anchor: "SIGNATURE OF CARETAKER RELATIVE", answerType: "date" },
-];
-
-// Keyword auto-detection for the other forms (first occurrence of each).
-// Curated extra fields for the other forms (beyond auto-detected identity fields).
-// Deepening these per-form is ongoing; CW 42 is the fully-mapped example. Each maps
-// to an existing group so it fills from the shared profile (cross-fill).
-const CURATED: Record<string, Omit<Field, "token">[]> = {
+const FIELD_MAP: Record<string, Omit<Field, "token">[]> = {
+  // CW 42 — Statement of Facts (the priority form, fully mapped).
+  cw42: [
+    { id: "name", group: "full_name", anchor: "Name of Caretaker Relative", answerType: "name" },
+    { id: "phone", group: "phone", anchor: "Message Phone", answerType: "phone" },
+    { id: "ssn", group: "ssn", anchor: "Social Security Number", answerType: "ssn", needsReview: true },
+    { id: "dob", group: "dob", anchor: "Date of Birth", answerType: "date" },
+    { id: "address", group: "address", anchor: "What is your current or last address", answerType: "address" },
+    { id: "cash_aid", group: "gets_cash_aid", anchor: "Do you get Cash Aid", answerType: "boolean" },
+    { id: "cash_aid_county", group: "cash_aid_county", anchor: "in which county", answerType: "text" },
+    { id: "prior_ha", group: "prior_ha", anchor: "Did you get Homeless Assistance from any county", answerType: "boolean" },
+    { id: "income", group: "household_income", anchor: "Does anyone in your home get income", answerType: "longtext" },
+    { id: "resources", group: "liquid_resources", anchor: "List all liquid resources you own", answerType: "longtext" },
+    { id: "payment_pref", group: "payment_preference", anchor: "how you want the payment made", answerType: "choice" },
+    { id: "where_staying", group: "where_staying", anchor: "Explain where you are staying now", answerType: "longtext" },
+    { id: "how_long", group: "how_long_there", anchor: "How long have you been there", answerType: "text" },
+    { id: "pay_to_stay", group: "pay_to_stay", anchor: "Do you pay for staying there", answerType: "text" },
+    { id: "why_homeless", group: "why_homeless", anchor: "Explain why you have no place to live", answerType: "longtext" },
+    { id: "seeking", group: "seeking_housing", anchor: "Are you seeking permanent housing", answerType: "longtext" },
+    { id: "eviction_date", group: "eviction_notice_date", anchor: "What day did you get a pay rent or quit notice", answerType: "date" },
+    { id: "months_back", group: "months_back_rent", anchor: "How many months of back rent do you owe", answerType: "number" },
+    { id: "monthly_rent", group: "monthly_rent", anchor: "How much is your monthly rent", answerType: "money" },
+    { id: "why_unpaid", group: "why_unpaid_rent", anchor: "pay your rent", answerType: "longtext" },
+    { id: "why_evict", group: "why_evicting", anchor: "Why is your Landlord evicting you", answerType: "longtext" },
+    { id: "sign_date", group: "sign_date", anchor: "SIGNATURE OF CARETAKER RELATIVE", answerType: "date" },
+  ],
+  // CW 74 — Permanent Housing Search log. The only pre-fillable applicant field
+  // is the Case Name; everything else (contact log, EW phone) is filled later.
   cw74: [
     { id: "case_name", group: "full_name", anchor: "Case Name", answerType: "name" },
   ],
-  scd508: [
-    { id: "register", group: "wants_to_register_vote", anchor: "I would like to register to vote", answerType: "choice" },
-  ],
+  // SAWS 1 — Initial application. Identity fields only (no DOB on this form).
   saws1: [
+    { id: "full_name", group: "full_name", anchor: "NAME (FIRST, MIDDLE, LAST)", answerType: "name" },
+    { id: "ssn", group: "ssn", anchor: "SOCIAL SECURITY NUMBER (IF YOU HAVE ONE", answerType: "ssn", needsReview: true },
+    { id: "address", group: "address", anchor: "HOME ADDRESS OR DIRECTIONS TO YOUR HOME", answerType: "address" },
+    { id: "phone", group: "phone", anchor: "WORK/ALTERNATE/MESSAGE PHONE", answerType: "phone" },
+    { id: "email", group: "email", anchor: "EMAIL ADDRESS", answerType: "email" },
     { id: "sign_date", group: "sign_date", anchor: "SIGNATURE OF APPLICANT", answerType: "date" },
   ],
+  // SAWS 2 PLUS — Main application. DOB comes from the question 6 person table.
   saws2plus: [
+    { id: "full_name", group: "full_name", anchor: "NAME (FIRST, MIDDLE, LAST)", answerType: "name" },
+    { id: "ssn", group: "ssn", anchor: "SOCIAL SECURITY NUMBER (IF YOU HAVE ONE", answerType: "ssn", needsReview: true },
+    { id: "dob", group: "dob", anchor: "DATE OF BIRTH", answerType: "date" },
+    { id: "address", group: "address", anchor: "MAILING ADDRESS (IF DIFFERENT FROM ABOVE", answerType: "address" },
+    { id: "phone", group: "phone", anchor: "WORK/ALTERNATE/MESSAGE PHONE", answerType: "phone" },
+    { id: "email", group: "email", anchor: "EMAIL ADDRESS", answerType: "email" },
     { id: "sign_date", group: "sign_date", anchor: "SIGNATURE OF APPLICANT", answerType: "date" },
   ],
+  // SAWS 2A SAR — Rights & Responsibilities. Purely informational; the only
+  // entry field is the acknowledgement signature/date at the end.
   saws2asar: [
     { id: "sign_date", group: "sign_date", anchor: "Signature (Parent or Caretaker", answerType: "date" },
   ],
+  // SCD 508 — Voter registration preference + signature name.
+  scd508: [
+    { id: "register", group: "wants_to_register_vote", anchor: "I would like to register to vote", answerType: "choice" },
+    { id: "full_name", group: "full_name", anchor: "Please sign your name here:", answerType: "name" },
+  ],
 };
-
-// Keyword auto-detection (first occurrence of each per form). These map to the
-// SHARED core groups, so answering once fills the field on every form (cross-fill).
-const AUTO: { group: string; answerType: AnswerType; test: (t: string) => boolean; needsReview?: boolean }[] = [
-  { group: "full_name", answerType: "name",
-    test: (t) =>
-      /\bname\b/i.test(t) &&
-      t.length < 52 &&
-      /(applicant|your name|^name\b|print name|full name|client|caretaker)/i.test(t) &&
-      !/(case|worker|program|landlord|employer|county|business|file|user|spouse|child|provider|payee)/i.test(t) },
-  { group: "address", answerType: "address",
-    test: (t) =>
-      /\baddress\b/i.test(t) &&
-      t.length < 64 &&
-      !/(e-?mail|website|web site|employer|landlord)/i.test(t) },
-  { group: "ssn", answerType: "ssn", needsReview: true,
-    test: (t) => /social security/i.test(t) && t.length < 90 && !/required to give/i.test(t) },
-  { group: "dob", answerType: "date",
-    test: (t) => /date of birth|birthdate/i.test(t) && t.length < 90 },
-  { group: "phone", answerType: "phone",
-    test: (t) => /(telephone|phone)\s*(number|no\.?|#)?/i.test(t) && t.length < 70 },
-  { group: "email", answerType: "email",
-    test: (t) => /e-?mail/i.test(t) && t.length < 70 },
-];
 
 const FORM_META: { id: string; code: string; title: string; description: string }[] = [
   { id: "cw42", code: "CW 42", title: "Statement of Facts — Homeless Assistance",
@@ -283,49 +279,15 @@ function toMarkdown(xml: string, fields: Field[]): string {
   return lines.join("\n");
 }
 
-// Auto-detect shared fields for non-curated forms.
-function autoFields(formId: string, xml: string): Field[] {
-  const paras = xml.match(/<w:p\b[^>]*>[\s\S]*?<\/w:p>/g) ?? [];
-  const fields: Field[] = [];
-  const usedGroups = new Set<string>();
-  for (const p of paras) {
-    const t = paraText(p);
-    if (!t) continue;
-    for (const a of AUTO) {
-      if (usedGroups.has(a.group)) continue;
-      if (a.test(t)) {
-        usedGroups.add(a.group);
-        fields.push({
-          id: a.group,
-          token: `${formId}__${a.group}`,
-          group: a.group,
-          anchor: t.slice(0, Math.min(t.length, 40)),
-          answerType: a.answerType,
-          needsReview: a.needsReview,
-        });
-      }
-    }
-  }
-  return fields;
-}
-
 function processForm(meta: { id: string; code: string; title: string; description: string }): FormDef {
   const srcPath = join(ROOT, "forms", `${meta.id}.docx`);
   const zip = new PizZip(readFileSync(srcPath));
   const xml = zip.file("word/document.xml")!.asText();
 
-  let fields: Field[];
-  if (meta.id === "cw42") {
-    fields = CW42_FIELDS.map((f) => ({ ...f, token: `cw42__${f.id}` }));
-  } else {
-    const curated = (CURATED[meta.id] ?? []).map((f) => ({
-      ...f,
-      token: `${meta.id}__${f.id}`,
-    }));
-    const curatedGroups = new Set(curated.map((f) => f.group));
-    const auto = autoFields(meta.id, xml).filter((f) => !curatedGroups.has(f.group));
-    fields = [...curated, ...auto];
-  }
+  const fields: Field[] = (FIELD_MAP[meta.id] ?? []).map((f) => ({
+    ...f,
+    token: `${meta.id}__${f.id}`,
+  }));
 
   const { xml: filledXml, placed } = inject(xml, fields);
   const missing = fields.filter((f) => !placed.has(f.id));

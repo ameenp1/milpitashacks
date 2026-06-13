@@ -13,10 +13,10 @@
     },
     {
       "id": "full_name",
-      "token": "scd508__full_name",
       "group": "full_name",
       "anchor": "Please sign your name here:",
-      "answerType": "name"
+      "answerType": "name",
+      "token": "scd508__full_name"
     }
   ]
 }

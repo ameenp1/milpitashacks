@@ -43,7 +43,7 @@ If you want Medi-Cal/34-County CMSP, you must provide a declaration of citizensh
 Fingerprint/Photo Imaging
 All eligible adult household members for cash aid, and any adult applying for a child-only grant, must be fingerprint/photo imaged. If you are required to meet this rule but do not get fingerprint/photo imaged, the entire household will not get cash aid benefits. (Manual of Policies and Procedures (MPP) Section 40-105.3.)
 The fingerprint/photo images are confidential. We can only use them to prevent fraud or to bring a criminal case against you for welfare fraud.
-Social Security Number (SSN) Rules {{saws2asar__ssn}}
+Social Security Number (SSN) Rules
 The SSNs will be used in a computer match to check income and resources with records from tax, welfare, employment, the Social Security Administration and other agencies. Differences may be checked out with employers, banks or others. Making false statements or failing to report all facts or situations which affect eligibility and aid payments for cash aid, CalFresh and Medi-Cal/34-County CMSP may result in repayment of benefits and/or criminal or civil action.
 Cash Aid and CalFresh Benefits: You must give us the SSN for each applicant or recipient of cash aid and/or CalFresh. If you refuse to give us either a SSN or proof of application for a SSN, you will not be able to get cash aid or CalFresh benefits. For CalFresh, if there are people in your home who are not applying for CalFresh benefits, you do not have to provide their SSN. For cash aid, you must give proof of application for a SSN within 30 days of application for cash aid and give the SSN to the county when you get it. (MPP Section 40-105.2).
 Each applicant for Medi-Cal/34-County CMSP, who says he/she is a U.S. citizen, a U.S. national, LPR in the U.S., an amnesty alien with a valid and current I-688, or PRUCOL, will be disqualified from getting Medi-Cal if he/she refuses to give either a SSN or proof of application for a SSN. Any noncitizen who does not have a SSN and who is not an amnesty alien with a valid and current I-688 or a LPR or PRUCOL, can still get restricted Medi-Cal/34-County CMSP if he/she meets all eligibility rules, including California residency.
@@ -79,7 +79,7 @@ CalWORKs Applicants - If any of the facts you told the county change, you must r
 HOW YOU MUST REPORT
 For Cash Aid and CalFresh Semi-Annual Reporting, in addition to your annual SAWS 2 PLUS you must turn in a Semi-Annual Eligibility Report (SAR 7) by the fifth day of the month following your report month and report all required changes to the county within 10 days.
 For CalFresh Change Reporting, you must report all changes within 10 days:
-by mail, telephone, or in person at the county CalFresh office; OR {{saws2asar__phone}}
+by mail, telephone, or in person at the county CalFresh office; OR
 on the SAR 3 or AR 3; OR
 on a CF 377.5, CalFresh Household Change Report
 For Medi-Cal, you must report all changes within 10 days AND turn in a complete Status Report by the 5th of the month when the county sends or gives it to you.
@@ -137,7 +137,7 @@ Your total monthly income starts, stops, or changes by more than $50.
 Anyone’s source of income changes.
 Anyone moves into or out of your home.
 Anyone joins or leaves your household.
-You move or you get a new address. {{saws2asar__address}}
+You move or you get a new address.
 Your rent and utility costs only if you move.
 If there is a change in the amount of any court ordered child support paid by a member of the household for a child not living in the home.
 Anyone who is an Able Bodied Adult Without Dependents (ABAWD) CalFresh recipient and the number of hours they work or are in training drop to less than 20 hours a week or 80 hours a month.

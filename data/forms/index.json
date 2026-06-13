@@ -11,7 +11,7 @@
     "code": "CW 74",
     "title": "Permanent Housing Search Document",
     "description": "A log of your search for permanent housing while you receive temporary shelter.",
-    "fieldCount": 3
+    "fieldCount": 1
   },
   {
     "id": "saws1",
@@ -32,7 +32,7 @@
     "code": "SAWS 2A SAR",
     "title": "Rights, Responsibilities and Other Important Information",
     "description": "Explains your rights and responsibilities. Mostly for your records.",
-    "fieldCount": 4
+    "fieldCount": 1
   },
   {
     "id": "scd508",

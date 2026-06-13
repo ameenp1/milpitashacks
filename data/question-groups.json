@@ -281,5 +281,11 @@
     ],
     "question": "Would you like to register to vote?",
     "help": "Your choice will not affect the help you get from the county."
+  },
+  {
+    "id": "sign_date",
+    "isCore": false,
+    "answerType": "date",
+    "question": "Today's date (added automatically for your signature)."
   }
 ]

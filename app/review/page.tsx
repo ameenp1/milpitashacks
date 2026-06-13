@@ -18,7 +18,7 @@ const SUMMARY_FIELDS = [
 ];
 
 export default function ReviewPage() {
-  const { profile, reviewed } = useAppState();
+  const { profile, reviewed, signature } = useAppState();
   const answers = profile.answers;
   const { showToast } = useToast();
   const t = useT([
@@ -31,6 +31,8 @@ export default function ReviewPage() {
     "Open",
     "Print / Save as PDF",
     "Delete my information",
+    "Signature",
+    "Date",
   ]);
 
   const supportingDocs = [
@@ -102,6 +104,20 @@ export default function ReviewPage() {
             </div>
           ))}
         </dl>
+        {(signature || answers.sign_date) && (
+          <div className="mt-5 border-t border-neutral-100 pt-4">
+            <div className="text-xs text-neutral-500">{t("Signature")}</div>
+            {signature ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={signature} alt={t("Signature")} className="mt-1 h-16" />
+            ) : (
+              <div className="text-sm text-neutral-400">— signed electronically —</div>
+            )}
+            <div className="mt-1 text-xs text-neutral-500">
+              {t("Date")}: {answers.sign_date}
+            </div>
+          </div>
+        )}
       </section>
 
       {/* Supporting documents */}

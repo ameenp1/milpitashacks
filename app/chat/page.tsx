@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { PROFILE_SCHEMA, FORM_INDEX, getFormDef, getGroup } from "@/lib/data";
 import { useAppState, setAnswer, approveGroups } from "@/lib/profile";
+import { todayMMDDYYYY } from "@/lib/date";
 import { chat, NoKeyError } from "@/lib/client/api";
 import { useSpeak } from "@/lib/client/useSpeak";
 import { useI18n } from "@/components/I18nProvider";
@@ -105,6 +106,9 @@ export default function ChatPage() {
   useEffect(() => {
     const q = new URLSearchParams(window.location.search).get("form");
     if (q && getFormDef(q)) setManualForm(q);
+    // Auto-fill today's date for the signature line (if /sign was skipped).
+    if (!answers.sign_date?.trim()) setAnswer("sign_date", todayMMDDYYYY());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function addBot(text: string, doSpeak: boolean) {

@@ -147,6 +147,8 @@ const GROUPS: QuestionGroup[] = [
     choices: ["Yes", "No"],
     question: "Would you like to register to vote?",
     help: "Your choice will not affect the help you get from the county." },
+  { id: "sign_date", isCore: false, answerType: "date",
+    question: "Today's date (added automatically for your signature)." },
 ];
 
 // --------------------------------------------------------------------------
@@ -174,6 +176,7 @@ const CW42_FIELDS: Omit<Field, "token">[] = [
   { id: "monthly_rent", group: "monthly_rent", anchor: "How much is your monthly rent", answerType: "money" },
   { id: "why_unpaid", group: "why_unpaid_rent", anchor: "pay your rent", answerType: "longtext" },
   { id: "why_evict", group: "why_evicting", anchor: "Why is your Landlord evicting you", answerType: "longtext" },
+  { id: "sign_date", group: "sign_date", anchor: "SIGNATURE OF CARETAKER RELATIVE", answerType: "date" },
 ];
 
 // Keyword auto-detection for the other forms (first occurrence of each).

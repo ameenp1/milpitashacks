@@ -15,6 +15,15 @@ and SCD 508.
 Next.js 16 (App Router) · TypeScript · Tailwind v4 · OpenAI (GPT-4o Transcribe +
 GPT-4o + TTS) · pizzip (DOCX) · docx-preview (in-browser preview).
 
+## What it looks like (chatbot)
+The core is a single conversational surface (`/chat`): the assistant **typewrites**
+each question, reads it aloud (hear-mode by default, audio cuts when you move on),
+takes **voice or text**, and you can **ask it questions** mid-flow. Each answer is
+applied to the **md form** and shown on the right as a **Word tracked change** on the
+live document; an **Approve / Approve-all** panel accepts the changes. Questions appear
+in the user's language only once translated (no English flicker); answers are stored in
+**English** for the official form.
+
 ## Setup & run
 
 Node is provided via nvm (not on the default PATH):
@@ -47,9 +56,23 @@ npm run preprocess
 - **`lib/docx/fillEngine.ts`** — replaces each `{{token}}` run with the answer.
   `mode=preview` → plain blue runs (renders reliably in the browser);
   `mode=export` → Word tracked-change `<w:ins>` insertions (for download).
-- **Flow**: `/` → `/language` (voice) → `/interview` (≈20 grouped questions) →
-  `/forms` (checklist with status) → `/forms/[id]` (guided Q&A + live preview) →
-  `/review` (summary, document checklist, downloads, print-to-PDF, delete).
+- **Flow**: `/` → `/language` → `/sign` (e-signature + auto date) → `/chat` (the
+  unified assistant) → `/review` (summary, document checklist, downloads, delete).
+  `/forms` is an overview; `/print/[id]` is a clean full-document print/PDF view.
+- **Other touches**: SSN masked with an eye toggle; per-question Skip; a one-time
+  post-interview pass reformats answers and flags nonsense; `/api/translate` is backed
+  by a growing per-language dataset (`data/i18n/<lang>.json`); `/privacy` page; TTS
+  voice selection; "Delete my information" wipes the profile + translation caches.
+
+## Share a test link (ngrok)
+Vercel deploys from the team's pushes (Node is pinned via `engines` + `.nvmrc`). For an
+instant shared link, tunnel the running server:
+```bash
+ngrok config add-authtoken <token>
+npm run build && npm run start    # serves :3000
+ngrok http 3000                   # prints the public https URL
+```
+ngrok-free shows a one-time "Visit Site" interstitial in the browser — click through.
 
 ## Verified
 - `npm run build` passes (TypeScript + all routes).

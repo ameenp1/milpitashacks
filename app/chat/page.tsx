@@ -4,7 +4,7 @@ import Link from "next/link";
 import { PROFILE_SCHEMA, FORM_INDEX, getFormDef, getGroup } from "@/lib/data";
 import { useAppState, setAnswer, approveGroups } from "@/lib/profile";
 import { todayMMDDYYYY } from "@/lib/date";
-import { chat, NoKeyError } from "@/lib/client/api";
+import { chat, reviewPass, NoKeyError } from "@/lib/client/api";
 import { useSpeak } from "@/lib/client/useSpeak";
 import { useI18n } from "@/components/I18nProvider";
 import { useToast } from "@/components/Toast";
@@ -28,6 +28,10 @@ const CHROME = [
   "Type your answer…",
   "Send",
   "Print",
+  "Skip",
+  "That doesn't look like a complete email (like name@example.com). Want to try again, or skip it?",
+  "Checking your answers…",
+  "Everything looks good. You can review and download on the right.",
   "All your forms are filled in. Review the highlighted answers on the right and approve them.",
   "Sorry, I didn't catch that. Could you say it another way?",
   "Something went wrong. Please try again or type your answer.",
@@ -40,6 +44,8 @@ const CHROME = [
   "answered",
   "Hi! I'll help you fill out your forms. You can speak or type, and you can ask me anything.",
 ];
+
+const isValidEmail = (s: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.trim());
 
 export default function ChatPage() {
   const { profile, approved } = useAppState();
@@ -54,6 +60,7 @@ export default function ChatPage() {
   const [hearMode, setHearMode] = useState(true);
   const [ttsVoice, setTtsVoice] = useState("alloy");
   const [showSecret, setShowSecret] = useState(false);
+  const [skipped, setSkipped] = useState<Set<string>>(new Set());
   const [manualForm, setManualForm] = useState<string | null>(null);
   const [lastValue, setLastValue] = useState<string | undefined>(undefined);
 
@@ -82,7 +89,9 @@ export default function ChatPage() {
   const applies = (g: QuestionGroup) =>
     !g.dependsOn || answers[g.dependsOn.group] === g.dependsOn.equals;
   const currentGroup =
-    orderedGroups.find((g) => applies(g) && !(answers[g.id]?.trim())) ?? null;
+    orderedGroups.find(
+      (g) => applies(g) && !(answers[g.id]?.trim()) && !skipped.has(g.id),
+    ) ?? null;
 
   const formForGroup = (gid: string | undefined) => {
     if (!gid) return "cw42";
@@ -149,6 +158,7 @@ export default function ChatPage() {
         t("All your forms are filled in. Review the highlighted answers on the right and approve them."),
         true,
       );
+      runReviewPass();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentGroup?.id, questionReady, displayedQuestion, greetedRef.current]);
@@ -179,22 +189,68 @@ export default function ChatPage() {
         language: langLabel,
       });
       if (r.type === "answer" && r.value) {
-        setLastValue(r.value);
-        setAnswer(g.id, r.value);
-        if (r.reply) addBot(r.reply, true);
+        if (g.answerType === "email" && !isValidEmail(r.value)) {
+          addBot(t("That doesn't look like a complete email (like name@example.com). Want to try again, or skip it?"), true);
+        } else {
+          setLastValue(r.value);
+          setAnswer(g.id, r.value);
+          if (r.reply) addBot(r.reply, true);
+        }
       } else {
         addBot(r.reply || t("Sorry, I didn't catch that. Could you say it another way?"), true);
       }
     } catch (err) {
       if (err instanceof NoKeyError) {
         // Deterministic fallback: take the text as the answer.
-        setLastValue(text);
-        setAnswer(g.id, text);
+        if (g.answerType === "email" && !isValidEmail(text)) {
+          addBot(t("That doesn't look like a complete email (like name@example.com). Want to try again, or skip it?"), false);
+        } else {
+          setLastValue(text);
+          setAnswer(g.id, text);
+        }
       } else {
         showToast(t("Something went wrong. Please try again or type your answer."), "error");
       }
     } finally {
       setSending(false);
+    }
+  }
+
+  function skip() {
+    if (!currentGroup) return;
+    stop();
+    setSkipped((s) => new Set(s).add(currentGroup.id));
+  }
+
+  // Final pass once the interview is done: reformat answers + flag nonsense.
+  // (SSN excluded; date is auto.) Runs once.
+  async function runReviewPass() {
+    const items = orderedGroups
+      .filter((g) => g.id !== "ssn" && g.id !== "sign_date" && answers[g.id]?.trim())
+      .map((g) => ({
+        group: g.id,
+        question: g.question,
+        answerType: g.answerType,
+        value: answers[g.id],
+      }));
+    if (!items.length) return;
+    addBot(t("Checking your answers…"), false);
+    try {
+      const { fixes, issues } = await reviewPass(items);
+      Object.entries(fixes).forEach(([g, v]) => {
+        if (v && v !== answers[g]) setAnswer(g, v);
+      });
+      if (issues.length) {
+        issues
+          .slice(0, 5)
+          .forEach((i) =>
+            showToast(`${getGroup(i.group)?.question ?? i.group}: ${i.reason}`, "error"),
+          );
+      } else {
+        addBot(t("Everything looks good. You can review and download on the right."), true);
+      }
+    } catch {
+      /* no key or failure: skip silently */
     }
   }
 
@@ -324,6 +380,15 @@ export default function ChatPage() {
                 {t("Send")}
               </button>
             </div>
+            {currentGroup && (
+              <button
+                type="button"
+                onClick={skip}
+                className="mt-2 text-xs text-neutral-400 hover:text-neutral-700"
+              >
+                {t("Skip")}
+              </button>
+            )}
           </div>
         </section>
 

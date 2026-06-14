@@ -1,6 +1,6 @@
 // Sample shelters for Santa Clara & San Francisco counties, with fake
 // participants and applicants. Passwords are a single word from the name.
-import type { Shelter, Participant, Applicant } from "./types";
+import type { Shelter, Participant, Applicant, Post } from "./types";
 
 export interface SeedShelter extends Shelter {
   participants: Participant[];
@@ -16,6 +16,9 @@ export const SEED_SHELTERS: SeedShelter[] = [
     address: "1297 N First St, San Jose, CA 95112",
     phone: "(408) 555-0142",
     capacity: 60,
+    description:
+      "A general-purpose emergency shelter for single adults and couples. Walk-ins welcome; meals and case management included.",
+    focus: ["General shelter", "Single adults"],
     password: "hope",
     participants: [
       { id: "p1", name: "Maria Gonzalez", joinedOn: "2026-04-12", bedAssignment: "A-14", caseworker: "L. Tran" },
@@ -35,6 +38,9 @@ export const SEED_SHELTERS: SeedShelter[] = [
     address: "2011 Little Orchard St, San Jose, CA 95125",
     phone: "(408) 555-0188",
     capacity: 250,
+    description:
+      "The county's largest shelter. On-site clinic, mental-health services, and a path toward permanent supportive housing.",
+    focus: ["General shelter", "Health services", "Housing placement"],
     password: "boccardo",
     participants: [
       { id: "p1", name: "Daniel Okafor", joinedOn: "2026-03-30", bedAssignment: "D-22", caseworker: "M. Rivera" },
@@ -56,6 +62,9 @@ export const SEED_SHELTERS: SeedShelter[] = [
     address: "370 Tomkins Ct, Gilroy, CA 95020",
     phone: "(408) 555-0211",
     capacity: 45,
+    description:
+      "Employment-focused shelter for adults ready to work. On-site job training, resume help, and partnerships with local employers.",
+    focus: ["Job assistance", "Job training", "Single adults"],
     password: "gilroy",
     participants: [
       { id: "p1", name: "Hector Ramirez", joinedOn: "2026-05-05", bedAssignment: "1-02", caseworker: "A. Flores" },
@@ -73,6 +82,9 @@ export const SEED_SHELTERS: SeedShelter[] = [
     address: "1313 N Mathilda Ave, Sunnyvale, CA 94089",
     phone: "(408) 555-0276",
     capacity: 80,
+    description:
+      "Assisted-living shelter for seniors and adults with disabilities. Accessible rooms, on-site nursing, and daily living support.",
+    focus: ["Assisted living", "Seniors", "Accessible"],
     password: "sunnyvale",
     participants: [
       { id: "p1", name: "Evelyn Carter", joinedOn: "2026-04-22", bedAssignment: "F-11", caseworker: "J. Singh" },
@@ -92,6 +104,9 @@ export const SEED_SHELTERS: SeedShelter[] = [
     address: "1631 Hayes St, San Francisco, CA 94117",
     phone: "(415) 555-0319",
     capacity: 120,
+    description:
+      "Family shelter for parents with children. Private rooms, childcare, after-school programs, and rapid re-housing support.",
+    focus: ["Families", "Children", "Housing placement"],
     password: "hamilton",
     participants: [
       { id: "p1", name: "Andre Jackson", joinedOn: "2026-03-15", bedAssignment: "2-A", caseworker: "P. Mendez" },
@@ -111,6 +126,9 @@ export const SEED_SHELTERS: SeedShelter[] = [
     address: "525 5th St, San Francisco, CA 94107",
     phone: "(415) 555-0364",
     capacity: 340,
+    description:
+      "Large 24-hour shelter for single adults. Reservations and drop-in beds, hot meals, showers, and benefits enrollment.",
+    focus: ["General shelter", "Single adults", "24-hour"],
     password: "msc",
     participants: [
       { id: "p1", name: "Gerald Foster", joinedOn: "2026-02-28", bedAssignment: "L1-58", caseworker: "K. Boyd" },
@@ -132,6 +150,9 @@ export const SEED_SHELTERS: SeedShelter[] = [
     address: "1001 Polk St, San Francisco, CA 94109",
     phone: "(415) 555-0402",
     capacity: 270,
+    description:
+      "Shelter for women and transgender adults, with a focus on safety. Trauma-informed care and domestic-violence support.",
+    focus: ["Women", "Trauma-informed", "Safety"],
     password: "nextdoor",
     participants: [
       { id: "p1", name: "Carla Jensen", joinedOn: "2026-04-01", bedAssignment: "N-77", caseworker: "B. Aziz" },
@@ -150,6 +171,9 @@ export const SEED_SHELTERS: SeedShelter[] = [
     address: "1601 McKinnon Ave, San Francisco, CA 94124",
     phone: "(415) 555-0457",
     capacity: 100,
+    description:
+      "Faith-based shelter for older adults needing extra care. Light assisted-living support, meals, and medical coordination.",
+    focus: ["Assisted living", "Seniors", "General shelter"],
     password: "providence",
     participants: [
       { id: "p1", name: "Dorothy Sims", joinedOn: "2026-03-22", bedAssignment: "P-05", caseworker: "C. Nava" },
@@ -159,5 +183,60 @@ export const SEED_SHELTERS: SeedShelter[] = [
     applicants: [
       { id: "a1", name: "Paul Greer", appliedOn: "2026-06-11", progress: 85, needs: "Senior, mobility limited" },
     ],
+  },
+];
+
+// Sample community-feed posts. createdAt is fixed so ordering is stable.
+const day = (iso: string) => new Date(iso + "T09:00:00").getTime();
+
+export const SEED_POSTS: (Post & { id: string })[] = [
+  {
+    id: "post-gilroy-jobfair",
+    shelterId: "gilroy-compassion",
+    shelterName: "Gilroy Compassion Center",
+    county: "Santa Clara",
+    title: "On-site Job Fair — 12 employers hiring",
+    body: "Bring your ID. Warehouse, food service, and landscaping roles. Resume help available all morning, and we'll have free coffee and lunch.",
+    eventDate: "2026-06-20",
+    createdAt: day("2026-06-11"),
+  },
+  {
+    id: "post-boccardo-clinic",
+    shelterId: "boccardo-center",
+    shelterName: "Boccardo Reception Center",
+    county: "Santa Clara",
+    title: "Free dental clinic this Saturday",
+    body: "Mobile dental van will be in the parking lot from 9am to 3pm. Cleanings and basic care, no appointment needed. Open to anyone, not just residents.",
+    eventDate: "2026-06-14",
+    createdAt: day("2026-06-10"),
+  },
+  {
+    id: "post-hamilton-backpacks",
+    shelterId: "hamilton-families",
+    shelterName: "Hamilton Families",
+    county: "San Francisco",
+    title: "Back-to-school backpack giveaway",
+    body: "Free backpacks and school supplies for kids K–12. Families welcome from any shelter. While supplies last.",
+    eventDate: "2026-06-28",
+    createdAt: day("2026-06-12"),
+  },
+  {
+    id: "post-msc-meals",
+    shelterId: "msc-south",
+    shelterName: "MSC South Shelter",
+    county: "San Francisco",
+    title: "Extended dinner hours starting this week",
+    body: "We're now serving hot dinner until 8pm every night. Showers and laundry also available for drop-in guests.",
+    createdAt: day("2026-06-09"),
+  },
+  {
+    id: "post-sunnyvale-health",
+    shelterId: "sunnyvale-haven",
+    shelterName: "Sunnyvale Safe Haven",
+    county: "Santa Clara",
+    title: "Free blood-pressure & flu shot day",
+    body: "County nurses on site for seniors and anyone who'd like a checkup. Wheelchair accessible. No insurance required.",
+    eventDate: "2026-06-18",
+    createdAt: day("2026-06-08"),
   },
 ];

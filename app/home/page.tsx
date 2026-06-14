@@ -39,12 +39,20 @@ export default function ResidentHome() {
         </Link>
       </div>
 
-      <Link
-        href="/resources"
-        className="mt-6 inline-flex items-center gap-2 text-base font-medium text-blue-700 underline-offset-2 hover:underline"
-      >
-        Find nearby shelters, food banks & transit →
-      </Link>
+      <div className="mt-6 flex flex-col gap-2">
+        <Link
+          href="/resources"
+          className="inline-flex items-center gap-2 text-base font-medium text-blue-700 underline-offset-2 hover:underline"
+        >
+          Find nearby shelters, food banks & transit →
+        </Link>
+        <Link
+          href="/feed"
+          className="inline-flex items-center gap-2 text-base font-medium text-blue-700 underline-offset-2 hover:underline"
+        >
+          See shelter events & community posts →
+        </Link>
+      </div>
 
       <p className="mt-10 max-w-xl text-sm leading-relaxed text-neutral-500">
         Your answers stay on this device. You can delete everything with one tap

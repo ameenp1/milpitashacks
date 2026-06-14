@@ -14,7 +14,7 @@ export function BrandLogo({
       className={`inline-flex items-center text-neutral-900 ${className}`}
     >
       <svg
-        viewBox={compact ? "0 0 126 92" : "0 0 520 120"}
+        viewBox={compact ? "0 0 126 92" : "0 0 470 120"}
         role="img"
         aria-hidden="true"
         className={compact ? "h-10 w-auto" : "h-16 w-auto sm:h-20"}
@@ -30,16 +30,16 @@ export function BrandLogo({
         {!compact && (
           <g fill="currentColor">
             <text
-              x="122"
+              x="104"
               y="88"
               fontFamily="Arial Black, Arial, Helvetica, sans-serif"
               fontSize="62"
               fontWeight="900"
               letterSpacing="-1"
             >
-              HousingAId
+              ousingAId
             </text>
-            <path d="M405 92h86v9h-86z" />
+            <path d="M358 92h88v9h-88z" />
           </g>
         )}
       </svg>

@@ -28,10 +28,37 @@ export function VoiceButton({
   const chunksRef = useRef<Blob[]>([]);
   const { showToast } = useToast();
 
+  // Always deliver to the CURRENT handler/language. A recording may have started
+  // for an earlier question (mic-first auto-listen) and only finish after the user
+  // moved on (e.g. skipped); its result must go to whatever question is current
+  // now, not the one captured when recording began.
+  const onResultRef = useRef(onResult);
+  onResultRef.current = onResult;
+  const languageRef = useRef(language);
+  languageRef.current = language;
+  // Bumped whenever we (re)start; an abandoned recording's result is discarded.
+  const epochRef = useRef(0);
+
   async function start() {
-    if (stateRef.current !== "idle") return;
+    if (stateRef.current === "processing") return; // don't cut off transcription
+    // Abandon any recording still running from a previous question (the user
+    // skipped/advanced while the mic was open), then listen fresh.
+    epochRef.current += 1;
+    const epoch = epochRef.current;
+    if (recorderRef.current && recorderRef.current.state !== "inactive") {
+      try {
+        recorderRef.current.stop();
+      } catch {
+        /* already stopping */
+      }
+    }
+    recorderRef.current = null;
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      if (epoch !== epochRef.current) {
+        stream.getTracks().forEach((t) => t.stop());
+        return; // superseded while acquiring the mic
+      }
       const recorder = new MediaRecorder(stream);
       chunksRef.current = [];
       recorder.ondataavailable = (e) => {
@@ -39,13 +66,15 @@ export function VoiceButton({
       };
       recorder.onstop = async () => {
         stream.getTracks().forEach((t) => t.stop());
+        if (epoch !== epochRef.current) return; // abandoned -> discard this take
         const blob = new Blob(chunksRef.current, {
           type: recorder.mimeType || "audio/webm",
         });
         setState("processing");
         try {
-          const text = await transcribeAudio(blob, language);
-          if (text.trim()) onResult(text.trim());
+          const text = await transcribeAudio(blob, languageRef.current);
+          if (epoch !== epochRef.current) return;
+          if (text.trim()) onResultRef.current(text.trim());
           else showToast("I didn't catch that. Please try again.", "info");
         } catch (err) {
           if (err instanceof NoKeyError) {

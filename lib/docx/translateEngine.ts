@@ -110,10 +110,11 @@ export async function translateDocumentXml(
   });
 }
 
-// Free-text answer values, translated into `lang` for the your-language copy.
-// Personal/structured values (name, SSN, dates, phone, money, address, the
-// signature data URL) are left as-is. Returns a new answers map.
-const FREE_TEXT = new Set(["text", "longtext", "choice", "boolean"]);
+// Answer values translated into `lang` for the your-language copy. Free text and
+// place-based answers (incl. address, so "Beijing" -> the localized name) are
+// translated; structured/personal values (name, SSN, dates, phone, money, number,
+// and the signature data URL) are left as entered. Returns a new answers map.
+const TRANSLATABLE = new Set(["text", "longtext", "choice", "boolean", "address"]);
 
 export async function translateAnswers(
   def: FormDef,
@@ -127,7 +128,7 @@ export async function translateAnswers(
     if (!typeByGroup.has(f.group)) typeByGroup.set(f.group, f.answerType);
   }
   const entries = Object.entries(answers).filter(
-    ([g, v]) => v?.trim() && FREE_TEXT.has(typeByGroup.get(g) ?? ""),
+    ([g, v]) => v?.trim() && TRANSLATABLE.has(typeByGroup.get(g) ?? ""),
   );
   if (!entries.length) return answers;
 

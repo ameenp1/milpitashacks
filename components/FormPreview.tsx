@@ -30,7 +30,7 @@ export function FormPreview({
   const ref = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const translated = !!lang && lang !== "en";
+  const translated = !!lang && lang !== "en" && lang !== "English";
   const key = JSON.stringify({ answers, mode, lang });
 
   // Keep the latest edit callback in a ref so re-rendering with a new function

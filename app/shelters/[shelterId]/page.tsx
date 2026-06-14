@@ -6,10 +6,10 @@ import { CalendarIcon } from "@/components/icons";
 import {
   getShelter,
   getParticipants,
-  getApplicants,
   listPosts,
   createPost,
 } from "@/lib/shelters/store";
+import { watchApplicants } from "@/lib/shelters/applications";
 import type { Shelter, Participant, Applicant, Post } from "@/lib/shelters/types";
 import { useToast } from "@/components/Toast";
 
@@ -44,23 +44,20 @@ export default function ShelterDashboard() {
       router.replace("/shelters");
       return;
     }
-    Promise.all([
-      getShelter(shelterId),
-      getParticipants(shelterId),
-      getApplicants(shelterId),
-      listPosts(),
-    ])
-      .then(([s, p, a, allPosts]) => {
+    Promise.all([getShelter(shelterId), getParticipants(shelterId), listPosts()])
+      .then(([s, p, allPosts]) => {
         if (!s) {
           router.replace("/shelters");
           return;
         }
         setShelter(s);
         setParticipants(p);
-        setApplicants(a);
         setPosts(allPosts.filter((post) => post.shelterId === shelterId));
       })
       .finally(() => setLoading(false));
+    // Live: applicants stream in and update as people fill out their applications.
+    const unsub = watchApplicants(shelterId, setApplicants);
+    return () => unsub();
   }, [shelterId, router]);
 
   function logout() {
@@ -152,8 +149,20 @@ export default function ShelterDashboard() {
           <div className="space-y-3">
             {applicants.map((a) => (
               <div key={a.id} className="rounded-lg border border-line bg-white p-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-lg font-bold text-navy">{a.name}</span>
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg font-bold text-navy">{a.name}</span>
+                    {a.status === "complete" && (
+                      <span className="rounded-md bg-green-50 px-2 py-0.5 text-xs font-medium text-green-800">
+                        Complete
+                      </span>
+                    )}
+                    {a.status === "in_progress" && (
+                      <span className="rounded-md bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-800">
+                        In progress
+                      </span>
+                    )}
+                  </div>
                   <span className="text-sm text-ink/55">Applied {fmtDate(a.appliedOn)}</span>
                 </div>
                 <div className="mt-1 text-sm text-ink/55">{a.needs}</div>

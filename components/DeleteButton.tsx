@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { clearAll } from "@/lib/profile";
+import { clearAll, useAppState } from "@/lib/profile";
+import { getApplicantId, deleteApplication } from "@/lib/shelters/applications";
 import { useToast } from "./Toast";
 
 export function DeleteButton({
@@ -10,12 +11,20 @@ export function DeleteButton({
 }) {
   const router = useRouter();
   const { showToast } = useToast();
+  const { selectedShelterIds } = useAppState();
 
-  function onClick() {
+  async function onClick() {
     const ok = window.confirm(
       "This permanently erases all of your answers from this device. Continue?",
     );
     if (!ok) return;
+    // Also remove the application from any shelters it was shared with.
+    try {
+      if (selectedShelterIds.length)
+        await deleteApplication(getApplicantId(), selectedShelterIds);
+    } catch {
+      /* best-effort: still clear the device below */
+    }
     clearAll();
     showToast("Your information was deleted from this device.", "success");
     router.push("/");

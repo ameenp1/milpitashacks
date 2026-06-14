@@ -8,6 +8,7 @@ export interface AppState {
   profile: Profile;
   reviewed: string[]; // form ids the applicant confirmed
   signature?: string; // data URL of the e-signature
+  selectedShelterIds: string[]; // shelters the applicant chose to apply to
 }
 
 const KEY = "ha_state";
@@ -15,6 +16,7 @@ const KEY = "ha_state";
 const EMPTY: AppState = {
   profile: { language: "en", languageLabel: "English", answers: {} },
   reviewed: [],
+  selectedShelterIds: [],
 };
 
 function load(): AppState {
@@ -31,6 +33,7 @@ function load(): AppState {
       },
       reviewed: parsed.reviewed ?? [],
       signature: parsed.signature,
+      selectedShelterIds: parsed.selectedShelterIds ?? [],
     };
   } catch {
     return EMPTY;
@@ -78,17 +81,23 @@ export function markReviewed(formId: string, reviewed = true) {
 export function setSignature(dataUrl: string | undefined) {
   set({ ...state, signature: dataUrl });
 }
+export function setSelectedShelters(ids: string[]) {
+  set({ ...state, selectedShelterIds: ids });
+}
 export function clearAll() {
-  // Wipe everything this app ever stored, including cached translations.
+  // Wipe everything this app ever stored, including cached translations and the
+  // applicant id used to key the Firestore application (Firestore docs themselves
+  // are removed by the caller before this, since it needs the selection list).
   if (typeof window !== "undefined") {
     Object.keys(window.localStorage)
-      .filter((k) => k === KEY || k.startsWith("ha_tr_"))
+      .filter((k) => k === KEY || k === "ha_applicant_id" || k.startsWith("ha_tr_"))
       .forEach((k) => window.localStorage.removeItem(k));
   }
   set({
     profile: { language: "en", languageLabel: "English", answers: {} },
     reviewed: [],
     signature: undefined,
+    selectedShelterIds: [],
   });
 }
 

@@ -56,6 +56,7 @@ export default function ReviewPage() {
     "Worth asking about",
     "Immediate help you may get now",
     "Because of:",
+    "Apply to shelters",
     ...ELIGIBILITY_STRINGS,
     ...groupQuestions,
   ]);
@@ -262,13 +263,21 @@ export default function ReviewPage() {
       </section>
 
       <div className="no-print flex flex-wrap items-center justify-between gap-4">
-        <button
-          type="button"
-          onClick={() => window.print()}
-          className="rounded-md border border-line bg-white px-5 py-3 text-sm font-bold text-navy hover:bg-neutral-100"
-        >
-          {t("Print / Save as PDF")}
-        </button>
+        <div className="flex flex-wrap gap-3">
+          <button
+            type="button"
+            onClick={() => window.print()}
+            className="rounded-md border border-line bg-white px-5 py-3 text-sm font-bold text-navy hover:bg-neutral-100"
+          >
+            {t("Print / Save as PDF")}
+          </button>
+          <Link
+            href="/choose-shelters"
+            className="rounded-md bg-brand px-5 py-3 text-sm font-bold text-white hover:bg-brand-dark"
+          >
+            {t("Apply to shelters")}
+          </Link>
+        </div>
         <DeleteButton label={t("Delete my information")} />
       </div>
     </main>

@@ -41,4 +41,5 @@ export interface Applicant {
   appliedOn: string; // ISO date
   progress: number; // 0-100 percent of application completed
   needs: string;
+  status?: "in_progress" | "complete"; // present on real (synced) applicants
 }

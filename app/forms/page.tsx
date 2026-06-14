@@ -16,6 +16,7 @@ export default function FormsPage() {
     "We filled in what we could from your answers. Open each form to review it side by side.",
     "Review and download everything",
     "Apply online with a guide",
+    "Apply to shelters",
     "Delete my information",
     ...FORM_INDEX.map((f) => f.description),
   ]);
@@ -78,6 +79,12 @@ export default function FormsPage() {
             className="rounded-md border border-brand/30 bg-white px-6 py-4 text-lg font-semibold text-brand transition hover:border-brand"
           >
             {t("Apply online with a guide")}
+          </Link>
+          <Link
+            href="/choose-shelters"
+            className="rounded-md border border-brand/30 bg-white px-6 py-4 text-lg font-semibold text-brand transition hover:border-brand"
+          >
+            {t("Apply to shelters")}
           </Link>
         </div>
         <DeleteButton label={t("Delete my information")} />

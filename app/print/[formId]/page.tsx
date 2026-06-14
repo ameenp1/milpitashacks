@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import { getFormDef } from "@/lib/data";
 import { useAppState } from "@/lib/profile";
 import { FormPreview } from "@/components/FormPreview";
+import { PrinterIcon } from "@/components/icons";
 
 // Clean, full-document print view (all pages) — print CSS expands the preview so
 // the entire form prints, not just the visible page. Answers render as accepted
@@ -26,9 +27,10 @@ export default function PrintPage() {
         <button
           type="button"
           onClick={() => window.print()}
-          className="rounded-xl bg-neutral-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-neutral-700"
+          className="inline-flex items-center gap-2 rounded bg-brand px-5 py-2.5 text-sm font-bold text-white hover:bg-brand-dark"
         >
-          🖨 Print / Save as PDF
+          <PrinterIcon className="h-4 w-4" />
+          Print / Save as PDF
         </button>
       </div>
       <FormPreview formId={formId} answers={answers} mode="clean" />

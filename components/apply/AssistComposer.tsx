@@ -3,6 +3,7 @@ import { useState } from "react";
 import { VoiceButton } from "@/components/VoiceButton";
 import { useScreenShare } from "@/lib/apply/useScreenShare";
 import { useToast } from "@/components/Toast";
+import { MonitorIcon } from "@/components/icons";
 
 // Composer for the BenefitsCal guide chat: type a question or tap the mic. Kept
 // separate from the form-filling ChatComposer, which is tied to the question
@@ -78,13 +79,13 @@ export function AssistComposer({
           title={sharing ? t("Stop sharing") : t("Show agent my screen")}
           aria-pressed={sharing}
           className={[
-            "rounded-xl border px-3 py-3 text-lg transition",
+            "rounded-lg border px-3 py-3 transition",
             sharing
               ? "border-emerald-500 bg-emerald-50 text-emerald-600"
-              : "border-neutral-300 text-neutral-600 hover:border-neutral-900 hover:text-neutral-900",
+              : "border-line text-ink/60 hover:border-brand hover:text-brand",
           ].join(" ")}
         >
-          🖥
+          <MonitorIcon className="h-5 w-5" />
         </button>
         <VoiceButton onResult={send} language={language} idleLabel={t("Ask a question")} />
         <button

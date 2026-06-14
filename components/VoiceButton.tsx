@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { transcribeAudio, NoKeyError } from "@/lib/client/api";
 import { useToast } from "./Toast";
+import { MicIcon } from "./icons";
 
 type State = "idle" | "recording" | "processing";
 
@@ -92,15 +93,19 @@ export function VoiceButton({
         aria-pressed={state === "recording"}
         aria-label={state === "recording" ? "Stop" : "Speak"}
         className={[
-          "flex h-24 w-24 flex-col items-center justify-center rounded-full text-3xl shadow-sm transition",
+          "flex h-24 w-24 flex-col items-center justify-center rounded-full shadow-sm transition",
           state === "recording"
             ? "animate-pulse bg-red-600 text-white"
             : state === "processing"
               ? "bg-neutral-200 text-neutral-400"
-              : "bg-neutral-900 text-white hover:bg-neutral-700",
+              : "bg-brand text-white hover:bg-brand-dark",
         ].join(" ")}
       >
-        {state === "processing" ? "…" : "🎤"}
+        {state === "processing" ? (
+          <span className="text-3xl">…</span>
+        ) : (
+          <MicIcon className="h-7 w-7" />
+        )}
         <span className="mt-1 text-[11px] font-medium">
           {state === "recording"
             ? "Tap to stop"
@@ -124,7 +129,7 @@ export function VoiceButton({
           ? "bg-red-600 text-white hover:bg-red-700"
           : state === "processing"
             ? "bg-neutral-200 text-neutral-500"
-            : "bg-neutral-900 text-white hover:bg-neutral-700",
+            : "bg-brand text-white hover:bg-brand-dark",
       ].join(" ")}
     >
       <span

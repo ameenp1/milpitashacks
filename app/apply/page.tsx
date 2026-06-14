@@ -8,6 +8,7 @@ import { ChatTranscript } from "@/components/chat/ChatTranscript";
 import { AssistComposer } from "@/components/apply/AssistComposer";
 import { BrowserPanel } from "@/components/apply/BrowserPanel";
 import { SpeakerIcon, SpeakerOffIcon } from "@/components/icons";
+import { BrandLogo } from "@/components/BrandLogo";
 
 const VOICES = ["alloy", "echo", "fable", "onyx", "nova", "shimmer"];
 
@@ -19,10 +20,7 @@ export default function ApplyPage() {
     <main className="mx-auto h-screen max-w-7xl px-4 py-4">
       <header className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Link href="/" className="flex items-baseline leading-none">
-            <span className="text-lg font-extrabold text-navy">housing</span>
-            <span className="text-lg font-extrabold text-brand">AId</span>
-          </Link>
+          <BrandLogo compact className="text-navy" />
           <Link href="/forms" className="text-sm text-ink/55 hover:text-ink">
             ← {t("All forms")}
           </Link>

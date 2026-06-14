@@ -1,10 +1,12 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   DocIcon,
   HomeIcon,
   CalendarIcon,
   KeyIcon,
 } from "@/components/icons";
+import { BrandLogo } from "@/components/BrandLogo";
 
 const SERVICES = [
   {
@@ -44,6 +46,7 @@ export default function Home() {
       <section className="border-b border-line bg-brand-tint">
         <div className="mx-auto max-w-6xl px-4 py-14 sm:py-20">
           <div className="max-w-2xl">
+            <BrandLogo className="mb-8 text-navy" />
             <p className="text-sm font-bold uppercase tracking-wide text-brand">
               Santa Clara &amp; San Francisco Counties
             </p>
@@ -95,6 +98,109 @@ export default function Home() {
               </span>
             </Link>
           ))}
+        </div>
+      </section>
+
+      {/* About */}
+      <section className="border-t border-line bg-white">
+        <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 lg:grid-cols-[1fr_1.05fr] lg:items-center">
+          <div>
+            <p className="text-sm font-bold uppercase tracking-wide text-brand">
+              About HousingAId
+            </p>
+            <h2 className="mt-3 text-3xl font-bold leading-tight text-navy sm:text-4xl">
+              We help people move from crisis to connection.
+            </h2>
+            <p className="mt-5 text-lg leading-relaxed text-ink/80">
+              HousingAId exists to make housing support easier to reach for
+              people who are already carrying too much. We guide residents
+              through confusing forms, connect them with nearby shelters and
+              services, and give shelter teams a clearer way to support the
+              people who come to them.
+            </p>
+            <p className="mt-4 leading-relaxed text-ink/75">
+              We are committed to building tools that are respectful, accessible,
+              multilingual, and practical in urgent moments. Our mission is to
+              reduce paperwork barriers, protect dignity, and help communities
+              respond faster with the resources people need most.
+            </p>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+            <Image
+              src="/about/homeless.jpeg"
+              alt="A person sitting near belongings on a city sidewalk."
+              width={1440}
+              height={898}
+              className="h-64 w-full rounded object-cover shadow-sm sm:h-72 lg:h-64"
+            />
+            <Image
+              src="/about/homess2.jpg"
+              alt="A person receiving help while sitting outdoors."
+              width={1900}
+              height={1404}
+              className="h-64 w-full rounded object-cover shadow-sm sm:h-72 lg:h-64"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Contact */}
+      <section className="border-t border-line bg-brand-tint/40">
+        <div className="mx-auto max-w-6xl px-4 py-14">
+          <div className="max-w-3xl">
+            <p className="text-sm font-bold uppercase tracking-wide text-brand">
+              Contact
+            </p>
+            <h2 className="mt-3 text-3xl font-bold leading-tight text-navy sm:text-4xl">
+              Get in touch with HousingAId.
+            </h2>
+            <p className="mt-4 max-w-2xl leading-relaxed text-ink/75">
+              For partnerships, shelter coordination, or general questions,
+              reach out to our team. These contact details are placeholders for
+              the demo.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-4 sm:grid-cols-3">
+            <a
+              href="mailto:staff@housingaid.org"
+              className="rounded border border-line bg-white p-5 transition hover:border-brand hover:shadow-sm"
+            >
+              <div className="text-xs font-bold uppercase tracking-wide text-ink/50">
+                Email
+              </div>
+              <div className="mt-2 text-sm font-bold text-navy">
+                staff@housingaid.org
+              </div>
+            </a>
+
+            <a
+              href="tel:+14085550192"
+              className="rounded border border-line bg-white p-5 transition hover:border-brand hover:shadow-sm"
+            >
+              <div className="text-xs font-bold uppercase tracking-wide text-ink/50">
+                Phone
+              </div>
+              <div className="mt-2 text-sm font-bold text-navy">
+                (408) 555-0192
+              </div>
+            </a>
+
+            <a
+              href="https://instagram.com/housingaId"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded border border-line bg-white p-5 transition hover:border-brand hover:shadow-sm"
+            >
+              <div className="text-xs font-bold uppercase tracking-wide text-ink/50">
+                Instagram
+              </div>
+              <div className="mt-2 text-sm font-bold text-navy">
+                @housingaId
+              </div>
+            </a>
+          </div>
         </div>
       </section>
 

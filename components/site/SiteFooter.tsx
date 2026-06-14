@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BrandLogo } from "@/components/BrandLogo";
 
 const COLUMNS: { heading: string; links: { href: string; label: string }[] }[] =
   [
@@ -32,10 +33,7 @@ export function SiteFooter() {
     <footer className="bg-navy text-white">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:grid-cols-2 md:grid-cols-4">
         <div>
-          <div className="flex items-baseline">
-            <span className="text-xl font-extrabold">housing</span>
-            <span className="text-xl font-extrabold text-white/80">AId</span>
-          </div>
+          <BrandLogo compact className="text-white" />
           <p className="mt-3 text-sm leading-relaxed text-white/70">
             Free, multilingual help completing CalWORKs Homeless Assistance
             forms for residents of Santa Clara &amp; San Francisco Counties.

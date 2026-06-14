@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
+import { BrandLogo } from "@/components/BrandLogo";
 
 const NAV = [
   { href: "/home", label: "Get Help" },
@@ -10,20 +11,6 @@ const NAV = [
   { href: "/shelters", label: "Shelter Staff" },
   { href: "/privacy", label: "Privacy" },
 ];
-
-/** housingAId wordmark — navy + brand blue, no decoration. */
-function Wordmark({ className = "" }: { className?: string }) {
-  return (
-    <Link href="/" className={`flex items-baseline leading-none ${className}`}>
-      <span className="text-2xl font-extrabold tracking-tight text-navy">
-        housing
-      </span>
-      <span className="text-2xl font-extrabold tracking-tight text-brand">
-        AId
-      </span>
-    </Link>
-  );
-}
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -51,7 +38,7 @@ export function SiteHeader() {
       {/* Row 2 — white logo + search bar */}
       <div className="border-b border-line bg-white">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-4">
-          <Wordmark />
+          <BrandLogo compact className="text-navy" />
 
           <form
             onSubmit={(e) => {

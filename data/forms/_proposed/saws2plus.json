@@ -1,0 +1,846 @@
+{
+  "formId": "saws2plus",
+  "generatedAt": "2026-06-13",
+  "regexMatched": [
+    {
+      "anchor": "APPLICATION FOR CALFRESH , CASH AID , AND/OR MEDI-CAL/HEALTH",
+      "group": "gets_cash_aid",
+      "answerType": "boolean",
+      "source": "regex"
+    },
+    {
+      "anchor": "For cash aid, you may get immediate assistance if:",
+      "group": "gets_cash_aid",
+      "answerType": "boolean",
+      "source": "regex"
+    },
+    {
+      "anchor": "Your utilities have been or will be shut off; or",
+      "group": "utilities_shutoff",
+      "answerType": "boolean",
+      "source": "regex"
+    },
+    {
+      "anchor": "You don’t have sufficient clothing or diapers; or",
+      "group": "essential_clothing",
+      "answerType": "boolean",
+      "source": "regex"
+    },
+    {
+      "anchor": "Birth certificates for everyone applying for cash aid.",
+      "group": "gets_cash_aid",
+      "answerType": "boolean",
+      "source": "regex"
+    },
+    {
+      "anchor": "Phone and utility costs.",
+      "group": "phone",
+      "answerType": "phone",
+      "source": "regex"
+    },
+    {
+      "anchor": "Additional Proof Needed for Cash Aid",
+      "group": "gets_cash_aid",
+      "answerType": "boolean",
+      "source": "regex"
+    },
+    {
+      "anchor": "Get cash aid within one day if you qualify for Immediate Nee",
+      "group": "gets_cash_aid",
+      "answerType": "boolean",
+      "source": "regex"
+    },
+    {
+      "anchor": "For cash aid I understand that if I...",
+      "group": "gets_cash_aid",
+      "answerType": "boolean",
+      "source": "regex"
+    },
+    {
+      "anchor": "do not follow cash aid rules",
+      "group": "gets_cash_aid",
+      "answerType": "boolean",
+      "source": "regex"
+    },
+    {
+      "anchor": "lose my cash aid",
+      "group": "gets_cash_aid",
+      "answerType": "boolean",
+      "source": "regex"
+    },
+    {
+      "anchor": "Use of Social Security Numbers (SSN)",
+      "group": "ssn",
+      "answerType": "ssn",
+      "source": "regex"
+    },
+    {
+      "anchor": "Work Rules for CalWORKs (Welfare-to-Work)",
+      "group": "gets_cash_aid",
+      "answerType": "boolean",
+      "source": "regex"
+    },
+    {
+      "anchor": "CalWORKs - Fingerprinting/Photo Imaging",
+      "group": "gets_cash_aid",
+      "answerType": "boolean",
+      "source": "regex"
+    },
+    {
+      "anchor": "How do I get/use my benefits? CalFresh and Cash Aid:",
+      "group": "gets_cash_aid",
+      "answerType": "boolean",
+      "source": "regex"
+    },
+    {
+      "anchor": "I want to get information about this application by email.",
+      "group": "email",
+      "answerType": "email",
+      "source": "regex"
+    },
+    {
+      "anchor": "WORK/ALTERNATE/MESSAGE PHONE",
+      "group": "phone",
+      "answerType": "phone",
+      "source": "regex"
+    },
+    {
+      "anchor": "ZIP CODE",
+      "group": "address",
+      "answerType": "address",
+      "source": "regex"
+    },
+    {
+      "anchor": "$150 and cash on hand, checking and",
+      "group": "liquid_resources",
+      "answerType": "longtext",
+      "source": "regex"
+    },
+    {
+      "anchor": "savings accounts $100 or less?",
+      "group": "liquid_resources",
+      "answerType": "longtext",
+      "source": "regex"
+    },
+    {
+      "anchor": "45402575105AUTHORIZED REPRESENTATIVE PHONE NUMBER",
+      "group": "phone",
+      "answerType": "phone",
+      "source": "regex"
+    },
+    {
+      "anchor": "AUTHORIZED REPRESENTATIVE PHONE NUMBER",
+      "group": "phone",
+      "answerType": "phone",
+      "source": "regex"
+    },
+    {
+      "anchor": "PHONE NUMBER",
+      "group": "phone",
+      "answerType": "phone",
+      "source": "regex"
+    },
+    {
+      "anchor": "ADDRESSCITY,STATE,ZIP CODE",
+      "group": "address",
+      "answerType": "address",
+      "source": "regex"
+    },
+    {
+      "anchor": "Social Security number is optional for members not applying ",
+      "group": "ssn",
+      "answerType": "ssn",
+      "source": "regex"
+    },
+    {
+      "anchor": "SOCIAL SECURITY NUMBER",
+      "group": "ssn",
+      "answerType": "ssn",
+      "source": "regex"
+    },
+    {
+      "anchor": "*Cash Aid",
+      "group": "gets_cash_aid",
+      "answerType": "boolean",
+      "source": "regex"
+    },
+    {
+      "anchor": "NAME (FIRST, MIDDLE, AND LAST)",
+      "group": "full_name",
+      "answerType": "name",
+      "source": "regex"
+    },
+    {
+      "anchor": "HOME PHONE NUMBER",
+      "group": "phone",
+      "answerType": "phone",
+      "source": "regex"
+    },
+    {
+      "anchor": "MAILING ADDRESS (IF DIFFERENT FROM ABOVE)",
+      "group": "address",
+      "answerType": "address",
+      "source": "regex"
+    },
+    {
+      "anchor": "EMAIL ADDRESS (OPTIONAL)",
+      "group": "email",
+      "answerType": "email",
+      "source": "regex"
+    },
+    {
+      "anchor": "DATE OF BIRTH",
+      "group": "dob",
+      "answerType": "date",
+      "source": "regex"
+    },
+    {
+      "anchor": "Cash Aid",
+      "group": "gets_cash_aid",
+      "answerType": "boolean",
+      "source": "regex"
+    },
+    {
+      "anchor": "485978604936c. SOCIAL SECURITY INFORMATION",
+      "group": "ssn",
+      "answerType": "ssn",
+      "source": "regex"
+    },
+    {
+      "anchor": "REASON FOR NOT HAVING A SOCIAL SECURITY NUMBER",
+      "group": "ssn",
+      "answerType": "ssn",
+      "source": "regex"
+    },
+    {
+      "anchor": "APPLIED FOR SSN",
+      "group": "ssn",
+      "answerType": "ssn",
+      "source": "regex"
+    },
+    {
+      "anchor": "This person does not qualify for an SSN.",
+      "group": "ssn",
+      "answerType": "ssn",
+      "source": "regex"
+    },
+    {
+      "anchor": "Has this person applied for a Social Security Number?",
+      "group": "ssn",
+      "answerType": "ssn",
+      "source": "regex"
+    },
+    {
+      "anchor": "SPONSOR’S PHONE NUMBER",
+      "group": "phone",
+      "answerType": "phone",
+      "source": "regex"
+    },
+    {
+      "anchor": "babies are expected with this pregnancy?",
+      "group": "is_pregnant",
+      "answerType": "boolean",
+      "source": "regex"
+    },
+    {
+      "anchor": "Social Security Disability SSI/SSP",
+      "group": "ssn",
+      "answerType": "ssn",
+      "source": "regex"
+    },
+    {
+      "anchor": "Cash aid CalWORKs/TANF/GA/GR/CAPI/RCA",
+      "group": "gets_cash_aid",
+      "answerType": "boolean",
+      "source": "regex"
+    },
+    {
+      "anchor": "Social Security retirement or survivors benefits",
+      "group": "ssn",
+      "answerType": "ssn",
+      "source": "regex"
+    },
+    {
+      "anchor": "Employer’s Phone Number",
+      "group": "phone",
+      "answerType": "phone",
+      "source": "regex"
+    },
+    {
+      "anchor": "40% flat Rate (CalFresh/cash aid) Actual Expenses $ Monthly ",
+      "group": "gets_cash_aid",
+      "answerType": "boolean",
+      "source": "regex"
+    },
+    {
+      "anchor": "Special phone or other equipment?",
+      "group": "phone",
+      "answerType": "phone",
+      "source": "regex"
+    },
+    {
+      "anchor": "Telephone/cell phone",
+      "group": "phone",
+      "answerType": "phone",
+      "source": "regex"
+    },
+    {
+      "anchor": "Have you or anyone in your household had their cash aid stop",
+      "group": "gets_cash_aid",
+      "answerType": "boolean",
+      "source": "regex"
+    },
+    {
+      "anchor": "how to prevent unwanted pregnancies and/or have the next chi",
+      "group": "is_pregnant",
+      "answerType": "boolean",
+      "source": "regex"
+    },
+    {
+      "anchor": "Is the household’s combined gross income and liquid resource",
+      "group": "liquid_resources",
+      "answerType": "longtext",
+      "source": "regex"
+    },
+    {
+      "anchor": "Is the household a destitute migrant/seasonal farm worker ho",
+      "group": "migrant_worker",
+      "answerType": "boolean",
+      "source": "regex"
+    },
+    {
+      "anchor": "Does the CalWORKs Assistance Unit have a pay-or-quit or othe",
+      "group": "has_eviction_notice",
+      "answerType": "boolean",
+      "source": "regex"
+    },
+    {
+      "anchor": "473105757111. EMPLOYEE NAME (FIRST NAME, MIDDLE NAME, LAST N",
+      "group": "full_name",
+      "answerType": "name",
+      "source": "regex"
+    },
+    {
+      "anchor": "2. EMPLOYEE SOCIAL SECURITY NUMBER",
+      "group": "ssn",
+      "answerType": "ssn",
+      "source": "regex"
+    },
+    {
+      "anchor": "1. EMPLOYEE NAME (FIRST NAME, MIDDLE NAME, LAST NAME)",
+      "group": "full_name",
+      "answerType": "name",
+      "source": "regex"
+    },
+    {
+      "anchor": "6. EMPLOYER PHONE NUMBER",
+      "group": "phone",
+      "answerType": "phone",
+      "source": "regex"
+    },
+    {
+      "anchor": "9. ZIP CODE",
+      "group": "address",
+      "answerType": "address",
+      "source": "regex"
+    },
+    {
+      "anchor": "47310520213511. PHONE NUMBER (IF DIFFERENT FROM EMPLOYER’S P",
+      "group": "phone",
+      "answerType": "phone",
+      "source": "regex"
+    },
+    {
+      "anchor": "12. EMPLOYER’S EMAIL ADDRESS (EMPLOYER’S REPRESENTATIVE)",
+      "group": "email",
+      "answerType": "email",
+      "source": "regex"
+    },
+    {
+      "anchor": "11. PHONE NUMBER (IF DIFFERENT FROM EMPLOYER’S PHONE NUMBER)",
+      "group": "phone",
+      "answerType": "phone",
+      "source": "regex"
+    },
+    {
+      "anchor": "1.Name (First name, Middle name, Last name)",
+      "group": "full_name",
+      "answerType": "name",
+      "source": "regex"
+    },
+    {
+      "anchor": "6.Zip code",
+      "group": "address",
+      "answerType": "address",
+      "source": "regex"
+    }
+  ],
+  "gptProposed": [
+    {
+      "anchor": "OTHER NAMES",
+      "group": "other_names",
+      "answerType": "text",
+      "needsReview": true,
+      "source": "gpt"
+    },
+    {
+      "anchor": "RACE/ETHNICITY",
+      "group": "race_ethnicity",
+      "answerType": "choice",
+      "source": "gpt"
+    },
+    {
+      "anchor": "HEALTH INSURANCE AUTHORIZED REPRESENTATIVES",
+      "group": "health_insurance_representatives",
+      "answerType": "text",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Do you want to name someone to help you with your CalFresh c",
+      "group": "calfresh_representative",
+      "answerType": "boolean",
+      "source": "gpt"
+    },
+    {
+      "anchor": "AUTHORIZED REPRESENTATIVE NAME",
+      "group": "authorized_representative_name",
+      "answerType": "name",
+      "needsReview": true,
+      "source": "gpt"
+    },
+    {
+      "anchor": "Do you want to name someone to receive and spend CalFresh Be",
+      "group": "calfresh_benefits_representative",
+      "answerType": "boolean",
+      "source": "gpt"
+    },
+    {
+      "anchor": "NAME OF CHILD",
+      "group": "child_name",
+      "answerType": "name",
+      "needsReview": true,
+      "source": "gpt"
+    },
+    {
+      "anchor": "NAME OF PARENT(S) NOT LIVING IN THE HOME",
+      "group": "non_resident_parent_name",
+      "answerType": "name",
+      "needsReview": true,
+      "source": "gpt"
+    },
+    {
+      "anchor": "PLACE OF BIRTH",
+      "group": "place_of_birth",
+      "answerType": "text",
+      "needsReview": true,
+      "source": "gpt"
+    },
+    {
+      "anchor": "SEX",
+      "group": "gender",
+      "answerType": "choice",
+      "source": "gpt"
+    },
+    {
+      "anchor": "U.S. Citizen?",
+      "group": "us_citizen",
+      "answerType": "boolean",
+      "needsReview": true,
+      "source": "gpt"
+    },
+    {
+      "anchor": "Date entered U.S.",
+      "group": "date_entered_us",
+      "answerType": "date",
+      "needsReview": true,
+      "source": "gpt"
+    },
+    {
+      "anchor": "Has this person lived in the U.S. continuously since 1996?",
+      "group": "continuous_us_residence",
+      "answerType": "boolean",
+      "needsReview": true,
+      "source": "gpt"
+    },
+    {
+      "anchor": "Is this person a Naturalized Citizen?",
+      "group": "naturalized_citizen",
+      "answerType": "boolean",
+      "needsReview": true,
+      "source": "gpt"
+    },
+    {
+      "anchor": "Sponsored?",
+      "group": "sponsored",
+      "answerType": "boolean",
+      "needsReview": true,
+      "source": "gpt"
+    },
+    {
+      "anchor": "ALIEN NUMBER",
+      "group": "alien_number",
+      "answerType": "text",
+      "needsReview": true,
+      "source": "gpt"
+    },
+    {
+      "anchor": "Does the sponsor regularly help with money?",
+      "group": "sponsor_financial_help",
+      "answerType": "boolean",
+      "needsReview": true,
+      "source": "gpt"
+    },
+    {
+      "anchor": "SPONSOR’S NAME",
+      "group": "sponsor_name",
+      "answerType": "name",
+      "needsReview": true,
+      "source": "gpt"
+    },
+    {
+      "anchor": "WHO IS SPONSORED?",
+      "group": "sponsored_person",
+      "answerType": "name",
+      "needsReview": true,
+      "source": "gpt"
+    },
+    {
+      "anchor": "Name of person",
+      "group": "disabled_person_name",
+      "answerType": "name",
+      "needsReview": true,
+      "source": "gpt"
+    },
+    {
+      "anchor": "Disability is expected to last",
+      "group": "disability_duration",
+      "answerType": "choice",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Does this person need care so that someone else can work or ",
+      "group": "care_needed_for_work_school",
+      "answerType": "boolean",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Is this person in a medical facility or nursing home?",
+      "group": "medical_facility_residence",
+      "answerType": "boolean",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Name of School/Training",
+      "group": "school_training_name",
+      "answerType": "text",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Enrolled Status",
+      "group": "enrollment_status",
+      "answerType": "choice",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Is this person under the age of 20?",
+      "group": "under_20",
+      "answerType": "boolean",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Is this person a teen parent?",
+      "group": "teen_parent",
+      "answerType": "boolean",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Is attending school regularly",
+      "group": "school_attendance",
+      "answerType": "boolean",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Due date",
+      "group": "due_date",
+      "answerType": "date",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Is this person 26 years of age or younger and were they in f",
+      "group": "foster_care_status",
+      "answerType": "boolean",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Is there a foster child currently living in your home who is",
+      "group": "foster_child_in_home",
+      "answerType": "boolean",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Does everyone listed in question 6 live in California and ex",
+      "group": "california_residence",
+      "answerType": "boolean",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Does anyone listed in question 6 plan to leave California fo",
+      "group": "california_absence",
+      "answerType": "boolean",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Unearned Income",
+      "group": "unearned_income",
+      "answerType": "longtext",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Earned income",
+      "group": "earned_income",
+      "answerType": "longtext",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Has anyone lost a job, changed jobs, quit a job, or reduced ",
+      "group": "recent_job_change",
+      "answerType": "boolean",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Self-Employment",
+      "group": "self_employment",
+      "answerType": "longtext",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Other Income",
+      "group": "other_income",
+      "answerType": "longtext",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Yearly Income",
+      "group": "yearly_income",
+      "answerType": "money",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Child Support Payments",
+      "group": "child_support_payments",
+      "answerType": "money",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Spousal Support/Alimony",
+      "group": "spousal_support",
+      "answerType": "money",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Special Needs Expenses",
+      "group": "special_needs_expenses",
+      "answerType": "longtext",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Household Expenses",
+      "group": "household_expenses",
+      "answerType": "longtext",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Low Income Home Energy Assistance Program (LIHEAP)",
+      "group": "liheap",
+      "answerType": "boolean",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Medical Expenses",
+      "group": "medical_expenses",
+      "answerType": "longtext",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Other Tax-Deductible Expenses",
+      "group": "tax_deductible_expenses",
+      "answerType": "longtext",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Shelter for battered women",
+      "group": "battered_women_shelter",
+      "answerType": "boolean",
+      "source": "gpt"
+    },
+    {
+      "anchor": "WHO GETS SERVICES?",
+      "group": "services_recipient",
+      "answerType": "name",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Household’s Resources",
+      "group": "household_resources",
+      "answerType": "longtext",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Diversion Program",
+      "group": "diversion_program",
+      "answerType": "longtext",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Duplicate Benefits",
+      "group": "duplicate_benefits",
+      "answerType": "boolean",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Trafficking Benefits",
+      "group": "trafficking_benefits",
+      "answerType": "boolean",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Fraud",
+      "group": "fraud",
+      "answerType": "boolean",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Non-Cooperation/Sanctions",
+      "group": "non_cooperation_sanctions",
+      "answerType": "boolean",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Fleeing Felon",
+      "group": "fleeing_felon",
+      "answerType": "boolean",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Probation/Parole Violation",
+      "group": "probation_parole_violation",
+      "answerType": "boolean",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Other Special Needs",
+      "group": "other_special_needs",
+      "answerType": "longtext",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Other Services",
+      "group": "other_services",
+      "answerType": "longtext",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Third Party Liability",
+      "group": "third_party_liability",
+      "answerType": "longtext",
+      "source": "gpt"
+    },
+    {
+      "anchor": "EMPLOYER NAME",
+      "group": "employer_name",
+      "answerType": "text",
+      "source": "gpt"
+    },
+    {
+      "anchor": "EMPLOYER IDENTIFICATION NUMBER (EIN)",
+      "group": "employer_ein",
+      "answerType": "text",
+      "source": "gpt"
+    },
+    {
+      "anchor": "EMPLOYER ADDRESS",
+      "group": "employer_address",
+      "answerType": "address",
+      "source": "gpt"
+    },
+    {
+      "anchor": "WHO CAN WE CONTACT ABOUT EMPLOYEE HEALTH COVERAGE AT THIS JO",
+      "group": "employer_contact",
+      "answerType": "text",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Are you currently eligible for coverage offered by this empl",
+      "group": "employer_health_coverage_eligibility",
+      "answerType": "boolean",
+      "source": "gpt"
+    },
+    {
+      "anchor": "If you’re in a waiting or probationary period, when can you ",
+      "group": "coverage_enrollment_date",
+      "answerType": "date",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Is this a State employee benefit plan?",
+      "group": "state_employee_benefit_plan",
+      "answerType": "boolean",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Tell us about your American Indian or Alaskan Native family ",
+      "group": "ai_an_family_members",
+      "answerType": "longtext",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Name of authorized representative",
+      "group": "authorized_representative",
+      "answerType": "name",
+      "needsReview": true,
+      "source": "gpt"
+    },
+    {
+      "anchor": "Organization name",
+      "group": "organization_name",
+      "answerType": "text",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Job 1",
+      "group": "job_1",
+      "answerType": "longtext",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Job 2",
+      "group": "job_2",
+      "answerType": "longtext",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Job 3",
+      "group": "job_3",
+      "answerType": "longtext",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Vehicle (1)",
+      "group": "vehicle_1",
+      "answerType": "longtext",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Vehicle (2)",
+      "group": "vehicle_2",
+      "answerType": "longtext",
+      "source": "gpt"
+    },
+    {
+      "anchor": "Vehicle (3)",
+      "group": "vehicle_3",
+      "answerType": "longtext",
+      "source": "gpt"
+    }
+  ]
+}

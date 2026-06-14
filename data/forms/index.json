@@ -25,7 +25,7 @@
     "code": "SAWS 2 PLUS",
     "title": "Application for CalFresh, Cash Aid, and/or Medi-Cal",
     "description": "The main application with your household, income, and resource details.",
-    "fieldCount": 7
+    "fieldCount": 16
   },
   {
     "id": "saws2asar",

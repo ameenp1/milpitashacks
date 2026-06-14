@@ -11,6 +11,11 @@ import { chat, reviewPass, NoKeyError } from "@/lib/client/api";
 import { useSpeak } from "@/lib/client/useSpeak";
 import { useI18n } from "@/components/I18nProvider";
 import { useToast } from "@/components/Toast";
+import {
+  assessEligibility,
+  ELIGIBILITY_SUMMARY,
+  ELIGIBILITY_IMMEDIATE,
+} from "@/lib/eligibility";
 import type { QuestionGroup } from "@/lib/types";
 import type { DetectedLanguage, Msg } from "./contracts";
 
@@ -72,6 +77,8 @@ export const CHROME = [
   ...(GUIDE_GROUP.choices ?? []),
   SWITCH_PREFIX,
   SWITCH_STAY,
+  ELIGIBILITY_SUMMARY,
+  ELIGIBILITY_IMMEDIATE,
 ];
 
 export function useChatFlow() {
@@ -334,6 +341,14 @@ export function useChatFlow() {
     } catch {
       /* no key or failure: skip silently */
     }
+
+    // Deterministic eligibility summary — runs with or without an API key, and
+    // points the applicant to the full breakdown + document list on /review.
+    const elig = assessEligibility(answers);
+    const summary = elig.immediateNeed.active
+      ? `${t(ELIGIBILITY_SUMMARY)} ${t(ELIGIBILITY_IMMEDIATE)}`
+      : t(ELIGIBILITY_SUMMARY);
+    addBot(summary, true);
   }
 
   return {

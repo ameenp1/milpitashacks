@@ -6,6 +6,8 @@
 import { useEffect, useRef, useState } from "react";
 import { askAssistant, NoKeyError } from "@/lib/client/api";
 import { useSpeak } from "@/lib/client/useSpeak";
+import { useProfile } from "@/lib/profile";
+import { getGroup } from "@/lib/data";
 import { useI18n } from "@/components/I18nProvider";
 import { useToast } from "@/components/Toast";
 import type { Msg } from "@/lib/chat/contracts";
@@ -29,6 +31,7 @@ export const APPLY_CHROME = [
   "Show agent my screen",
   "Stop sharing",
   "Agent can see your screen",
+  "What do I type here?",
   INTRO,
   ERROR,
   NO_KEY,
@@ -38,6 +41,19 @@ export function useAssistChat() {
   const { t, ensure, langLabel, lang } = useI18n();
   const { speak, stop, speaking, playingText } = useSpeak();
   const { showToast } = useToast();
+  const profile = useProfile();
+
+  // The saved answers as a readable {question: value} map for vision autofill.
+  // SSN and signature are deliberately excluded — the assistant tells the user to
+  // type their SSN from their card rather than displaying it.
+  function profileForAssist(): Record<string, string> {
+    const out: Record<string, string> = {};
+    for (const [gid, val] of Object.entries(profile.answers)) {
+      if (!val?.trim() || gid === "ssn" || gid === "signature" || gid === "sign_date") continue;
+      out[getGroup(gid)?.question ?? gid] = val;
+    }
+    return out;
+  }
 
   const [messages, setMessages] = useState<Msg[]>([]);
   const [sending, setSending] = useState(false);
@@ -58,7 +74,7 @@ export function useAssistChat() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [t]);
 
-  async function send(message: string, image?: string) {
+  async function send(message: string, image?: string, mode?: string) {
     const text = message.trim();
     if (!text || sending) return;
     stop();
@@ -76,6 +92,7 @@ export function useAssistChat() {
         })),
         langLabel,
         image,
+        mode === "autofill" ? { profile: profileForAssist(), mode } : undefined,
       );
       setMessages((m) => [
         ...m,

@@ -117,6 +117,90 @@
     "help": "To get Homeless Assistance you must have less than $100 in resources."
   },
   {
+    "id": "programs_applying",
+    "isCore": false,
+    "answerType": "text",
+    "question": "Which programs are you applying for? For example, Cash Aid, CalFresh food benefits, or Medi-Cal.",
+    "help": "Most people in a housing crisis apply for Cash Aid and CalFresh together."
+  },
+  {
+    "id": "food_3_days",
+    "isCore": false,
+    "answerType": "boolean",
+    "choices": [
+      "Yes",
+      "No"
+    ],
+    "question": "Will your food run out in 3 days or less?",
+    "help": "If yes, you may be able to get CalFresh food benefits within 3 days."
+  },
+  {
+    "id": "utilities_shutoff",
+    "isCore": false,
+    "answerType": "boolean",
+    "choices": [
+      "Yes",
+      "No"
+    ],
+    "question": "Have your utilities been shut off, or do you have a shut-off notice?",
+    "help": "A shut-off can qualify you for immediate help."
+  },
+  {
+    "id": "need_transport",
+    "isCore": false,
+    "answerType": "boolean",
+    "choices": [
+      "Yes",
+      "No"
+    ],
+    "question": "Do you need help with transportation to get food, clothing, medical care, or other emergency items?",
+    "help": "The county may be able to help with urgent needs."
+  },
+  {
+    "id": "essential_clothing",
+    "isCore": false,
+    "answerType": "boolean",
+    "choices": [
+      "Yes",
+      "No"
+    ],
+    "question": "Do you need essential clothing, such as diapers or clothing for cold weather?",
+    "help": "Urgent clothing needs can qualify you for extra help."
+  },
+  {
+    "id": "migrant_worker",
+    "isCore": false,
+    "answerType": "boolean",
+    "choices": [
+      "Yes",
+      "No"
+    ],
+    "question": "Is your household a migrant or seasonal farm worker household with $100 or less in resources?",
+    "help": "If yes, you may qualify for faster food benefits."
+  },
+  {
+    "id": "is_pregnant",
+    "isCore": false,
+    "answerType": "boolean",
+    "choices": [
+      "Yes",
+      "No"
+    ],
+    "question": "Is anyone in your household pregnant?",
+    "help": "Pregnancy can qualify you for additional or faster help."
+  },
+  {
+    "id": "personal_emergency",
+    "isCore": false,
+    "answerType": "boolean",
+    "choices": [
+      "Yes",
+      "No"
+    ],
+    "question": "Does anyone in your household have a personal emergency, such as a medical need, or domestic, child, or elder abuse?",
+    "help": "If yes, the county can help right away. If you are in danger, call 911."
+  },
+  {
     "id": "has_home",
     "order": 12,
     "isCore": true,

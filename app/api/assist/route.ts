@@ -15,15 +15,26 @@ const APPLY_URL = "https://benefitscal.com/ApplyForBenefits/begin/ABOVR?lang=en"
 
 export async function POST(req: NextRequest) {
   try {
-    const { messages, language, image } = (await req.json()) as {
+    const { messages, language, image, profile, mode } = (await req.json()) as {
       messages: { role: "user" | "assistant"; content: string }[];
       language?: string;
       image?: string;
+      profile?: Record<string, string>; // {label: value}, SSN already excluded client-side
+      mode?: string;
     };
 
     const client = getClient();
     const lang = language || "English";
     const hasImage = typeof image === "string" && image.startsWith("data:image");
+    const isAutofill = mode === "autofill";
+    const profileEntries =
+      profile && typeof profile === "object"
+        ? Object.entries(profile).filter(([, v]) => typeof v === "string" && v.trim())
+        : [];
+    const profileBlock = profileEntries.length
+      ? "=== THE APPLICANT'S SAVED ANSWERS (label: value) ===\n" +
+        profileEntries.map(([k, v]) => `- ${k}: ${v}`).join("\n")
+      : "";
     const system = [
       "You are a warm, patient guide helping someone apply for benefits (CalWORKs cash aid, CalFresh food benefits, and Homeless Assistance) in Santa Clara County.",
       `They are filling out the official online application at ${APPLY_URL}, which is open in a panel next to this chat. You guide them through it step by step.`,
@@ -32,8 +43,12 @@ export async function POST(req: NextRequest) {
       hasImage
         ? "A screenshot of the user's current screen is attached to their latest message. Look at it to see exactly which page, field, or question they are on, and tailor your guidance to what is actually shown."
         : "",
+      isAutofill
+        ? "AUTOFILL MODE: Look at the screenshot and find the single field, box, or question the applicant is on right now. In one short, specific instruction, tell them exactly what to type there, using their saved answer below when it matches that field. If you cannot tell which field they mean, briefly say what you see and ask them to click the field. For a Social Security Number field, tell them to type it from their Social Security card — never show SSN digits."
+        : "",
       "Answer their questions using ONLY the reference material below. If the answer is not covered, say you are not sure and suggest they call their county worker or 211 — never invent eligibility rules, dollar amounts, or deadlines.",
       "Do not give legal advice. Do not ask for or repeat their Social Security Number.",
+      profileBlock,
       "",
       "=== REFERENCE MATERIAL (CalWORKs / Homeless Assistance / CalFresh) ===",
       getContextDocs(),

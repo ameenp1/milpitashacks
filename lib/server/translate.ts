@@ -9,8 +9,13 @@ import { join } from "node:path";
 import { getClient, MODELS, NoKeyError } from "@/lib/openai";
 
 const DIR = join(process.cwd(), "data", "i18n");
-const slugify = (target: string) =>
-  target.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
+const slugify = (target: string) => {
+  const s = target.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
+  // Non-Latin labels (中文, 한국어, العربية, Русский) slug to "" — fall back to a
+  // stable hex of the bytes so the cache key is filesystem-safe AND non-empty
+  // (an empty slug would skip translation entirely and leave the copy English).
+  return s || Buffer.from(target).toString("hex");
+};
 const file = (slug: string) => join(DIR, `forms.${slug}.json`);
 
 function loadCache(slug: string): Record<string, string> {

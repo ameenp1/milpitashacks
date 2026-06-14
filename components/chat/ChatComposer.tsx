@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { VoiceButton } from "@/components/VoiceButton";
+import { EyeIcon, EyeOffIcon } from "@/components/icons";
 import type { ChatComposerProps } from "@/lib/chat/contracts";
 
 // Role 2 (Voice): mic-first composer. The microphone is the big primary control;
@@ -100,16 +101,20 @@ export function ChatComposer({
               type={isSsn && !showSecret ? "password" : "text"}
               placeholder={t("Type your answer…")}
               disabled={!currentGroup || sending}
-              className="w-full rounded-xl border border-neutral-300 px-4 py-3 pr-10 outline-none focus:border-neutral-900 disabled:bg-neutral-50"
+              className="w-full rounded-lg border border-line px-4 py-3 pr-10 outline-none focus:border-brand disabled:bg-neutral-50"
             />
             {isSsn && (
               <button
                 type="button"
                 onClick={() => setShowSecret((s) => !s)}
                 aria-label={showSecret ? "Hide" : "Show"}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-700"
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-navy"
               >
-                {showSecret ? "🙈" : "👁"}
+                {showSecret ? (
+                  <EyeOffIcon className="h-5 w-5" />
+                ) : (
+                  <EyeIcon className="h-5 w-5" />
+                )}
               </button>
             )}
           </div>
@@ -117,7 +122,7 @@ export function ChatComposer({
             type="button"
             onClick={() => send(input)}
             disabled={!input.trim() || sending || !currentGroup}
-            className="rounded-xl bg-neutral-900 px-4 py-3 text-sm font-medium text-white hover:bg-neutral-700 disabled:bg-neutral-200 disabled:text-neutral-400"
+            className="rounded-lg bg-brand px-4 py-3 text-sm font-bold text-white hover:bg-brand-dark disabled:bg-neutral-200 disabled:text-neutral-400"
           >
             {t("Send")}
           </button>

@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { getFormDef, getGroup } from "@/lib/data";
+import { EyeIcon, EyeOffIcon } from "@/components/icons";
 
 // Replaces the old approve/reject panel (revisions_2 L5): just the list of
 // answers with an inline Edit. Role 3 extends this (e.g. click-on-document edit).
@@ -67,9 +68,13 @@ export function AnswerList({
                       type="button"
                       onClick={() => setReveal((r) => !r)}
                       aria-label={reveal ? "Hide" : "Show"}
-                      className="ml-2 text-neutral-400 hover:text-neutral-700"
+                      className="ml-2 inline-flex align-middle text-neutral-400 hover:text-navy"
                     >
-                      {reveal ? "🙈" : "👁"}
+                      {reveal ? (
+                        <EyeOffIcon className="h-4 w-4" />
+                      ) : (
+                        <EyeIcon className="h-4 w-4" />
+                      )}
                     </button>
                   )}
                 </div>

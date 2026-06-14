@@ -1,75 +1,77 @@
 import Link from "next/link";
-import { BrandLogo } from "@/components/BrandLogo";
 
 export default function ResidentHome() {
   return (
-    <main className="mx-auto flex min-h-screen max-w-2xl flex-col justify-center px-6 py-16">
-      <div className="mb-8 flex items-center justify-between gap-4">
-        <Link
-          href="/"
-          className="inline-block text-sm text-neutral-400 hover:text-neutral-700"
-        >
-          ← Back
-        </Link>
-        <BrandLogo compact />
-      </div>
+    <main>
+      <section className="border-b border-line bg-brand-tint">
+        <div className="mx-auto max-w-3xl px-4 py-12 sm:py-16">
+          <p className="text-sm font-bold uppercase tracking-wide text-brand">
+            Santa Clara County · CalWORKs Homeless Assistance
+          </p>
+          <h1 className="mt-3 text-4xl font-bold leading-tight text-navy sm:text-5xl">
+            Get help with your housing assistance forms.
+          </h1>
+          <p className="mt-5 text-lg leading-relaxed text-ink/80">
+            Answer a few simple questions out loud, in your language. We fill out
+            the official forms for you, explain anything confusing, and prepare
+            them for review — so you only have to answer each question once.
+          </p>
 
-      <div className="mb-3 text-sm font-medium tracking-wide text-neutral-500">
-        Santa Clara County · CalWORKs Homeless Assistance
-      </div>
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <Link
+              href="/language"
+              className="inline-flex items-center justify-center rounded bg-brand px-7 py-3.5 text-base font-bold text-white transition hover:bg-brand-dark"
+            >
+              Start
+            </Link>
+            <Link
+              href="/apply"
+              className="inline-flex items-center justify-center rounded border-2 border-brand bg-white px-7 py-3.5 text-base font-bold text-brand transition hover:bg-brand-tint"
+            >
+              Apply online with a guide
+            </Link>
+          </div>
+        </div>
+      </section>
 
-      <h1 className="text-4xl font-semibold leading-tight text-neutral-900 sm:text-5xl">
-        Get help with your housing assistance forms.
-      </h1>
+      <section className="mx-auto max-w-3xl px-4 py-10">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Link
+            href="/resources"
+            className="rounded border border-line bg-white p-5 transition hover:border-brand hover:shadow-md"
+          >
+            <h2 className="text-base font-bold text-navy">
+              Nearby shelters, food banks &amp; transit
+            </h2>
+            <p className="mt-1.5 text-sm text-ink/70">
+              Find services near you across both counties.
+            </p>
+            <span className="mt-3 inline-block text-sm font-bold text-link">
+              Browse resources →
+            </span>
+          </Link>
+          <Link
+            href="/feed"
+            className="rounded border border-line bg-white p-5 transition hover:border-brand hover:shadow-md"
+          >
+            <h2 className="text-base font-bold text-navy">
+              Shelter events &amp; community posts
+            </h2>
+            <p className="mt-1.5 text-sm text-ink/70">
+              See announcements from shelters in your area.
+            </p>
+            <span className="mt-3 inline-block text-sm font-bold text-link">
+              See community →
+            </span>
+          </Link>
+        </div>
 
-      <p className="mt-5 max-w-xl text-lg leading-relaxed text-neutral-600">
-        Answer a few simple questions out loud, in your language. We fill out the
-        official forms for you, explain anything confusing, and prepare them for
-        review — so you only have to answer each question once.
-      </p>
-
-      <div className="mt-10 flex flex-wrap items-center gap-4">
-        <Link
-          href="/language"
-          className="inline-flex items-center justify-center rounded-xl bg-neutral-900 px-8 py-4 text-lg font-medium text-white transition hover:bg-neutral-700"
-        >
-          Start
-        </Link>
-        <Link
-          href="/apply"
-          className="inline-flex items-center justify-center rounded-xl border border-neutral-300 px-8 py-4 text-lg font-medium text-neutral-700 transition hover:border-neutral-900 hover:text-neutral-900"
-        >
-          Apply online with a guide
-        </Link>
-      </div>
-
-      <div className="mt-6 flex flex-col gap-2">
-        <Link
-          href="/resources"
-          className="inline-flex items-center gap-2 text-base font-medium text-blue-700 underline-offset-2 hover:underline"
-        >
-          Find nearby shelters, food banks & transit →
-        </Link>
-        <Link
-          href="/feed"
-          className="inline-flex items-center gap-2 text-base font-medium text-blue-700 underline-offset-2 hover:underline"
-        >
-          See shelter events & community posts →
-        </Link>
-      </div>
-
-      <p className="mt-10 max-w-xl text-sm leading-relaxed text-neutral-500">
-        Your answers stay on this device. You can delete everything with one tap
-        when you are done. If anything goes wrong, we will point you to a person
-        who can help.
-      </p>
-
-      <Link
-        href="/privacy"
-        className="mt-4 inline-block text-sm text-neutral-400 underline-offset-2 hover:text-neutral-700 hover:underline"
-      >
-        Privacy
-      </Link>
+        <p className="mt-8 max-w-xl text-sm leading-relaxed text-ink/60">
+          Your answers stay on this device. You can delete everything with one
+          tap when you are done. If anything goes wrong, we will point you to a
+          person who can help.
+        </p>
+      </section>
     </main>
   );
 }

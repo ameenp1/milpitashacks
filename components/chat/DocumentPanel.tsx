@@ -5,6 +5,7 @@ import { FORM_INDEX } from "@/lib/data";
 import { warmFilledDoc } from "@/lib/client/api";
 import { FormPreview } from "@/components/FormPreview";
 import { AnswerList } from "./AnswerList";
+import { PrinterIcon } from "@/components/icons";
 import type { DocumentPanelProps } from "@/lib/chat/contracts";
 
 // These exact strings are also listed in useChatFlow's CHROME so they are
@@ -32,7 +33,9 @@ export function DocumentPanel({
     setShowEnglish(!multilingual || done);
   }, [multilingual, done]);
 
-  const previewLang = showEnglish ? undefined : lang;
+  // Translate by the human language NAME (e.g. "中文"), which GPT handles far
+  // better than the bare code ("zh") and matches the UI translation target.
+  const previewLang = showEnglish ? undefined : langLabel;
 
   // Keep both the English and translated copies (and the English print copy)
   // generated in the background as answers come in, so toggling language or
@@ -41,10 +44,10 @@ export function DocumentPanel({
     warmFilledDoc(activeForm, answers, "clean"); // /print uses clean English
     if (multilingual) {
       warmFilledDoc(activeForm, answers, "preview"); // English toggle
-      warmFilledDoc(activeForm, answers, "preview", lang); // translated toggle
+      warmFilledDoc(activeForm, answers, "preview", langLabel); // translated toggle
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeForm, JSON.stringify(answers), lang, multilingual]);
+  }, [activeForm, JSON.stringify(answers), langLabel, multilingual]);
 
   return (
     <section className="flex min-h-0 flex-col">
@@ -62,9 +65,10 @@ export function DocumentPanel({
         </select>
         <Link
           href={`/print/${activeForm}`}
-          className="rounded-lg border border-neutral-200 px-3 py-1.5 text-sm text-neutral-600 hover:bg-neutral-50"
+          className="inline-flex items-center gap-1.5 rounded-md border border-line px-3 py-1.5 text-sm text-ink/70 hover:bg-brand-tint"
         >
-          🖨 {t("Print")}
+          <PrinterIcon className="h-4 w-4" />
+          {t("Print")}
         </Link>
       </div>
 

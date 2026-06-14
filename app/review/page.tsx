@@ -8,7 +8,11 @@ import { DeleteButton } from "@/components/DeleteButton";
 import { fetchFilledDoc } from "@/lib/client/api";
 import { useToast } from "@/components/Toast";
 import { useT } from "@/components/I18nProvider";
-import { BrandLogo } from "@/components/BrandLogo";
+import {
+  assessEligibility,
+  ELIGIBILITY_STRINGS,
+  ELIGIBILITY_IMMEDIATE,
+} from "@/lib/eligibility";
 
 const SUMMARY_FIELDS = [
   "full_name",
@@ -46,21 +50,20 @@ export default function ReviewPage() {
     "Delete my information",
     "Signature",
     "Date",
+    "What you may qualify for",
+    "A county worker decides what you actually get.",
+    "You may qualify",
+    "Worth asking about",
+    "Immediate help you may get now",
+    "Because of:",
+    ...ELIGIBILITY_STRINGS,
     ...groupQuestions,
   ]);
 
-  const supportingDocs = [
-    "Photo ID (driver's license, state ID, or passport)",
-    "Social Security card or number for each person applying",
-    "Proof of any income (pay stubs, award letters)",
-    "Proof of your money/resources (recent bank statements)",
-    answers["has_eviction_notice"] === "Yes"
-      ? "Your 'pay rent or quit' (eviction) notice"
-      : "",
-    answers["has_home"] === "No"
-      ? "Anything that shows where you have been staying, if you have it"
-      : "",
-  ].filter(Boolean);
+  // Decision support: what they may qualify for, immediate-need flags, and a
+  // document checklist derived from the answers (lib/eligibility.ts).
+  const elig = assessEligibility(answers);
+  const supportingDocs = elig.documents;
 
   // Missing fields across all forms.
   const missing: { formId: string; code: string; question: string }[] = [];
@@ -95,55 +98,107 @@ export default function ReviewPage() {
   }
 
   return (
-    <main className="mx-auto min-h-screen max-w-3xl px-6 py-10">
+    <main className="mx-auto max-w-3xl px-4 py-10">
       <div className="mb-8 flex items-center justify-between gap-4">
-        <h1 className="text-3xl font-semibold">{t("Review and download")}</h1>
-        <div className="no-print flex items-center gap-4">
-          <Link href="/forms" className="text-sm text-neutral-500 hover:text-neutral-900">
-            ← Back
-          </Link>
-          <BrandLogo compact />
-        </div>
+        <h1 className="text-3xl font-bold text-navy">{t("Review and download")}</h1>
+        <Link href="/forms" className="no-print text-sm text-ink/50 hover:text-ink">
+          ← Back
+        </Link>
       </div>
 
+      {/* Immediate need — surfaced first because it's time-sensitive. */}
+      {elig.immediateNeed.active && (
+        <section className="mb-8 rounded-2xl border border-red-300 bg-red-50 p-6">
+          <h2 className="mb-2 flex items-center gap-2 text-lg font-semibold text-red-900">
+            <span aria-hidden>⏱</span> {t("Immediate help you may get now")}
+          </h2>
+          <p className="text-sm text-red-900">
+            {t("Because of:")}{" "}
+            {elig.immediateNeed.triggers.map((x) => t(x)).join(", ")}.
+          </p>
+          <p className="mt-2 text-sm font-medium text-red-900">
+            {t(ELIGIBILITY_IMMEDIATE)}
+          </p>
+        </section>
+      )}
+
       {/* Applicant summary */}
-      <section className="mb-8 rounded-2xl border border-neutral-200 p-6">
-        <h2 className="mb-4 text-lg font-semibold">{t("Your summary")}</h2>
+      <section className="mb-8 rounded-lg border border-line bg-white p-6">
+        <h2 className="mb-4 text-lg font-bold text-navy">{t("Your summary")}</h2>
         <dl className="grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2">
           {SUMMARY_FIELDS.map((id) => (
             <div key={id}>
-              <dt className="text-xs text-neutral-500">
+              <dt className="text-xs text-ink/55">
                 {t(getGroup(id)?.question ?? id)}
               </dt>
-              <dd className="text-sm text-neutral-900">
+              <dd className="text-sm text-ink">
                 {answers[id] || "—"}
               </dd>
             </div>
           ))}
         </dl>
         {(signature || answers.sign_date) && (
-          <div className="mt-5 border-t border-neutral-100 pt-4">
-            <div className="text-xs text-neutral-500">{t("Signature")}</div>
+          <div className="mt-5 border-t border-line pt-4">
+            <div className="text-xs text-ink/55">{t("Signature")}</div>
             {signature ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={signature} alt={t("Signature")} className="mt-1 h-16" />
             ) : (
-              <div className="text-sm text-neutral-400">— signed electronically —</div>
+              <div className="text-sm text-ink/40">— signed electronically —</div>
             )}
-            <div className="mt-1 text-xs text-neutral-500">
+            <div className="mt-1 text-xs text-ink/55">
               {t("Date")}: {answers.sign_date}
             </div>
           </div>
         )}
       </section>
 
-      {/* Supporting documents */}
+      {/* What you may qualify for */}
       <section className="mb-8 rounded-2xl border border-neutral-200 p-6">
-        <h2 className="mb-4 text-lg font-semibold">{t("Documents to bring")}</h2>
+        <h2 className="text-lg font-semibold">{t("What you may qualify for")}</h2>
+        <p className="mb-4 text-xs text-neutral-500">
+          {t("A county worker decides what you actually get.")}
+        </p>
+        <div className="space-y-4">
+          {elig.programs.map((p) => (
+            <div key={p.key}>
+              <div className="flex flex-wrap items-center gap-2">
+                <span
+                  aria-hidden
+                  className={[
+                    "inline-block h-2.5 w-2.5 rounded-full",
+                    p.status === "likely" ? "bg-emerald-500" : "bg-amber-400",
+                  ].join(" ")}
+                />
+                <span className="text-sm font-medium text-neutral-900">{t(p.label)}</span>
+                <span
+                  className={[
+                    "rounded-full px-2 py-0.5 text-xs",
+                    p.status === "likely"
+                      ? "bg-emerald-100 text-emerald-800"
+                      : "bg-amber-100 text-amber-800",
+                  ].join(" ")}
+                >
+                  {p.status === "likely" ? t("You may qualify") : t("Worth asking about")}
+                </span>
+              </div>
+              <ul className="mt-1.5 list-disc space-y-1 pl-6 text-sm text-neutral-600">
+                {p.reasons.map((r, i) => (
+                  <li key={i}>{t(r)}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Supporting documents */}
+      <section className="mb-8 rounded-lg border border-line bg-white p-6">
+        <h2 className="mb-4 text-lg font-bold text-navy">{t("Documents to bring")}</h2>
         <ul className="space-y-2">
           {supportingDocs.map((d) => (
-            <li key={d} className="flex items-start gap-3 text-sm text-neutral-700">
-              <span className="mt-0.5 inline-block h-4 w-4 shrink-0 rounded border border-neutral-300" />
+            <li key={d} className="flex items-start gap-3 text-sm text-ink/80">
+              <span className="mt-0.5 inline-block h-4 w-4 shrink-0 rounded border border-neutral-400" />
               {d}
             </li>
           ))}
@@ -170,7 +225,7 @@ export default function ReviewPage() {
 
       {/* Forms + downloads */}
       <section className="mb-8">
-        <h2 className="mb-4 text-lg font-semibold">{t("Your forms")}</h2>
+        <h2 className="mb-4 text-lg font-bold text-navy">{t("Your forms")}</h2>
         <div className="space-y-3">
           {FORM_INDEX.map((f) => {
             const def = getFormDef(f.id)!;
@@ -178,24 +233,24 @@ export default function ReviewPage() {
             return (
               <div
                 key={f.id}
-                className="flex items-center justify-between gap-3 rounded-xl border border-neutral-200 p-4"
+                className="flex items-center justify-between gap-3 rounded-lg border border-line bg-white p-4"
               >
                 <div className="min-w-0">
-                  <div className="text-xs text-neutral-500">{f.code}</div>
-                  <div className="truncate text-sm font-medium">{f.title}</div>
+                  <div className="text-xs text-ink/55">{f.code}</div>
+                  <div className="truncate text-sm font-medium text-ink">{f.title}</div>
                 </div>
                 <div className="flex shrink-0 items-center gap-2">
                   <StatusBadge status={status} />
                   <Link
                     href={`/forms/${f.id}`}
-                    className="no-print rounded-lg border border-neutral-200 px-3 py-1.5 text-xs hover:bg-neutral-50"
+                    className="no-print rounded-md border border-line px-3 py-1.5 text-xs text-ink hover:bg-neutral-100"
                   >
                     {t("Open")}
                   </Link>
                   <button
                     type="button"
                     onClick={() => download(f.id, f.code)}
-                    className="no-print rounded-lg bg-neutral-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-neutral-700"
+                    className="no-print rounded-md bg-brand px-3 py-1.5 text-xs font-semibold text-white hover:bg-brand-dark"
                   >
                     {t("Download")}
                   </button>
@@ -210,7 +265,7 @@ export default function ReviewPage() {
         <button
           type="button"
           onClick={() => window.print()}
-          className="rounded-xl border border-neutral-300 px-5 py-3 text-sm font-medium text-neutral-800 hover:bg-neutral-50"
+          className="rounded-md border border-line bg-white px-5 py-3 text-sm font-bold text-navy hover:bg-neutral-100"
         >
           {t("Print / Save as PDF")}
         </button>

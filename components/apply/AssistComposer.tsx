@@ -3,6 +3,7 @@ import { useState } from "react";
 import { VoiceButton } from "@/components/VoiceButton";
 import { useScreenShare } from "@/lib/apply/useScreenShare";
 import { useToast } from "@/components/Toast";
+import { MonitorIcon } from "@/components/icons";
 
 // Composer for the BenefitsCal guide chat: type a question or tap the mic. Kept
 // separate from the form-filling ChatComposer, which is tied to the question
@@ -18,7 +19,7 @@ export function AssistComposer({
   sending: boolean;
   language: string;
   t: (s: string) => string;
-  onSubmit: (text: string, image?: string) => void;
+  onSubmit: (text: string, image?: string, mode?: string) => void;
 }) {
   const [input, setInput] = useState("");
   const { sharing, start, stop, captureFrame } = useScreenShare();
@@ -35,8 +36,28 @@ export function AssistComposer({
     setInput("");
   }
 
+  // Vision autofill: grab the current screen and ask the agent what to type in the
+  // field shown, using the saved profile. Starts sharing first (within this click
+  // gesture, which getDisplayMedia requires) if it isn't already on.
+  async function autofill() {
+    if (sending) return;
+    const ok = sharing || (await start());
+    if (!ok) return;
+    const image = (await captureFrame()) ?? undefined;
+    onSubmit(t("What do I type here?"), image, "autofill");
+  }
+
   return (
     <div className="border-t border-neutral-100 p-3">
+      <button
+        type="button"
+        onClick={autofill}
+        disabled={sending}
+        title={t("What do I type here?")}
+        className="mb-2 flex w-full items-center justify-center gap-2 rounded-xl border border-neutral-300 bg-neutral-50 px-4 py-2 text-sm font-medium text-neutral-700 transition hover:border-neutral-900 hover:text-neutral-900 disabled:opacity-50"
+      >
+        ✨ {t("What do I type here?")}
+      </button>
       {sharing && (
         <div className="mb-2 flex items-center justify-center gap-1.5 text-xs text-emerald-600">
           <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
@@ -58,13 +79,13 @@ export function AssistComposer({
           title={sharing ? t("Stop sharing") : t("Show agent my screen")}
           aria-pressed={sharing}
           className={[
-            "rounded-xl border px-3 py-3 text-lg transition",
+            "rounded-lg border px-3 py-3 transition",
             sharing
               ? "border-emerald-500 bg-emerald-50 text-emerald-600"
-              : "border-neutral-300 text-neutral-600 hover:border-neutral-900 hover:text-neutral-900",
+              : "border-line text-ink/60 hover:border-brand hover:text-brand",
           ].join(" ")}
         >
-          🖥
+          <MonitorIcon className="h-5 w-5" />
         </button>
         <VoiceButton onResult={send} language={language} idleLabel={t("Ask a question")} />
         <button

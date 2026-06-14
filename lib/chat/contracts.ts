@@ -7,6 +7,7 @@ export interface Msg {
   role: "bot" | "user";
   text: string;
   speak?: boolean; // bot turns the transcript should read aloud
+  image?: string; // optional screenshot the user shared with this turn (data URL)
 }
 
 export interface DetectedLanguage {
@@ -53,4 +54,9 @@ export interface DocumentPanelProps {
   t: (s: string) => string;
   onSwitchForm: (id: string) => void;
   onEditField: (group: string, value: string) => void;
+  // Multilingual copy: the applicant's language + label, and whether the
+  // interview is finished (flip the preview to the English submit copy).
+  lang: string;
+  langLabel: string;
+  done: boolean;
 }

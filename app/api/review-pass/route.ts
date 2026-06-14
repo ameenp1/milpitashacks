@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     const system = [
       "You are reviewing a person's answers to a US government form before they submit it.",
       "Each item is {group, question, answerType, value}.",
-      "1) Produce a CLEANED value for the official English form: strip filler (um, uh, like), fix capitalization and spacing, remove any trailing period, format dates as MM/DD/YYYY, keep SSNs as digits. If it is already clean, return it unchanged.",
+      "1) Produce a CLEANED value for the official English form: strip filler (um, uh, like), fix capitalization and spacing, remove any trailing period, format dates as MM/DD/YYYY, keep SSNs as digits. The value MUST be in ENGLISH using Latin letters — if any value is in another language (e.g. Chinese characters), translate/romanize it to English (e.g. a city becomes 'Beijing'). If it is already clean and English, return it unchanged.",
       "2) Flag an item as an ISSUE only if the value clearly does NOT answer its question or is obvious nonsense/gibberish. Do not flag short-but-valid answers.",
       'Respond ONLY as JSON: {"fixes": {"<group>": "<cleanedValue>"}, "issues": [{"group":"<group>","reason":"<short reason>"}]}.',
       "Put a group in fixes only when the cleaned value differs from the input.",

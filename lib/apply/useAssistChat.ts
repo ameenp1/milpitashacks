@@ -32,6 +32,7 @@ export const APPLY_CHROME = [
   "Stop sharing",
   "Agent can see your screen",
   "What do I type here?",
+  "Couldn't capture your screen. Try sharing again.",
   INTRO,
   ERROR,
   NO_KEY,
@@ -79,7 +80,7 @@ export function useAssistChat() {
     if (!text || sending) return;
     stop();
 
-    const userMsg: Msg = { id: idRef.current++, role: "user", text };
+    const userMsg: Msg = { id: idRef.current++, role: "user", text, image };
     const history = [...messages, userMsg];
     setMessages(history);
     setSending(true);

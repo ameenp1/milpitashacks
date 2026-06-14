@@ -79,6 +79,8 @@ export const CHROME = [
   SWITCH_STAY,
   ELIGIBILITY_SUMMARY,
   ELIGIBILITY_IMMEDIATE,
+  // Mirrors SUBMIT_NOTE in DocumentPanel — pre-translated for the language toggle.
+  "This copy is translated so you can read it. Print the English copy to submit.",
 ];
 
 export function useChatFlow() {

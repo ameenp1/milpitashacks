@@ -16,6 +16,11 @@ export function useSpeak() {
   const queueRef = useRef<{ text: string; voice?: string }[]>([]);
   const playingRef = useRef(false);
   const disabledRef = useRef(false);
+  // Bumped on every stop(). A playback attempt captures the epoch before its
+  // (async) TTS fetch; if the epoch changed by the time the fetch resolves, the
+  // attempt was superseded (a newer turn now owns playback) and must NOT start —
+  // otherwise a stale, still-fetching turn overlaps the current one.
+  const epochRef = useRef(0);
   const [speaking, setSpeaking] = useState(false);
   // The text of the utterance that has actually begun PLAYING. The transcript
   // uses this to start a turn's typewriter only once its audio starts, so speech
@@ -23,10 +28,12 @@ export function useSpeak() {
   const [playingText, setPlayingText] = useState<string | null>(null);
 
   const stop = useCallback(() => {
+    epochRef.current++; // invalidate any in-flight playback attempt
     queueRef.current = [];
     playingRef.current = false;
     if (audioRef.current) {
       audioRef.current.onended = null;
+      audioRef.current.onerror = null;
       audioRef.current.pause();
       audioRef.current = null;
     }
@@ -44,15 +51,18 @@ export function useSpeak() {
     }
     playingRef.current = true;
     setSpeaking(true);
+    const epoch = epochRef.current;
+    const current = () => epoch === epochRef.current; // not superseded by stop()
     try {
       const blob = await fetchTts(item.text, item.voice);
-      if (!playingRef.current) return; // stopped while fetching
+      if (!current()) return; // stopped/superseded while fetching — don't play
       const url = URL.createObjectURL(blob);
       const audio = new Audio(url);
       audioRef.current = audio;
       const advance = () => {
         URL.revokeObjectURL(url);
         if (audioRef.current === audio) audioRef.current = null;
+        if (!current()) return; // a newer turn owns playback now
         playingRef.current = false;
         playNext();
       };
@@ -61,7 +71,7 @@ export function useSpeak() {
       await audio
         .play()
         .then(() => {
-          if (audioRef.current === audio) setPlayingText(item.text);
+          if (current() && audioRef.current === audio) setPlayingText(item.text);
         })
         .catch(advance);
     } catch (err) {
@@ -69,6 +79,7 @@ export function useSpeak() {
         disabledRef.current = true;
         queueRef.current = [];
       }
+      if (!current()) return;
       playingRef.current = false;
       playNext();
     }

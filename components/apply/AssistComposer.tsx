@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { VoiceButton } from "@/components/VoiceButton";
 import { useScreenShare } from "@/lib/apply/useScreenShare";
+import { useToast } from "@/components/Toast";
 
 // Composer for the BenefitsCal guide chat: type a question or tap the mic. Kept
 // separate from the form-filling ChatComposer, which is tied to the question
@@ -21,10 +22,15 @@ export function AssistComposer({
 }) {
   const [input, setInput] = useState("");
   const { sharing, start, stop, captureFrame } = useScreenShare();
+  const { showToast } = useToast();
 
   async function send(text: string) {
     if (!text.trim() || sending) return;
-    const image = sharing ? (await captureFrame()) ?? undefined : undefined;
+    let image: string | undefined;
+    if (sharing) {
+      image = (await captureFrame()) ?? undefined;
+      if (!image) showToast(t("Couldn't capture your screen. Try sharing again."), "error");
+    }
     onSubmit(text, image);
     setInput("");
   }

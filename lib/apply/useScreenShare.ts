@@ -105,6 +105,18 @@ export function useScreenShare() {
       await new Promise((r) => setTimeout(r, 100));
     }
     if (!video || !video.videoWidth) return null;
+    // Wait for an actually-painted frame so we don't capture a black one.
+    const rvfc = (
+      video as HTMLVideoElement & {
+        requestVideoFrameCallback?: (cb: () => void) => number;
+      }
+    ).requestVideoFrameCallback?.bind(video);
+    if (rvfc) {
+      await new Promise<void>((res) => {
+        rvfc(() => res());
+        setTimeout(res, 400);
+      });
+    }
     return toJpeg(video, video.videoWidth, video.videoHeight);
   }, []);
 

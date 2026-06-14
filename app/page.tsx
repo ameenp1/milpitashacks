@@ -6,7 +6,6 @@ import {
   CalendarIcon,
   KeyIcon,
 } from "@/components/icons";
-import { BrandLogo } from "@/components/BrandLogo";
 
 const SERVICES = [
   {
@@ -46,7 +45,11 @@ export default function Home() {
       <section className="border-b border-line bg-brand-tint">
         <div className="mx-auto max-w-6xl px-4 py-14 sm:py-20">
           <div className="max-w-2xl">
-            <BrandLogo className="mb-8 text-navy" />
+            <div className="mb-8 text-5xl font-extrabold tracking-tight text-navy sm:text-6xl">
+              Housing
+              <span className="border-b-8 border-current leading-none">AI</span>
+              d
+            </div>
             <p className="text-sm font-bold uppercase tracking-wide text-brand">
               Santa Clara &amp; San Francisco Counties
             </p>

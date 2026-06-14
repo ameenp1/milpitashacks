@@ -35,6 +35,7 @@ export async function POST(req: NextRequest) {
       "    booleans -> exactly 'Yes' or 'No'; choice -> exactly one of the choices;",
       "    date -> MM/DD/YYYY if possible; ssn -> digits as said (keep dashes), never invent;",
       "    remove filler words (um, uh, like), fix capitalization, and use NO trailing period.",
+      "    The VALUE MUST be in ENGLISH using Latin letters. If the user answered in another language, TRANSLATE it to English — e.g. a city said in Chinese becomes 'Beijing', names/places are romanized. The VALUE must never contain Chinese or other non-Latin characters. (Only the VALUE is English; the 'reply' below stays in " + lang + ".)",
       `    Also write a brief, friendly one-sentence confirmation ("reply") in ${lang}.`,
       isSsn
         ? "    SSN PRIVACY: this is a Social Security Number. NEVER write any SSN digits in the reply, and NEVER read the number back or ask the user to confirm a specific number. The reply must contain NO digits. Instead, acknowledge briefly and invite the user to look over their own SSN shown on the form/screen to make sure it's right."

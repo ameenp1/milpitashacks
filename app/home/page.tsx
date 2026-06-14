@@ -1,14 +1,18 @@
 import Link from "next/link";
+import { BrandLogo } from "@/components/BrandLogo";
 
 export default function ResidentHome() {
   return (
     <main className="mx-auto flex min-h-screen max-w-2xl flex-col justify-center px-6 py-16">
-      <Link
-        href="/"
-        className="mb-6 inline-block text-sm text-neutral-400 hover:text-neutral-700"
-      >
-        ← Back
-      </Link>
+      <div className="mb-8 flex items-center justify-between gap-4">
+        <Link
+          href="/"
+          className="inline-block text-sm text-neutral-400 hover:text-neutral-700"
+        >
+          ← Back
+        </Link>
+        <BrandLogo compact />
+      </div>
 
       <div className="mb-3 text-sm font-medium tracking-wide text-neutral-500">
         Santa Clara County · CalWORKs Homeless Assistance

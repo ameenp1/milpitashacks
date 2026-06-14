@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { listPosts, listShelters } from "@/lib/shelters/store";
 import type { Post, Shelter } from "@/lib/shelters/types";
+import { BrandLogo } from "@/components/BrandLogo";
 
 type Tab = "events" | "shelters";
 type PublicShelter = Omit<Shelter, "password">;
@@ -42,9 +43,12 @@ export default function FeedPage() {
 
   return (
     <main className="mx-auto min-h-screen max-w-2xl px-6 py-12">
-      <Link href="/" className="mb-6 inline-block text-sm text-neutral-400 hover:text-neutral-700">
-        ← Back
-      </Link>
+      <div className="mb-8 flex items-center justify-between gap-4">
+        <Link href="/" className="inline-block text-sm text-neutral-400 hover:text-neutral-700">
+          ← Back
+        </Link>
+        <BrandLogo compact />
+      </div>
 
       <h1 className="text-3xl font-semibold text-neutral-900 sm:text-4xl">Community</h1>
       <p className="mt-3 text-neutral-600">

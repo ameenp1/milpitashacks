@@ -6,6 +6,7 @@ import { formStatus, formProgress } from "@/lib/status";
 import { StatusBadge } from "@/components/StatusBadge";
 import { DeleteButton } from "@/components/DeleteButton";
 import { useT } from "@/components/I18nProvider";
+import { BrandLogo } from "@/components/BrandLogo";
 
 export default function FormsPage() {
   const { profile, reviewed } = useAppState();
@@ -22,7 +23,7 @@ export default function FormsPage() {
 
   return (
     <main className="mx-auto min-h-screen max-w-3xl px-6 py-10">
-      <div className="mb-8 flex items-end justify-between gap-4">
+      <div className="mb-8 flex items-start justify-between gap-4">
         <div>
           <h1 className="text-3xl font-semibold">{t("Your forms")}</h1>
           <p className="mt-2 max-w-xl text-neutral-500">
@@ -31,6 +32,7 @@ export default function FormsPage() {
             )}
           </p>
         </div>
+        <BrandLogo compact className="shrink-0" />
       </div>
 
       <div className="space-y-3">

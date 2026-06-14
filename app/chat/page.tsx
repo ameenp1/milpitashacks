@@ -6,6 +6,7 @@ import { useChatFlow } from "@/lib/chat/useChatFlow";
 import { ChatTranscript } from "@/components/chat/ChatTranscript";
 import { ChatComposer } from "@/components/chat/ChatComposer";
 import { DocumentPanel } from "@/components/chat/DocumentPanel";
+import { BrandLogo } from "@/components/BrandLogo";
 
 const VOICES = ["alloy", "echo", "fable", "onyx", "nova", "shimmer"];
 
@@ -53,6 +54,7 @@ export default function ChatPage() {
           >
             {t("Review & download")}
           </Link>
+          <BrandLogo compact className="ml-2 hidden sm:inline-flex" />
         </div>
       </header>
 

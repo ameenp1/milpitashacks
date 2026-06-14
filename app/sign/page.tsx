@@ -5,6 +5,7 @@ import { SignaturePad } from "@/components/SignaturePad";
 import { useAppState, setSignature, setAnswer } from "@/lib/profile";
 import { todayMMDDYYYY } from "@/lib/date";
 import { useT } from "@/components/I18nProvider";
+import { BrandLogo } from "@/components/BrandLogo";
 
 export default function SignPage() {
   const router = useRouter();
@@ -28,6 +29,9 @@ export default function SignPage() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-xl flex-col justify-center px-6 py-16">
+      <div className="mb-8 flex justify-end">
+        <BrandLogo compact />
+      </div>
       <h1 className="text-3xl font-semibold">{t("Add your signature")}</h1>
       <p className="mt-2 text-neutral-500">
         {t("We'll add today's date for you automatically.")} ({todayMMDDYYYY()})

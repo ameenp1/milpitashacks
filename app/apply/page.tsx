@@ -7,6 +7,7 @@ import { useAssistChat } from "@/lib/apply/useAssistChat";
 import { ChatTranscript } from "@/components/chat/ChatTranscript";
 import { AssistComposer } from "@/components/apply/AssistComposer";
 import { BrowserPanel } from "@/components/apply/BrowserPanel";
+import { BrandLogo } from "@/components/BrandLogo";
 
 const VOICES = ["alloy", "echo", "fable", "onyx", "nova", "shimmer"];
 
@@ -46,6 +47,7 @@ export default function ApplyPage() {
               ))}
             </select>
           )}
+          <BrandLogo compact className="ml-2 hidden sm:inline-flex" />
         </div>
       </header>
 

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { setLanguage } from "@/lib/profile";
 import { useSpeak } from "@/lib/client/useSpeak";
 import { VoiceButton } from "@/components/VoiceButton";
+import { BrandLogo } from "@/components/BrandLogo";
 
 const LANGUAGES = [
   { code: "en", native: "English", english: "English" },
@@ -41,6 +42,9 @@ export default function LanguagePage() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-3xl flex-col justify-center px-6 py-16">
+      <div className="mb-8 flex justify-end">
+        <BrandLogo compact />
+      </div>
       <div className="mb-2 flex items-center gap-3">
         <h1 className="text-3xl font-semibold sm:text-4xl">
           What language do you prefer?

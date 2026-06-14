@@ -8,6 +8,7 @@ import { DeleteButton } from "@/components/DeleteButton";
 import { fetchFilledDoc } from "@/lib/client/api";
 import { useToast } from "@/components/Toast";
 import { useT } from "@/components/I18nProvider";
+import { BrandLogo } from "@/components/BrandLogo";
 
 const SUMMARY_FIELDS = [
   "full_name",
@@ -97,9 +98,12 @@ export default function ReviewPage() {
     <main className="mx-auto min-h-screen max-w-3xl px-6 py-10">
       <div className="mb-8 flex items-center justify-between gap-4">
         <h1 className="text-3xl font-semibold">{t("Review and download")}</h1>
-        <Link href="/forms" className="no-print text-sm text-neutral-500 hover:text-neutral-900">
-          ← Back
-        </Link>
+        <div className="no-print flex items-center gap-4">
+          <Link href="/forms" className="text-sm text-neutral-500 hover:text-neutral-900">
+            ← Back
+          </Link>
+          <BrandLogo compact />
+        </div>
       </div>
 
       {/* Applicant summary */}

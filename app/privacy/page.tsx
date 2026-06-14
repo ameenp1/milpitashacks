@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { DeleteButton } from "@/components/DeleteButton";
 import { useT } from "@/components/I18nProvider";
+import { BrandLogo } from "@/components/BrandLogo";
 
 const POINTS = [
   "Your answers are stored only on this device, in your browser. We do not save them on a server or in any database.",
@@ -20,9 +21,12 @@ export default function PrivacyPage() {
   ]);
   return (
     <main className="mx-auto min-h-screen max-w-2xl px-6 py-16">
-      <Link href="/chat" className="text-sm text-neutral-500 hover:text-neutral-900">
-        ← {t("Back")}
-      </Link>
+      <div className="mb-8 flex items-center justify-between gap-4">
+        <Link href="/chat" className="text-sm text-neutral-500 hover:text-neutral-900">
+          ← {t("Back")}
+        </Link>
+        <BrandLogo compact />
+      </div>
       <h1 className="mt-4 text-3xl font-semibold">{t("Your privacy")}</h1>
       <p className="mt-2 text-neutral-500">{t("How your information is handled")}</p>
       <ul className="mt-8 space-y-4">

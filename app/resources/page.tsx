@@ -4,6 +4,7 @@ import Link from "next/link";
 import { listShelters } from "@/lib/shelters/store";
 import type { Shelter } from "@/lib/shelters/types";
 import { FOOD_BANKS, TRANSIT, mapsUrl, type ResourcePlace } from "@/lib/resources/data";
+import { BrandLogo } from "@/components/BrandLogo";
 
 type Tab = "shelters" | "food" | "transit";
 
@@ -62,9 +63,12 @@ export default function ResourcesPage() {
 
   return (
     <main className="mx-auto min-h-screen max-w-3xl px-6 py-12">
-      <Link href="/home" className="mb-6 inline-block text-sm text-neutral-400 hover:text-neutral-700">
-        ← Back
-      </Link>
+      <div className="mb-8 flex items-center justify-between gap-4">
+        <Link href="/home" className="inline-block text-sm text-neutral-400 hover:text-neutral-700">
+          ← Back
+        </Link>
+        <BrandLogo compact />
+      </div>
 
       <h1 className="text-3xl font-semibold text-neutral-900 sm:text-4xl">
         Nearby resources

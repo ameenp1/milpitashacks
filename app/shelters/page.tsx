@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { listShelters, loginShelter } from "@/lib/shelters/store";
 import type { Shelter, County } from "@/lib/shelters/types";
@@ -47,38 +46,42 @@ export default function SheltersDirectory() {
   const counties: County[] = ["Santa Clara", "San Francisco"];
 
   return (
-    <main className="mx-auto min-h-screen max-w-3xl px-6 py-12">
-      <Link href="/" className="mb-6 inline-block text-sm text-neutral-400 hover:text-neutral-700">
-        ← Back
-      </Link>
+    <main>
+      <section className="border-b border-line bg-brand-tint">
+        <div className="mx-auto max-w-3xl px-4 py-10">
+          <p className="text-sm font-semibold uppercase tracking-wide text-brand">
+            For shelter staff
+          </p>
+          <h1 className="mt-2 text-3xl font-bold text-navy sm:text-4xl">
+            Shelter staff login
+          </h1>
+          <p className="mt-3 text-ink/70">
+            Find your shelter in the directory, then enter the code we gave you.
+          </p>
+        </div>
+      </section>
 
-      <h1 className="text-3xl font-semibold text-neutral-900 sm:text-4xl">
-        Shelter staff login
-      </h1>
-      <p className="mt-3 text-neutral-600">
-        Find your shelter in the directory, then enter the code we gave you.
-      </p>
-
+      <div className="mx-auto max-w-3xl px-4 py-8">
       {shelters === null ? (
-        <p className="mt-10 text-neutral-500">Loading directory…</p>
+        <p className="text-ink/55">Loading directory…</p>
       ) : (
-        <div className="mt-8 space-y-8">
+        <div className="space-y-8">
           {counties.map((county) => {
             const list = shelters.filter((s) => s.county === county);
             if (list.length === 0) return null;
             return (
               <section key={county}>
-                <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-neutral-500">
+                <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-brand">
                   {county} County
                 </h2>
                 <div className="space-y-3">
                   {list.map((s) => (
                     <div
                       key={s.id}
-                      className={`rounded-xl border p-4 transition ${
+                      className={`rounded-lg border bg-white p-4 transition ${
                         selected?.id === s.id
-                          ? "border-neutral-900 bg-neutral-50"
-                          : "border-neutral-300 hover:border-neutral-500"
+                          ? "border-brand ring-1 ring-brand/20"
+                          : "border-line hover:border-brand/50"
                       }`}
                     >
                       <button
@@ -90,14 +93,14 @@ export default function SheltersDirectory() {
                         className="flex w-full items-start justify-between text-left"
                       >
                         <span>
-                          <span className="block text-lg font-medium text-neutral-900">
+                          <span className="block text-lg font-bold text-navy">
                             {s.name}
                           </span>
-                          <span className="block text-sm text-neutral-500">
+                          <span className="block text-sm text-ink/55">
                             {s.address} · {s.capacity} beds
                           </span>
                         </span>
-                        <span className="ml-4 mt-1 text-neutral-400">
+                        <span className="ml-4 mt-1 text-ink/40">
                           {selected?.id === s.id ? "▲" : "▼"}
                         </span>
                       </button>
@@ -110,12 +113,12 @@ export default function SheltersDirectory() {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="Shelter code"
-                            className="flex-1 rounded-lg border border-neutral-300 px-4 py-2.5 text-neutral-900 outline-none focus:border-neutral-900"
+                            className="flex-1 rounded-md border border-line px-4 py-2.5 text-ink outline-none focus:border-brand"
                           />
                           <button
                             type="submit"
                             disabled={busy || !password}
-                            className="rounded-lg bg-neutral-900 px-6 py-2.5 font-medium text-white transition hover:bg-neutral-700 disabled:opacity-40"
+                            className="rounded-md bg-brand px-6 py-2.5 font-semibold text-white transition hover:bg-brand-dark disabled:opacity-40"
                           >
                             {busy ? "Checking…" : "Log in"}
                           </button>
@@ -129,6 +132,7 @@ export default function SheltersDirectory() {
           })}
         </div>
       )}
+      </div>
     </main>
   );
 }

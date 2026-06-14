@@ -1,9 +1,21 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
-    Helvetica, Arial, sans-serif;
-  --color-accent: #2563eb;
+  /* Open Sans — the face Alameda County Library uses site-wide. */
+  --font-sans: var(--font-open-sans), "Open Sans", Arial, sans-serif;
+
+  /* Palette pulled from the live library stylesheet. */
+  --color-accent: #0074b8;
+  --color-brand: #0074b8; /* bright primary blue — nav bar, buttons, links */
+  --color-brand-dark: #005485; /* button / link hover */
+  --color-navy: #0d405e; /* top utility bar + footer */
+  --color-navy-dark: #0a3047;
+  --color-brand-tint: #e3eff7; /* soft blue hero wash */
+  --color-brand-tint-strong: #cfe2f1;
+  --color-link: #02729e;
+  --color-ink: #262626; /* body text */
+  --color-page: #ffffff; /* white body, library-style */
+  --color-line: #d8dde2; /* hairline borders / rules */
 }
 
 html {
@@ -12,6 +24,11 @@ html {
 
 body {
   font-family: var(--font-sans);
+}
+
+/* Headings: Open Sans, just a touch tighter. */
+.font-display {
+  letter-spacing: -0.01em;
 }
 
 /* Large, calm focus rings for accessibility (iPad / low-vision users). */

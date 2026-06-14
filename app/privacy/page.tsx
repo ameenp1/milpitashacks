@@ -19,16 +19,16 @@ export default function PrivacyPage() {
     ...POINTS,
   ]);
   return (
-    <main className="mx-auto min-h-screen max-w-2xl px-6 py-16">
-      <Link href="/chat" className="text-sm text-neutral-500 hover:text-neutral-900">
+    <main className="mx-auto max-w-2xl px-4 py-12 sm:py-16">
+      <Link href="/chat" className="text-sm text-ink/50 hover:text-ink">
         ← {t("Back")}
       </Link>
-      <h1 className="mt-4 text-3xl font-semibold">{t("Your privacy")}</h1>
-      <p className="mt-2 text-neutral-500">{t("How your information is handled")}</p>
+      <h1 className="mt-4 text-3xl font-bold text-navy">{t("Your privacy")}</h1>
+      <p className="mt-2 text-ink/60">{t("How your information is handled")}</p>
       <ul className="mt-8 space-y-4">
         {POINTS.map((p) => (
-          <li key={p} className="flex items-start gap-3 text-neutral-700">
-            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-neutral-900" />
+          <li key={p} className="flex items-start gap-3 text-ink/80">
+            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand" />
             <span className="leading-relaxed">{t(p)}</span>
           </li>
         ))}

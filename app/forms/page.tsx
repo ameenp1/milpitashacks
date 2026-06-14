@@ -21,11 +21,11 @@ export default function FormsPage() {
   ]);
 
   return (
-    <main className="mx-auto min-h-screen max-w-3xl px-6 py-10">
+    <main className="mx-auto max-w-3xl px-4 py-10">
       <div className="mb-8 flex items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-semibold">{t("Your forms")}</h1>
-          <p className="mt-2 max-w-xl text-neutral-500">
+          <h1 className="text-3xl font-bold text-navy">{t("Your forms")}</h1>
+          <p className="mt-2 max-w-xl text-ink/60">
             {t(
               "We filled in what we could from your answers. Open each form to review it side by side.",
             )}
@@ -42,21 +42,21 @@ export default function FormsPage() {
             <Link
               key={f.id}
               href={`/chat?form=${f.id}`}
-              className="block rounded-2xl border border-neutral-200 p-5 transition hover:border-neutral-900"
+              className="block rounded-lg border border-line bg-white p-5 transition hover:border-brand hover:shadow-sm"
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <div className="text-xs font-medium tracking-wide text-neutral-500">
+                  <div className="text-xs font-semibold uppercase tracking-wide text-brand">
                     {f.code}
                   </div>
-                  <div className="text-lg font-medium text-neutral-900">
+                  <div className="text-lg font-bold text-navy">
                     {f.title}
                   </div>
                 </div>
                 <StatusBadge status={status} />
               </div>
-              <p className="mt-1 text-sm text-neutral-500">{t(f.description)}</p>
-              <div className="mt-3 text-xs text-neutral-500">
+              <p className="mt-1 text-sm text-ink/60">{t(f.description)}</p>
+              <div className="mt-3 text-xs text-ink/55">
                 {prog.filled} of {prog.total} fields filled
                 {prog.needsReview > 0 && ` · ${prog.needsReview} to review`}
               </div>
@@ -69,13 +69,13 @@ export default function FormsPage() {
         <div className="flex flex-wrap gap-3">
           <Link
             href="/review"
-            className="rounded-xl bg-neutral-900 px-6 py-4 text-lg font-medium text-white hover:bg-neutral-700"
+            className="rounded-md bg-brand px-6 py-4 text-lg font-semibold text-white transition hover:bg-brand-dark"
           >
             {t("Review and download everything")}
           </Link>
           <Link
             href="/apply"
-            className="rounded-xl border border-neutral-300 px-6 py-4 text-lg font-medium text-neutral-700 hover:border-neutral-900 hover:text-neutral-900"
+            className="rounded-md border border-brand/30 bg-white px-6 py-4 text-lg font-semibold text-brand transition hover:border-brand"
           >
             {t("Apply online with a guide")}
           </Link>

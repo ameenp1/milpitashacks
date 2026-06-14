@@ -5,6 +5,7 @@ import { FORM_INDEX } from "@/lib/data";
 import { warmFilledDoc } from "@/lib/client/api";
 import { FormPreview } from "@/components/FormPreview";
 import { AnswerList } from "./AnswerList";
+import { PrinterIcon } from "@/components/icons";
 import type { DocumentPanelProps } from "@/lib/chat/contracts";
 
 // These exact strings are also listed in useChatFlow's CHROME so they are
@@ -62,9 +63,10 @@ export function DocumentPanel({
         </select>
         <Link
           href={`/print/${activeForm}`}
-          className="rounded-lg border border-neutral-200 px-3 py-1.5 text-sm text-neutral-600 hover:bg-neutral-50"
+          className="inline-flex items-center gap-1.5 rounded-md border border-line px-3 py-1.5 text-sm text-ink/70 hover:bg-brand-tint"
         >
-          🖨 {t("Print")}
+          <PrinterIcon className="h-4 w-4" />
+          {t("Print")}
         </Link>
       </div>
 

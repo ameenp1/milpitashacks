@@ -10,7 +10,21 @@ export interface Shelter {
   address: string;
   phone: string;
   capacity: number;
+  description: string; // who this shelter serves / what it offers
+  focus: string[]; // short tags, e.g. "Job assistance", "Families"
   password: string; // demo login code (single word). NOT secure — demo only.
+}
+
+// A community-feed post made by a shelter (events, announcements).
+export interface Post {
+  id: string;
+  shelterId: string;
+  shelterName: string;
+  county: County;
+  title: string;
+  body: string;
+  eventDate?: string; // ISO date, present when the post is an event
+  createdAt: number; // epoch millis, for ordering
 }
 
 export interface Participant {

@@ -3,15 +3,18 @@
 //   shelters/{shelterId}/participants/{id}
 //   shelters/{shelterId}/applicants/{id}
 import {
+  addDoc,
   collection,
   doc,
   getDoc,
   getDocs,
+  orderBy,
+  query,
   writeBatch,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { SEED_SHELTERS } from "./seed-data";
-import type { Shelter, Participant, Applicant } from "./types";
+import { SEED_SHELTERS, SEED_POSTS } from "./seed-data";
+import type { Shelter, Participant, Applicant, Post } from "./types";
 
 // Public fields only — never ship the password to a directory listing.
 function publicShelter(s: Shelter): Omit<Shelter, "password"> {
@@ -35,6 +38,10 @@ async function seedIfEmpty(): Promise<void> {
     for (const a of applicants) {
       batch.set(doc(db, "shelters", s.id, "applicants", a.id), a);
     }
+  }
+  for (const post of SEED_POSTS) {
+    const { id, ...rest } = post;
+    batch.set(doc(db, "posts", id), rest);
   }
   await batch.commit();
 }
@@ -77,4 +84,36 @@ export async function getApplicants(shelterId: string): Promise<Applicant[]> {
   return snap.docs
     .map((d) => d.data() as Applicant)
     .sort((a, b) => b.progress - a.progress);
+}
+
+// --- Community feed -------------------------------------------------------
+
+export async function listPosts(): Promise<Post[]> {
+  await seedIfEmpty();
+  const snap = await getDocs(query(collection(db, "posts"), orderBy("createdAt", "desc")));
+  return snap.docs.map((d) => ({ id: d.id, ...(d.data() as Omit<Post, "id">) }));
+}
+
+export interface NewPost {
+  title: string;
+  body: string;
+  eventDate?: string;
+}
+
+export async function createPost(
+  shelter: Pick<Shelter, "id" | "name" | "county">,
+  input: NewPost,
+): Promise<Post> {
+  // Firestore rejects undefined fields, so only include eventDate when set.
+  const data: Omit<Post, "id"> = {
+    shelterId: shelter.id,
+    shelterName: shelter.name,
+    county: shelter.county,
+    title: input.title.trim(),
+    body: input.body.trim(),
+    createdAt: Date.now(),
+    ...(input.eventDate ? { eventDate: input.eventDate } : {}),
+  };
+  const ref = await addDoc(collection(db, "posts"), data);
+  return { id: ref.id, ...data };
 }

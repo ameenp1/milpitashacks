@@ -6,8 +6,11 @@ import {
   getShelter,
   getParticipants,
   getApplicants,
+  listPosts,
+  createPost,
 } from "@/lib/shelters/store";
-import type { Shelter, Participant, Applicant } from "@/lib/shelters/types";
+import type { Shelter, Participant, Applicant, Post } from "@/lib/shelters/types";
+import { useToast } from "@/components/Toast";
 
 type PublicShelter = Omit<Shelter, "password">;
 
@@ -22,10 +25,18 @@ function fmtDate(iso: string): string {
 export default function ShelterDashboard() {
   const { shelterId } = useParams<{ shelterId: string }>();
   const router = useRouter();
+  const { showToast } = useToast();
   const [shelter, setShelter] = useState<PublicShelter | null>(null);
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [applicants, setApplicants] = useState<Applicant[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Composer state
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [eventDate, setEventDate] = useState("");
+  const [posting, setPosting] = useState(false);
 
   useEffect(() => {
     if (sessionStorage.getItem(`shelter-auth-${shelterId}`) !== "1") {
@@ -36,8 +47,9 @@ export default function ShelterDashboard() {
       getShelter(shelterId),
       getParticipants(shelterId),
       getApplicants(shelterId),
+      listPosts(),
     ])
-      .then(([s, p, a]) => {
+      .then(([s, p, a, allPosts]) => {
         if (!s) {
           router.replace("/shelters");
           return;
@@ -45,6 +57,7 @@ export default function ShelterDashboard() {
         setShelter(s);
         setParticipants(p);
         setApplicants(a);
+        setPosts(allPosts.filter((post) => post.shelterId === shelterId));
       })
       .finally(() => setLoading(false));
   }, [shelterId, router]);
@@ -52,6 +65,28 @@ export default function ShelterDashboard() {
   function logout() {
     sessionStorage.removeItem(`shelter-auth-${shelterId}`);
     router.replace("/shelters");
+  }
+
+  async function submitPost(e: React.FormEvent) {
+    e.preventDefault();
+    if (!shelter || !title.trim() || !body.trim()) return;
+    setPosting(true);
+    try {
+      const post = await createPost(shelter, {
+        title,
+        body,
+        eventDate: eventDate || undefined,
+      });
+      setPosts((prev) => [post, ...prev]);
+      setTitle("");
+      setBody("");
+      setEventDate("");
+      showToast("Posted to the community feed.", "success");
+    } catch {
+      showToast("Could not publish your post.", "error");
+    } finally {
+      setPosting(false);
+    }
   }
 
   if (loading) {
@@ -140,6 +175,75 @@ export default function ShelterDashboard() {
           </div>
         </section>
       </div>
+
+      {/* Community feed composer */}
+      <section className="mt-12 border-t border-neutral-200 pt-10">
+        <div className="mb-4 flex items-baseline justify-between">
+          <h2 className="text-xl font-semibold text-neutral-900">Community feed</h2>
+          <Link href="/feed" className="text-sm font-medium text-blue-700 hover:underline">
+            View public feed →
+          </Link>
+        </div>
+        <p className="mb-4 text-sm text-neutral-500">
+          Post an event or announcement. Everyone — residents and other shelters — can see it.
+        </p>
+
+        <form onSubmit={submitPost} className="rounded-2xl border border-neutral-200 p-5">
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Title (e.g. Free job fair on Saturday)"
+            className="w-full rounded-lg border border-neutral-300 px-4 py-2.5 text-neutral-900 outline-none focus:border-neutral-900"
+          />
+          <textarea
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
+            placeholder="Details — what, where, who can come…"
+            rows={3}
+            className="mt-3 w-full resize-y rounded-lg border border-neutral-300 px-4 py-2.5 text-neutral-900 outline-none focus:border-neutral-900"
+          />
+          <div className="mt-3 flex flex-wrap items-center gap-3">
+            <label className="flex items-center gap-2 text-sm text-neutral-600">
+              Event date (optional)
+              <input
+                type="date"
+                value={eventDate}
+                onChange={(e) => setEventDate(e.target.value)}
+                className="rounded-lg border border-neutral-300 px-3 py-2 text-neutral-900 outline-none focus:border-neutral-900"
+              />
+            </label>
+            <button
+              type="submit"
+              disabled={posting || !title.trim() || !body.trim()}
+              className="ml-auto rounded-lg bg-neutral-900 px-6 py-2.5 font-medium text-white transition hover:bg-neutral-700 disabled:opacity-40"
+            >
+              {posting ? "Posting…" : "Post"}
+            </button>
+          </div>
+        </form>
+
+        {posts.length > 0 && (
+          <div className="mt-6">
+            <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-neutral-500">
+              Your posts
+            </h3>
+            <div className="space-y-3">
+              {posts.map((p) => (
+                <div key={p.id} className="rounded-xl border border-neutral-200 p-4">
+                  {p.eventDate && (
+                    <div className="mb-1 text-sm font-medium text-blue-800">
+                      📅 {fmtDate(p.eventDate)}
+                    </div>
+                  )}
+                  <div className="font-medium text-neutral-900">{p.title}</div>
+                  <p className="mt-1 whitespace-pre-wrap text-sm text-neutral-600">{p.body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </section>
 
       <Link
         href="/"

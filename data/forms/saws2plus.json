@@ -48,6 +48,69 @@
       "token": "saws2plus__email"
     },
     {
+      "id": "programs",
+      "group": "programs_applying",
+      "anchor": "What programs are you applying for",
+      "answerType": "text",
+      "token": "saws2plus__programs"
+    },
+    {
+      "id": "food_3_days",
+      "group": "food_3_days",
+      "anchor": "Will your food run out in 3 days",
+      "answerType": "boolean",
+      "token": "saws2plus__food_3_days"
+    },
+    {
+      "id": "utilities_shutoff",
+      "group": "utilities_shutoff",
+      "anchor": "Have your utilities been shut off",
+      "answerType": "boolean",
+      "token": "saws2plus__utilities_shutoff"
+    },
+    {
+      "id": "need_transport",
+      "group": "need_transport",
+      "anchor": "food, clothing, medical care or other emergency",
+      "answerType": "boolean",
+      "token": "saws2plus__need_transport"
+    },
+    {
+      "id": "essential_clothing",
+      "group": "essential_clothing",
+      "anchor": "Do you need essential clothing",
+      "answerType": "boolean",
+      "token": "saws2plus__essential_clothing"
+    },
+    {
+      "id": "migrant_worker",
+      "group": "migrant_worker",
+      "anchor": "migrant/seasonal farm worker household",
+      "answerType": "boolean",
+      "token": "saws2plus__migrant_worker"
+    },
+    {
+      "id": "is_pregnant",
+      "group": "is_pregnant",
+      "anchor": "Is anyone pregnant",
+      "answerType": "boolean",
+      "token": "saws2plus__is_pregnant"
+    },
+    {
+      "id": "personal_emergency",
+      "group": "personal_emergency",
+      "anchor": "Does anyone in your household have a personal emergency",
+      "answerType": "boolean",
+      "token": "saws2plus__personal_emergency"
+    },
+    {
+      "id": "eviction",
+      "group": "has_eviction_notice",
+      "anchor": "Do you have an eviction notice or a notice to pay rent",
+      "answerType": "boolean",
+      "token": "saws2plus__eviction"
+    },
+    {
       "id": "sign_date",
       "group": "sign_date",
       "anchor": "SIGNATURE OF APPLICANT",

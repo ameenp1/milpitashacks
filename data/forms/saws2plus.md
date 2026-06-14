@@ -207,7 +207,7 @@ EMAIL ADDRESS {{saws2plus__email}}
 ZIP CODE
 6058691-345986STATE
 STATE
-What programs are you applying for?CalFreshCash Aid Health CoverageOther
+What programs are you applying for?CalFreshCash Aid Health CoverageOther {{saws2plus__programs}}
 Do you have a disability and need help applying?
 YesNo
 Are you homeless?YesNoIf yes, please let the County know right away if you are homeless, so they can help you figure out an address to use to accept your application and get notices from the county about your case.
@@ -218,31 +218,31 @@ $150 and cash on hand, checking and
 savings accounts $100 or less?
 Yes
 No
-3426468069Have your utilities been shut off or do you have a shut-off notice?
+3426468069Have your utilities been shut off or do you have a shut-off notice? {{saws2plus__utilities_shutoff}}
 Yes
 No
 62504210Is your household’s combined gross income and liquid resources less than the combined
 rent/mortgage and utilities?
 Yes
 No
-Will your food run out in 3 days or less?
+Will your food run out in 3 days or less? {{saws2plus__food_3_days}}
 Yes
 No
-625017250Is your household a migrant/seasonal farm worker household with liquid resources not exceeding $100?
+625017250Is your household a migrant/seasonal farm worker household with liquid resources not exceeding $100? {{saws2plus__migrant_worker}}
 Yes
 No
 Do you need help with transportation to get
-24739-36089food, clothing, medical care or other emergency item(s)?
+24739-36089food, clothing, medical care or other emergency item(s)? {{saws2plus__need_transport}}
 Yes
 No
-1576320429Do you have an eviction notice or a notice to pay rent or leave?
+1576320429Do you have an eviction notice or a notice to pay rent or leave? {{saws2plus__eviction}}
 Yes
 No
-3426420429Do you need essential clothing, such as diapers or clothing needed for cold weather?
+3426420429Do you need essential clothing, such as diapers or clothing needed for cold weather? {{saws2plus__essential_clothing}}
 Yes
 No
-Is anyone pregnant?YesNoIf yes, did she get a Presumptive Eligibility card?YesNo
-Does anyone in your household have a personal emergency?YesNoIf yes, check box:Pregnancy Immediate Medical NeedChild AbuseDomestic AbuseElder AbuseOther emergency which
+Is anyone pregnant?YesNoIf yes, did she get a Presumptive Eligibility card?YesNo {{saws2plus__is_pregnant}}
+Does anyone in your household have a personal emergency?YesNoIf yes, check box:Pregnancy Immediate Medical NeedChild AbuseDomestic AbuseElder AbuseOther emergency which {{saws2plus__personal_emergency}}
 threatens health or safety. Explain:
 I understand that by signing this application under penalty of perjury (making false statements), that:
 I read, or had read to me, the information in this application and my answers to the questions in this application.

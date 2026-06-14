@@ -8,6 +8,11 @@ import { DeleteButton } from "@/components/DeleteButton";
 import { fetchFilledDoc } from "@/lib/client/api";
 import { useToast } from "@/components/Toast";
 import { useT } from "@/components/I18nProvider";
+import {
+  assessEligibility,
+  ELIGIBILITY_STRINGS,
+  ELIGIBILITY_IMMEDIATE,
+} from "@/lib/eligibility";
 
 const SUMMARY_FIELDS = [
   "full_name",
@@ -45,21 +50,20 @@ export default function ReviewPage() {
     "Delete my information",
     "Signature",
     "Date",
+    "What you may qualify for",
+    "A county worker decides what you actually get.",
+    "You may qualify",
+    "Worth asking about",
+    "Immediate help you may get now",
+    "Because of:",
+    ...ELIGIBILITY_STRINGS,
     ...groupQuestions,
   ]);
 
-  const supportingDocs = [
-    "Photo ID (driver's license, state ID, or passport)",
-    "Social Security card or number for each person applying",
-    "Proof of any income (pay stubs, award letters)",
-    "Proof of your money/resources (recent bank statements)",
-    answers["has_eviction_notice"] === "Yes"
-      ? "Your 'pay rent or quit' (eviction) notice"
-      : "",
-    answers["has_home"] === "No"
-      ? "Anything that shows where you have been staying, if you have it"
-      : "",
-  ].filter(Boolean);
+  // Decision support: what they may qualify for, immediate-need flags, and a
+  // document checklist derived from the answers (lib/eligibility.ts).
+  const elig = assessEligibility(answers);
+  const supportingDocs = elig.documents;
 
   // Missing fields across all forms.
   const missing: { formId: string; code: string; question: string }[] = [];
@@ -102,6 +106,22 @@ export default function ReviewPage() {
         </Link>
       </div>
 
+      {/* Immediate need — surfaced first because it's time-sensitive. */}
+      {elig.immediateNeed.active && (
+        <section className="mb-8 rounded-2xl border border-red-300 bg-red-50 p-6">
+          <h2 className="mb-2 flex items-center gap-2 text-lg font-semibold text-red-900">
+            <span aria-hidden>⏱</span> {t("Immediate help you may get now")}
+          </h2>
+          <p className="text-sm text-red-900">
+            {t("Because of:")}{" "}
+            {elig.immediateNeed.triggers.map((x) => t(x)).join(", ")}.
+          </p>
+          <p className="mt-2 text-sm font-medium text-red-900">
+            {t(ELIGIBILITY_IMMEDIATE)}
+          </p>
+        </section>
+      )}
+
       {/* Applicant summary */}
       <section className="mb-8 rounded-2xl border border-neutral-200 p-6">
         <h2 className="mb-4 text-lg font-semibold">{t("Your summary")}</h2>
@@ -131,6 +151,45 @@ export default function ReviewPage() {
             </div>
           </div>
         )}
+      </section>
+
+      {/* What you may qualify for */}
+      <section className="mb-8 rounded-2xl border border-neutral-200 p-6">
+        <h2 className="text-lg font-semibold">{t("What you may qualify for")}</h2>
+        <p className="mb-4 text-xs text-neutral-500">
+          {t("A county worker decides what you actually get.")}
+        </p>
+        <div className="space-y-4">
+          {elig.programs.map((p) => (
+            <div key={p.key}>
+              <div className="flex flex-wrap items-center gap-2">
+                <span
+                  aria-hidden
+                  className={[
+                    "inline-block h-2.5 w-2.5 rounded-full",
+                    p.status === "likely" ? "bg-emerald-500" : "bg-amber-400",
+                  ].join(" ")}
+                />
+                <span className="text-sm font-medium text-neutral-900">{t(p.label)}</span>
+                <span
+                  className={[
+                    "rounded-full px-2 py-0.5 text-xs",
+                    p.status === "likely"
+                      ? "bg-emerald-100 text-emerald-800"
+                      : "bg-amber-100 text-amber-800",
+                  ].join(" ")}
+                >
+                  {p.status === "likely" ? t("You may qualify") : t("Worth asking about")}
+                </span>
+              </div>
+              <ul className="mt-1.5 list-disc space-y-1 pl-6 text-sm text-neutral-600">
+                {p.reasons.map((r, i) => (
+                  <li key={i}>{t(r)}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* Supporting documents */}
